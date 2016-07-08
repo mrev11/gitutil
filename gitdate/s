@@ -1,0 +1,12 @@
+#!/bin/bash
+HERE=`pwd`
+
+#cd ~/temp/gitgyak/gitgyak1
+cd ~/temp/GIT/ccc2
+
+git whatchanged -m --pretty=Date:%ai  >$HERE/log-what
+git ls-files >$HERE/log-files
+
+
+time $HERE/gitdate0.exe
+time $HERE/gitdate.exe

@@ -1,0 +1,5 @@
+Bejár egy directory struktúrát,
+megkeresi, hol van .git directory,
+ahol ilyen van, ott lefuttatja git status-t.
+
+

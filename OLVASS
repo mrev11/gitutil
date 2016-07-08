@@ -1,0 +1,43 @@
+Részben hasznos utilityk, részben gyakorló programok:
+
+filetime
+  filetime-save     feljegyzi a fájlidőket
+  filetime-restore  visszaállítja a fájlidőket
+
+
+firstpar          
+  CHANGELOG első bekezdéséből commit_message
+  
+
+gitdate
+  felrakja a fájlokra a fájlt módosító utolsó commit idejét
+  (nem annyira jó, jobb a filetime-os módszer)
+  
+
+gitfind
+  gitstat megkeresi a git repókat, mindenhol csinál egy "git status"-t
+  gitpull megkeresi a git repókat, mindenhol csinál egy "git pull"-t
+  (sok repóban a változások/újdonságok kereséséhez)
+
+
+gitnav
+  browse menüből checkoutolja a kiválasztott branchet, 
+  browse-ban mutatja a logot, bármely commitot checkoutol
+  
+
+gitview
+  bármely két commitot összehasonlít git diff-el
+  alapesetben az indexet (next head) és a HEAD-et hasonlítja össze
+  
+  Tehát 
+        git add --all
+  után
+        gitview.exe 
+  mutatja az utolsó commit (HEAD) és az index (követlező commit)
+  közötti eltérést, így a commit véglegesítése előtt vizsgálhatjuk
+  annak hatását.
+     
+
+
+
+    
