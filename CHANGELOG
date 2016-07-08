@@ -1,3 +1,8 @@
+g-initial-upload-2 script
+  gyakorlaskeppen felrakom a repot a comfirm.hu-ra
+  elozoleg ki kell valasztani a master-t
+
+
 g-commit-ba felveve 'git add --all'
   enelkul ugyanis az automatikusan keszulo .FILETIME
   maris valtozast okoz a commithoz kepest, marpedig

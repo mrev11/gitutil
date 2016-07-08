@@ -1,0 +1,30 @@
+#!/bin/bash
+set -x
+
+REMOTE_HOST=comfirm.hu
+REMOTE_PATH=/opt/git/private/gitutil.git
+REMOTE_URL=ssh://git@$REMOTE_HOST$REMOTE_PATH
+
+
+ssh $REMOTE_HOST "git init --bare $REMOTE_PATH"
+
+
+# A lokális repóban létrehozzuk az "origin" remote definíciót,
+# ha ez megvan, akkor az URL helyett a rövid remote nevet, esetünkben
+# az "origin-t" használhatjuk. Több remote is lehet, és akármilyen neve 
+# lehet a remoteoknak. A lényeg, hogy egy remote meghatároz egy URL-t.
+
+git remote add  origin  $REMOTE_URL
+
+git config branch.master.remote origin
+git config branch.master.merge  refs/heads/master
+
+
+# Most még nincs feltöltve semmi, de megvannak a default
+# paraméterek, tehát a pull/push egyeszerűen működnek:
+
+git push
+git pull
+
+
+
