@@ -1,0 +1,3 @@
+#!/bin/bash
+export OREF_SIZE=500000
+exec filetime-save.exe  "$@"

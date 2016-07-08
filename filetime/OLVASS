@@ -1,0 +1,44 @@
+
+filetime-save.exe
+-----------------
+
+Bejarja a forrasfat, es listat keszit a fajlidokrol. A formatum (pl):
+
+a434c2fbd58108682d83e1f37e1fec40411c7b71 2012071712:26:22 ./readline.prg
+64643465299cee6703c38c4a2a4f715a05f46257 2014060323:39:18 ./r
+c67fdeb004749b8d106d18874801ebbed5fb6fc6 2014060407:41:12 ./filetime-save.prg
+1d1a935ae9c55369a3147594af8d63d005af5776 2014060407:43:45 ./outpre
+c7483525df48e23bdd3a46c056c98492cbf0cd0b 2014060316:27:00 ./m
+81c06847ea5c12ec191895771406dd668277d94f 2005082114:25:09 ./fspec.prg
+2de4ce85983f12475358456dcc3ea71011fcfe5f 2014060407:43:43 ./filetime-restore.prg
+ab8730a35f0ae15135258a8d4b1d6c9ea7149ee8 2014060323:12:38 ./s
+
+Elso oszlop a fajl tartalmabol kepzett sha1 kod,
+masodik oszlop az adott fajl datumideje,
+harmadik oszlop a fajlspecifikacio.
+
+
+A listafajl neve ".FILETIME_$USER", azaz felhasznalonkent kulonbozo, esetunkben
+
+    .FILETIME_bacsa
+    .FILETIME_csiszar
+    .FILETIME_vermes
+
+A .FILETIME_* fajlok mentodnek a git repoba.
+
+
+filetime-restore.exe
+--------------------
+
+A .FILETIME_* fajlokbol felepit egy hashtablat (kulcs az sha1 kod). 
+Bejarja a forrasfat, minden fajlbol kepezi az sha1 kodot, ezt a kodot
+megkeresi a hashtablaban, es ha abban regebbi ido van, mint a fajlido,
+akkor a fajlidot atallitja a korabbi idore.
+
+A fajlokat a _tartalmuk_ alapjan keresi/azonositja. Azonos tartalmu fajlok,
+amik a forrasfa kulonbozo helyein vannak, mind ugyanazt (a legregebbi) idot
+kapjak.
+    
+Ha a g-commit script elott lefuttatjuk a filetime-save.exe-t,
+es g-pull utan lefuttatjuk a filetime-restore.exe-t,
+akkor mindenkinel ugyanazok a fajlidok lesznek a forrasfaban.

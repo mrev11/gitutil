@@ -1,3 +1,11 @@
+kimaradt a filetime
+  Teljesen kimaradt a filtime directory a repobol, 
+  erthetetlen, hogy miert, ugyanis rengetegszer volt
+  git add --all, es a .gitignore-ban nem volt kizarva.
+  Elmozgattam, visszaraktam, akkor vegre bevette.
+  Most az a furcsa allapot, hogy (git st szerint)
+  a filetime directory torlodni fog (D), a benne levo
+  fajlok viszont hozzaadodnak (A).
 
 g-initial-upload-2 script javitva
 
