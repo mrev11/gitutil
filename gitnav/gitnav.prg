@@ -1,12 +1,10 @@
 
 #include "directry.ch"
 
-
 // browseolja a commitokat
 //
 //  "Branch"    kapcsol a különböző branchok között
 //  "Checkout"  előveszi a kiválasztott commitot  (checkout -f; clean -fdx)
-//  "Compare"   savex-szel összehasonlítja a HEAD-et és a kiválasztott commitot 
 
 
 static repo_clean:=repo_clean()
@@ -31,7 +29,9 @@ local err
     if( repo_clean  )
         //alert("repo clean")
     else
-        alert("Working directory is not clean!")
+        ? "Working directory is not clean!"
+        ?
+        quit
         //ha most a user továbbmegy és checkout-ol,
         //akkor a working directoriban levő esetleges
         //változások elvesznek.
@@ -46,7 +46,6 @@ local err
 
     brwMenu(brw,"Branch","Set current branch",branchmenu:=branchmenu(brw,{}))
     brwMenu(brw,"Checkout","Checkout the highlighted commit",{||checkout(brw)})
-    brwMenu(brw,"Compare","Compare current commit with the highlighted one",{||compare(brw)}) 
 
 
     brwApplyKey(brw,{|b,k|appkey(b,k)})
@@ -119,64 +118,6 @@ local commit:=brwArray(brw)[brwArrayPos(brw)][1]
     run("git checkout -f "+commit)     //force nélkül a módosításokat nem írja felül
     run("git clean -fxd")
     break("X") //kilép brwLoop-ból
-
-/*
-function checkout1(brw)
-local commit:=brwArray(brw)[brwArrayPos(brw)][1]
-    commit::=split(" ")
-    commit:=commit[1]
-    run("git reset "+commit)
-    run("git checkout .")
-    run("git clean -fxd")
-    break("X") //kilép brwLoop-ból
-
-    ugyanaz, kivéve, hogy levágja az ág végét
-    nehezebb visszatalálni az ág végére
-    a 'git reflog'-ból lehet csak kitalálni korábbi HEAD-et
-*/
-
-
-********************************************************************************************
-//nemannyira jó resetelni
-
-function reset(brw)
-local commit:=brwArray(brw)[brwArrayPos(brw)][1]
-    commit::=split(" ")
-    commit:=commit[1]
-    run("git reset "+commit)
-    break("X") //kilép brwLoop-ból
-    
-/*
-    levágja az ág végét
-    az ág új végének megfelelő állapotba teszi az indexet
-    de nem veszi elő a fájlokat (megmarad a wd tartalma)
-    azaz eldob valahány commitot az ág végéről
-    nem jó ilyet csinálni, ha emiatt eltérés keletkezik
-    a remote repótól
-*/    
-
-
-********************************************************************************************
-function compare(brw)
-local commit:=brwArray(brw)[brwArrayPos(brw)][1]
-    commit::=split(" ")
-    commit:=commit[1] //ez van kiválasztva
-
-    run ("find . | xargs touch -t 202202220000")
-    run ("rm -rf .git/compare")
-    run ("mkdir  .git/compare")
-    run ("ln -sr .git .git/compare")
-    dirchange(".git/compare")
-    run("git checkout -f "+commit)
-    run ("find . | xargs touch -t 201101110000" )
-    run ("export USER=x && fts -f")
-    run("cp .FILETIME_x ../../.FILETIME_x")
-    dirchange("../..")
-    run ("ftr")
-    run("savex.exe -s.git/compare  -mw -r:.git:" )
-    run ("rm -rf .git/compare")
-
-    checkout(brw)
 
 
 ********************************************************************************************
