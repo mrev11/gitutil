@@ -1,3 +1,4 @@
+commit-message
 
 *.bak
 *~
@@ -8,3 +9,4 @@ ppo/
 error
 error--*
 
+commit-message

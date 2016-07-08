@@ -1,2 +1,2 @@
 #!/bin/bash
-bapp_unixc.b
+bapp_unixc.b   BUILD_EXE=~/bin

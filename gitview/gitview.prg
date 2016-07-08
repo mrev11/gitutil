@@ -45,7 +45,7 @@ local gitcmd
 
     rl:=read_output_of(gitcmd)
     while( (line:=rl:readline)!=NIL )
-        ?? line
+        //?? line
         line::=bin2str
         //line::=strtran(chr(9),"")
         line::=strtran(chr(10),"")
@@ -102,7 +102,7 @@ while( mode!=NIL )
 
     rl:=read_output_of(gitcmd)
     while( (line:=rl:readline)!=NIL )
-        ?? line
+        //?? line
         line::=bin2str
         line::=strtran(chr(10),"")
         

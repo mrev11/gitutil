@@ -1,7 +1,0 @@
-#!/bin/bash
-
-#git diff viewer
-#git add --all
-
-/home/vermes/util/gitutil/gitview/gitview.exe "$@"
-

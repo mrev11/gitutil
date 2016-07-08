@@ -1,0 +1,8 @@
+#!/bin/bash
+
+firstpar.exe  CHANGELOG >commit-message  #(CCC program)
+fts
+
+git commit -F commit-message 
+
+

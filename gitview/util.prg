@@ -5,7 +5,7 @@ function read_output_of(x)
 local pp:=child(x) //{r,w}
 local rl:=readlineNew(pp[1])
     fclose(pp[2])
-    alert(x)
+    //alert(x)
     return rl //le kell majd zárni (rl:close)
 
 
