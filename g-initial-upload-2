@@ -6,7 +6,7 @@ REMOTE_PATH=/opt/git/private/gitutil.git
 REMOTE_URL=ssh://git@$REMOTE_HOST$REMOTE_PATH
 
 
-ssh $REMOTE_HOST "git init --bare $REMOTE_PATH"
+ssh git@$REMOTE_HOST "git init --bare $REMOTE_PATH"
 
 
 # A lokális repóban létrehozzuk az "origin" remote definíciót,
