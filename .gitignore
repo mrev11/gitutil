@@ -1,4 +1,3 @@
-commit-message
 
 *.bak
 *~
@@ -10,3 +9,5 @@ error
 error--*
 
 commit-message
+
+
