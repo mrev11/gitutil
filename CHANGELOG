@@ -1,3 +1,9 @@
+g-commit-ba felveve 'git add --all'
+  enelkul ugyanis az automatikusan keszulo .FILETIME
+  maris valtozast okoz a commithoz kepest, marpedig
+  egy commit utan legyen tiszta a working tree
+
+
 gitnav veszelytelenitve
   kilep, ha a working treeben valtozasok vannak,
   ui. minden funkcioja olyan checkout, ami leszed
