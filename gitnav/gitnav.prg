@@ -19,19 +19,17 @@ local err
 
     setcursor(0)
 
-    if( !direxist(".git") )
-        ? "Not a git working directory - Quit."
-        ?
-        quit
-    end
+    //if( !direxist(".git") )
+    //    alert( "Not a git working directory - Quit." )
+    //    quit
+    //end
     
     
     if( repo_clean  )
         //alert("repo clean")
     else
-        ? "Working directory is not clean!"
-        ?
-        quit
+        alert( "Working directory is not clean!")
+        //quit
         //ha most a user továbbmegy és checkout-ol,
         //akkor a working directoriban levő esetleges
         //változások elvesznek.
@@ -104,19 +102,30 @@ static function mkblock(b)
 
 ********************************************************************************************
 function setbranch(b)
-    b::=strtran("*","")
-    run("git checkout -f "+b)      //force nélkül a módosításokat nem írja felül
-    run("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
+    if( !repo_clean )
+        alert("There are modified file(s) in the working tree,;";
+              +"checkout would destroy all changes!")
+    else
+        b::=strtran("*","")
+        run("git checkout -f "+b)      //force nélkül a módosításokat nem írja felül
+        run("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
+    end
     break("X") //kilép brwLoop-ból
 
 
 ********************************************************************************************
 function checkout(brw)
-local commit:=brwArray(brw)[brwArrayPos(brw)][1]
-    commit::=split(" ")
-    commit:=commit[1]
-    run("git checkout -f "+commit)     //force nélkül a módosításokat nem írja felül
-    run("git clean -fxd")
+local commit
+    if( !repo_clean )
+        alert("There are modified file(s) in the working tree,;";
+              +"checkout would destroy all changes!")
+    else
+        commit:=brwArray(brw)[brwArrayPos(brw)][1]
+        commit::=split(" ")
+        commit:=commit[1]
+        run("git checkout -f "+commit) //force nélkül a módosításokat nem írja felül
+        run("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
+    end
     break("X") //kilép brwLoop-ból
 
 
