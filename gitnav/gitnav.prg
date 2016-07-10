@@ -48,10 +48,10 @@ local err
     brwColumn(brw,"Message",brwAblock(brw,3),replicate("X",maxcol()-21))
 
     brwMenu(brw,"Branch","Set current branch",branchmenu:=branchmenu(brw,{}))
-    brwMenu(brw,"Checkout","Checkout the highlighted commit",{||checkout(brw)})
+    brwMenu(brw,"Snapshot","Checkout the highlighted commit",{||checkout(brw)})
     brwMenu(brw,"Compare^","View changes caused by this commit",{||compare__(brw)})
     brwMenu(brw,"Compare-HEAD","View changes between this commit and HEAD",{||compare_h(brw)})
-    brwMenu(brw,"SoftReset","Reset to the highlighted commit",{||reset(brw)})
+    brwMenu(brw,"Reset","Soft reset to the highlighted commit",{||reset(brw)})
 
     brwApplyKey(brw,{|b,k|appkey(b,k)})
     brwMenuName(brw,"[GitNavig]")
@@ -128,8 +128,7 @@ static function mkblock(b)
 ********************************************************************************************
 function setbranch(b)
     if( !repo_clean )
-        alert("There are modified file(s) in the working tree,;";
-              +"checkout would destroy all changes!",{"Escape"})
+        alert_not_committed()
         return .t.
     else
         b::=strtran("*","")
@@ -143,8 +142,7 @@ function setbranch(b)
 function checkout(brw)
 local commit
     if( !repo_clean )
-        alert("There are modified file(s) in the working tree,;";
-              +"checkout would destroy all changes!",{"Escape"})
+        alert_not_committed()
         return .t.
     else
         commit:=brwArray(brw)[brwArrayPos(brw)][2]
@@ -174,10 +172,16 @@ local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
 local commit:=arr[pos][2]
 local head:=arr[1][2]
-    run( "gitview.exe "+commit+" "+head )
+    if( pos==1 )
+        //HEAD-et a HEAD-del összehasonlítani
+        //nincs értelme, helyette: HEAD<->index
+        run( "gitview.exe" )
+    else
+        //run( "gitview.exe "+commit+" "+head )
+        run( "gitview.exe "+commit+" HEAD" )
+    end
     restscreen(,,,,scrn)
     return .t.
-
 
 
 ********************************************************************************************
@@ -206,5 +210,10 @@ local result:=.f.
     fclose(pipe[1])
 
     return result // TRUE: clean
+
+********************************************************************************************
+static function alert_not_committed()
+    alert( "To prevent DISASTER;function is allowed only in fully committed state!",{"Escape"} )
+
 
 ********************************************************************************************

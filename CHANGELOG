@@ -1,3 +1,4 @@
+gitnav: HEAD<>HEAD helyett HEAD<-NEXT osszehasonlitas
 
 Rossz lett a chekout, mert a commit átkerült a 2. oszlopba.
 Javítva
