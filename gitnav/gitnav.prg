@@ -147,9 +147,7 @@ local commit
               +"checkout would destroy all changes!",{"Escape"})
         return .t.
     else
-        commit:=brwArray(brw)[brwArrayPos(brw)][1]
-        commit::=split(" ")
-        commit:=commit[1]
+        commit:=brwArray(brw)[brwArrayPos(brw)][2]
         run("git checkout -f "+commit) //force nélkül a módosításokat nem írja felül
         run("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
     end
