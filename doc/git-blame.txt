@@ -1,0 +1,6 @@
+
+git blame <file>
+
+file minden sorára mutatja, hogy a sor utoljára melyik
+commitban változott, és ki commitolta a változást
+

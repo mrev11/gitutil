@@ -1,5 +1,6 @@
 -s$(HOME)/util/gitutil
 -r:.git:
--x.bak.
 -lx.FILETIME_*
+-lxcommit-message
+-x.bak.
 -mw

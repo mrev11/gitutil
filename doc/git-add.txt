@@ -1,0 +1,34 @@
+
+
+git add
+
+
+git add #(paraméterek nélkül) 
+    nem csinál semmit
+
+git add --all
+    a módosult és új fájlokat beveszi az indexbe
+    a wd-ben megszűnt filéket (a törlést) beveszi az indexbe (azaz törli)
+    azaz előkészíti a következő commit tartalmát
+    
+git add .
+    újakat/módosításokat bevesz (törléseket nem)
+    
+git add -u .
+        módosításokat/törléseket bevesz (újakat nem)
+
+git add -A .
+    újakat/módosításokat/törléseket bevesz 
+    (ugyanaz, mint git add --all)
+
+
+
+--------------------------------------------------------------------
+A módosítások áramlását mutatja az alábbi diagramm:
+
+              add                    commit
+             ---->                   ---->
+WORKING-TREE        STAGING-INDEX            REPO-DATABASE
+             <----                   <----
+            checkout                 reset
+

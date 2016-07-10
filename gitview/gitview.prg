@@ -16,10 +16,12 @@ local brw,sort:={}
 local changes:={}
 local rl,line,n
 local current
-local branches:=list_of_branches(@current)
+local branches
 local gitcmd
 
+    change_to_gitdir()
     parseargs()
+    branches:=list_of_branches(@current)
     
     menutitle:="["+current+": "
     if( arg_commit1=="--staged" )
@@ -45,7 +47,9 @@ local gitcmd
 
     rl:=read_output_of(gitcmd)
     while( (line:=rl:readline)!=NIL )
-        //?? line
+        if(debug())
+            ?? line
+        end
         line::=bin2str
         //line::=strtran(chr(9),"")
         line::=strtran(chr(10),"")
@@ -55,9 +59,11 @@ local gitcmd
     rl:close
     
     if( empty(changes) )
-        alert("No (staged) changes.")
+        alert("No (staged) changes - quit.")
         quit
     end
+    
+    //? changes
     
     brw:=brwCreate(0,0,maxrow(),maxcol())
     brwMenuName(brw,menutitle)
@@ -102,7 +108,9 @@ while( mode!=NIL )
 
     rl:=read_output_of(gitcmd)
     while( (line:=rl:readline)!=NIL )
-        //?? line
+        if(debug())
+            ?? line
+        end
         line::=bin2str
         line::=strtran(chr(10),"")
         
@@ -258,7 +266,6 @@ local base
             descendant:=.f.
         end
     end
-    ?
 
 
 ********************************************************************************************

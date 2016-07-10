@@ -5,7 +5,9 @@ function read_output_of(x)
 local pp:=child(x) //{r,w}
 local rl:=readlineNew(pp[1])
     fclose(pp[2])
-    //alert(x)
+    if(debug())
+        alert(x)
+    end
     return rl //le kell majd zárni (rl:close)
 
 
@@ -45,11 +47,14 @@ local line
         line::=strtran(chr(10),"")
         line::=strtran(chr(13),"")
         if( "*"==line[1..1] )
-            line::=substr(3)
+            line::=substr(3)::alltrim
             current:=line
+        else
+            line::=alltrim
         end
         aadd(branches,line)
     end
+    rl:close
     return branches  //{b1,b2,...}
 
 **************************************************************************************

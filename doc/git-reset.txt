@@ -1,0 +1,85 @@
+
+I.  git reset [opt] [commit] 
+II. git reset [opt] [commit] -- filespec
+
+[commit]    defaultja HEAD (a kurrens branch végére mutató ref) 
+[opt]       defaultja --mixed
+
+
+Két változata van, filespec nélkül és filespec-cel.
+
+I. reset filespec nélkül 
+   (3 fokozat: --soft,[--mixed],--hard)
+
+1) git reset --soft commit
+    a. HEAD-et átállítja commit-ra
+
+2) git reset [--mixed] commit  (ez a default)
+    a. HEAD-et átállítja commit-ra
+    b. az új HEAD-et betölti az index-be
+
+3) git reset --hard commit
+    a. HEAD-et átállítja commit-ra
+    b. az új HEAD-et betölti az index-be
+    c. az új indexet checkoutolja (változik a worktree!)
+
+Általában nem jó a HEAD-et mozgatni, mert akkor az ág végére
+(vagyis a reset előtti HEAD-re) nem mutat többé hivatkozás,
+és ezt körülményes visszaszerezni. Egyéb intézkedés híján
+a hivatkozás nélkül maradt commitot egy idő múlva (30 nap)
+a gc kitörli.
+
+Alapállapot: 
+    .git/HEAD               tartalma    ref: refs/heads/devel
+    .git/refs/heads/devel   tartalma    228b3e11f871a26fbccd8b048bae59c970638aef
+Végrehajtva:
+    git reset --soft HEAD^
+Változások:    
+    .git/ORIG_HEAD          tartalma    228b3e11f871a26fbccd8b048bae59c970638aef
+    .git/refs/heads/devel   tartalma    6ea91a84e1e6189ebc0be68b14fbc2de908eb3de
+    .git/logs/HEAD                      bejegyezve: old-HEAD new-HEAD 
+    .git/logs/refs/head/devel           bejegyezve: old-HEAD new-HEAD 
+
+Tehát eggyel rövidebb lett a kurrens branch, de az előző HEAD
+több helyen is fel van jegyeze: két log-ban is, és az ORIG_HEAD-ben.
+Most 'git reset --soft ORIG_HEAD' visszaállítja az eredeti állapotot.
+
+Megjegyzés: A táblázat alapján 'reset --soft' nem csinál semmit
+(ui. a default=HEAD-hez mozgatná a HEAD-et, de már eleve ott van). 
+Módosul viszont az ORIG_HEAD (szerintem feleslegesen és rosszul).
+
+
+git reset
+    Az indexet visszaállítja a HEAD-nek megfelelőre.
+    Ennek az lehet az értelme, hogy ezután checkoutolni 
+    lehet belőle az utolsó commit-ban levő fájlokat.
+
+git reset HEAD^ (vagy git reset --soft HEAD^)
+    Ha kiderül, hogy nem jó az utolsó (még nem pusholt) commit,
+    akkor ezzel vissza lehet venni, majd lehet másikat csinálni.
+    Nagyjából mindegy, hogy az indexbe is betöltjük-e,
+    illetve a körülményektől függ, hogy érdemes-e betölteni.
+    
+git reset --soft HEAD~n
+    Ezután egy új commit lerövidíti az ágat, azaz így ki lehet
+    hagyni felesleges commitokat.    
+    
+
+Szerintem jobb kerülni a túl összetett műveleteket, és jobb
+külön resetelni (ha egyáltalán), és külön checkoutolni. 
+
+
+II. reset filespec-cel
+
+Az I. változathoz képest kihagyja az a. lépést, 
+azaz nem mozgatja a HEAD-et, és csak a megadott fájlokat 
+tölti be (az indexbe, vagy a working tree-be).
+        
+git reset -- <filespec>
+    <filespec>-et betölti az indexbe (unstage).
+    megjegyzés: default opt=--mixed, default commit=HEAD.    
+
+git reset --hard HEAD~3  -- <filespec>
+    <filespec> 3 comittal ezelőtti változatát betölti
+    az indexbe és a working tree-be.
+

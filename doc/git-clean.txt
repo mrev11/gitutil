@@ -1,0 +1,16 @@
+
+git clean
+    Az aktuális direcoryból indulva rekurzívan törli
+    azokat a fájlokat, amik nincsenek a verzió kontroll alatt.
+    Megj: akkor van egy fájl verzió kontroll alatt, ha a
+    alkalmazva volt rá a 'git add' parancs.
+    
+opciók:
+    -f (force), enélkül nem hajtja végre a törléseket
+    -d a directorykat is törli
+    -x az ignored fájlokat is törli
+    -X csak az ignored fájlokat törli
+    -n nem csinál semmit, de mutatja, hogy mit törölne
+
+
+    

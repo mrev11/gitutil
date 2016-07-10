@@ -1,0 +1,16 @@
+
+Mondjuk a devel-ben fejlesztek,
+és egy idő múlva be akarom olvasztani a változásokat a mater-ba.
+Nem írják külön, de szerintem egyértelmű, hogy mindkét ágnak
+tisztának kell lennie (commit-olva).
+
+    git checkout master
+    git merge devel
+
+ezután meg kell keresni a confict-okat ke kell javítani,
+a javított változatott commitolni (master-be).
+A devel ágat pedig törölni kell (mi lesz vele, ha megmarad!)
+
+
+    git branch --delete devel
+

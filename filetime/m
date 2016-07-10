@@ -1,2 +1,2 @@
 #!/bin/bash
-bapp_unix_.b -bccc3_crypto  'BUILD_EXE=$(HOME)/bin'
+bapp_unix_.b -bccc3_crypto  'BUILD_EXE=$(HOME)/bin'   '-b../$$(util)'

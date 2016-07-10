@@ -1,7 +1,5 @@
 #!/bin/bash
-
 #git diff viewer
-#git add --all
-
+git add --all
 exec gitview.exe  "$@"
 

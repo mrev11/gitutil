@@ -1,3 +1,15 @@
+
+gitnav-ban soft reset
+gitnav browseban az origin megjelenitve
+gitnav browseban a branchek megjelenitve
+gitnav-ban átállás read_output_of-re (memoread helyett)
+utility-k kulonveve
+irogatom a sajat dokumnetaciomat es megjegyzeseimet
+gitnav: menubol inditja gitview-t
+gitview: automatikusan megkeresi a git tree gyokeret
+irogatom a sajat dokumnetaciomat es megjegyzeseimet
+
+
 gitnav: co feluliras elleni vedelem finomitva
 
 kimaradt a filetime

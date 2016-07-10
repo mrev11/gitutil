@@ -1,0 +1,79 @@
+#!/bin/bash
+set -x
+
+REMOTE_HOST=localhost
+REMOTE_PATH=/home/vermes/temp/proba.git
+REMOTE_URL=ssh://vermes@$REMOTE_HOST$REMOTE_PATH
+
+# Make a local git repository and upload to the server.
+# A working directoryban (lokális) git repót hozunk létre,
+# amibe betöltjük/commitoljuk a project összes fájlját.
+
+
+git init 
+git add --all
+git commit -m "initial commit"
+
+
+# A remote szerverbe be-ssh-zunk, és létrehozzuk a bare repót:
+
+
+ssh $REMOTE_HOST "git init --bare $REMOTE_PATH"
+
+
+# A lokális repóban létrehozzuk az "origin" remote definíciót,
+# ha ez megvan, akkor az URL helyett a rövid remote nevet, esetünkben
+# az "origin-t" használhatjuk. Több remote is lehet, és akármilyen neve 
+# lehet a remoteoknak. A lényeg, hogy egy remote meghatároz egy URL-t.
+
+
+git remote add  origin  $REMOTE_URL
+
+
+# Most van a .git/config-ban egy [remote "origin"] szekciónk.
+#
+# [remote "origin"]
+#     url = ssh://vermes@localhost/home/vermes/temp/proba.git
+#     fetch = +refs/heads/*:refs/remotes/origin/*
+#
+# Ezzel már tudunk egyszerűen push-olni: "git push origin master",
+# de meg kell magyarázni a git-nek, hogy melyik remote-ban, melyik 
+# ágat akarjuk updatelni.
+#
+#
+# A "push -u" létrehozza a [barnch "master"] szekciót, azaz
+#
+# git push -u origin master
+#
+# után (amellett, hogy feltöltődik a szerverre a repó) a .git/config-ban
+# létrejön a [branch "master"] szekció
+#
+#  [branch "master"]
+#      remote = origin              innen fetchel,
+#                                   ide pushol (default)
+#      merge = refs/heads/master    azzal a committal mergel, azt updateli, 
+#                                   amire ez mutat az origin repóban (default) 
+#
+# Ha ez megvan, akkor a pull/push-nak a továbbaikban nincs
+# szüksége a <remote> és <branch> paraméterekre, vagyis, 
+# ha az aktuális lokális branch a master, akkor a pull/push tudja, hogy
+# melyik remote, melyik barnchával kell mergelni, mit kell updatelni.
+# (Ugyanezeket beállítja a git clone is.)
+#
+# A -u opció (és azonnali push) nélkül is létrehozható a branch
+# szekció a git config paranccsal:
+
+
+git config branch.master.remote origin
+git config branch.master.merge  refs/heads/master
+
+
+# Most még nincs feltöltve semmi, de megvannak a default
+# paraméterek, tehát a pull/push egyeszerűen működnek:
+
+
+git push
+git pull
+
+
+

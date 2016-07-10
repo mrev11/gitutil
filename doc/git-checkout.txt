@@ -1,0 +1,94 @@
+
+git checkout
+
+Az a helyzet, hogy egymástól merőben különböző dolgokra van használva 
+a checkout, ráadásul egyes esetekben a funkció "mellékhatása" a kívánt cél. 
+Másrészről viszont a reset több szempontból hasonló, mint a checkout. 
+Mindkét funkció feladatok sokaságát tudja végrehajtani, és az opciók
+hatására ezen feladatok egy részhalmazát megcsinálják, a maradékot nem.
+A felosztást nehéz megjegyezni, úgyhogy a helyzet zavaros.
+Ezért érdemes, csak néhány gyakori és biztonságos formára korlátozódni.
+
+
+I. git checkout filespec nélkül
+-------------------------------
+
+git checkout [-f] <branch>
+
+    Átvált a <branch> ágra. Ezzel lehet váltogatni a branchek között.
+    Update-eli az indexet az új branch-ból, és update-eli a working
+    tree fájljait. A working tree módosítási megmaradnak (kivéve ha
+    meg van adva a -f opció), így azokat commitolni lehet az újonnan 
+    kiválasztott branch-ba.
+
+    Az ág váltása a .git/HEAD átírásával történik. Például, 
+    ha a master branch-ban vagyunk,  
+        .git/HEAD           tartalma  ref: refs/heads/master
+
+    végrehajtjuk
+        git branch devel    #feltesszük, hogy van ilyen
+
+    a változás:
+        .git/HEAD           új tartalma  ref: refs/heads/devel
+ 
+
+git checkout [-f] <commitid>
+
+    Hasonló, mint az előző, de így tetszőleges commit-ot előszed
+    (és betölt az indexbe, és kibont a working tree-ben).
+    A .git/HEAD-be közvetlenül beíródik a commitid. Ezt nevezik
+    detached HEAD állapotnak. "Normál" állapotba úgy lehet 
+    visszajutni, hogy végrehajtunk egy git checkout <branch>-ot.
+    
+    A -f (force)  opció hatására a working tree-ben levő változások
+    felülíródnak.
+
+
+II. git checkout filespec-cel
+-----------------------------
+
+git checkout -- <filespec>
+    Az indexből előszedi <filespec>-et. Ha a fájl közben módosult,
+    akkor felülíródik az index-beli változattal.
+
+git checkout -- .
+    Az indexből előszedi az összes fájlt. A módosult fájlok,
+    felülíródnak az index-beli változattal.
+
+
+
+Egyebek
+--------------------------------------------------------------------
+git chekout #(paraméterek nélkül)
+
+    Paraméterek nélkül nem csinál semmit, csak mutatja a változásokat.
+    Felesleges, mert a git status jobban mutatja.
+
+--------------------------------------------------------------------
+Teljes visszaállás az utolsó commitra:
+ 
+    git reset       # index<-utolsó commit
+    git checkout .  # előszedi a filék utolsó commit szerinti állapotát
+    git clean -fxd  # törli a plusz dolgokat
+                    # -f  force
+                    # -x  törli az ignored fájlokat
+                    # -d  törli a plusz directorykat
+
+--------------------------------------------------------------------
+Megjegyzés a -f (force opciópról)
+
+    git checkout -f <branch>
+        -f nélkül nem írja felül a megváltozott fájlokat
+
+    git checkout .
+        -f nélkül is felülírja a megváltozott fájlokat
+
+--------------------------------------------------------------------
+A módosítások áramlását mutatja az alábbi diagramm:
+
+              add                    commit
+             ---->                   ---->
+WORKING-TREE        STAGING-INDEX            REPO-DATABASE
+             <----                   <----
+            checkout                 reset
+

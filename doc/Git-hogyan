@@ -1,0 +1,148 @@
+
+Munka a lokális repóban:
+
+git init 
+    Egy directoriban (akár üres akár nem) létrehozza a git infrastruktúrát:
+    a .git subdirectoryt, benne a config filéket, stb.
+    
+    opcionálisan configurálás:
+    git config --global  user.name  "vermes"
+    git config --global  user.email  "vermes@comfirm.hu"
+    git config --global  color.ui  auto
+
+
+git add <filespec> <dirspec> ...
+    A <filespec>-eket <dirspec>-eket felveszi az indexbe (stage).
+    Az új filéket beveszi, a módosultakat módosítja, 
+    de a megszűnteket nem törli (az indexből).
+    A direktoryk tartalmát rekurzívan mind beveszi.
+    Például: 'git add .' az aktuális direktorira fut (rekurzívan).
+    Nem ezt a formát érdemes használni.
+
+git add --all
+    A working tree minden változását átvezeti az indexbe (stage).
+    Az új filéket beveszi, a módosultakat módosítja, a megszűnteket törli.
+    Szerintem csak a --all-os alakot érdemes használni, 
+    mert másképp megzavarosodnak a dolgok.
+
+    Ha van a working dir-ben egy .gitignore nevű filé, 
+    akkor az abban felsorolt patternekhez illeszkedő filéket kihagyja.
+    
+    Az indexre (staging area) úgy érdemes gondolni, mint a köverkező
+    commit-ra, azaz itt készítjük elő a következő commit-ot.
+
+git commit -m "commit message"
+git commit -F "fspec containing the commit message"
+    Az index tartalmát ellátja egy SHA1 névvel és rögzíti.
+    Vagyis az indexből keletkezik a következő commit.
+
+
+
+A folyamat:
+
+                                  wroking tree
+                                        |
+                                        | git add --all
+                                        |
+                                        V
+                                  staging index
+                                        |
+                                        | git commit
+                                        |
+                                        V     
+    commit1 <------ commit2 <------ commit3           ez a current branch
+             parent          parent
+
+                                      HEAD
+
+
+
+git log
+git log --pretty=oneline  --abbrev-commit 
+    Listázza a commitokat (különféle egyszerűbb/bonyolultabb formákban)
+    
+
+git status
+    Listázza, hogy milyen változások vannak
+    - a staging index és az utolsó commit között : Changes to be committed
+    - a working tree és a staging index között   : Changes not staged for commit
+    
+
+git checkout <path>
+git checkout .
+    Ez visszaáll az indexben rögzített állapotra
+    - visszaállítja az indexhez képest módosult filéket
+    - újra előveszi az indexhez képest törölt filéket
+    - de nem törli az indexhez képest új filéket
+
+
+git reset HEAD
+    Visszaálítja az indexet a kurrens ág HEAD-jéből, 
+    de semmit nem módosít a working tree-ben.
+    Példa: 
+        (git reset HEAD && git checkout .)
+    Ez visszaállítja a working tree-t a kurrens ág utolsó commitjának 
+    (a HEAD-nek) megfelelő állapotra, de nem törli le az új fájlokat.
+
+git reset <commit>
+    Visszaálítja a kurrens ág HEAD-jét <commit>-ra, 
+    és visszaálítja az indexet az újonnan beállított HEAD-re,
+    de semmit nem módosít a working tree-ben.
+    Akkor működik jól, ha <commit> a kurrens ágon van.
+    Spec. eset: git reset HEAD~1  - visszaáll az utolsó előtti commitra
+    Spec. eset: git reset HEAD~2  - visszaáll az utolsó előtti előtti commitra
+
+git reset --hard <commit>
+    Visszaálítja kurrens ág HEAD-jét, az indexet és a working tree-t <commit>-ra,
+    azaz a tracked fájlok módosításai megsemmisülnek.
+    git reset --hard <commit> == git reset <commit> && git checkout .
+
+
+                            working tree
+                                 ^
+                                 |
+                                 | checkout
+                                 |
+                            index stage
+                   ^             ^
+                   |             |
+                   | HEAD~1      | reset HEAD
+                   |             |
+    commit <---- commit <---- commit      current branch
+
+                               last
+
+
+
+Hogyan lehet egyszerűen remote git repót csinálni? 
+
+1) Létrehozunk egy lokális git repót
+
+    git init
+    git add -all
+    git commit -m "initial commit"
+
+
+2) Az így keletkezett .git directoryt felmásoljuk a szerverre -> REPO.
+   A szereveren levő REPO/config-ban bare=true-t állítunk be.
+    
+
+3a) A kliensen új lokális repót csinálunk klónozással:
+
+    git clone ssh://USER@HOSTNAME/path/to/the/REPO
+
+3b) Vagy a meglevő lokális repóba beteszünk egy ilyen config-ot:
+
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+
+[remote "origin"]
+        url = ssh://vermes@localhost/home/vermes/temp/gitgyak-repo/.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master

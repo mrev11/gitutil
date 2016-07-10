@@ -14,8 +14,11 @@ function main()
 
 local brw
 local branchmenu
-local com:={{""}},n
+local com:={{"","",""}},n
+local rl,line,pos
 local err
+
+    change_to_gitdir()
 
     setcursor(0)
 
@@ -40,27 +43,45 @@ local err
 
     brwArray(brw,com)
 
-    brwColumn(brw,"Commit",brwAblock(brw,1),replicate("X",maxcol()-2))
+    brwColumn(brw,"Branch",brwAblock(brw,1),replicate("X",6))
+    brwColumn(brw,"Commit",brwAblock(brw,2),replicate("X",7))
+    brwColumn(brw,"Message",brwAblock(brw,3),replicate("X",maxcol()-21))
 
     brwMenu(brw,"Branch","Set current branch",branchmenu:=branchmenu(brw,{}))
     brwMenu(brw,"Checkout","Checkout the highlighted commit",{||checkout(brw)})
-
+    brwMenu(brw,"Compare^","View changes caused by this commit",{||compare__(brw)})
+    brwMenu(brw,"Compare-HEAD","View changes between this commit and HEAD",{||compare_h(brw)})
+    brwMenu(brw,"SoftReset","Reset to the highlighted commit",{||reset(brw)})
 
     brwApplyKey(brw,{|b,k|appkey(b,k)})
     brwMenuName(brw,"[GitNavig]")
 
+    brw:colorspec:="w/n,n/w,w+/n,rg+/n"
+    brw:getcolumn(1):colorblock:={|x|{3}}
+    brw:getcolumn(2):colorblock:={|x|{4}}
+    
+
     while(.t.)
         branchmenu(brw,branchmenu) //frissíti
 
-        run(" git log --pretty=oneline  --abbrev-commit >log1")
-        com:=memoread("log1") //commits
-        ferase("log1")
-        com::=split(chr(10))
-        for n:=1 to len(com)
-            com[n]:={com[n]}
-        next
-
-        brwArray(brw,com)
+        asize(com,0)
+        //rl:=read_output_of("git log --oneline --decorate")
+        rl:=read_output_of("git log --pretty=oneline  --abbrev-commit")
+        while( (line:=rl:readline)!=NIL )
+            if(debug())
+                ?? line
+            end
+            line::=bin2str
+            line::=strtran(chr(10),"")
+            pos:=at(" ",line)
+            aadd(com,{"?",line[1..pos-1],line[pos+1..]})
+        end
+        rl:close
+        if(empty(com))
+            exit
+        end
+        
+        fill_status(com)
 
         brw:gotop
         brwShow(brw)
@@ -81,18 +102,22 @@ function appkey(b,k)
 
 ********************************************************************************************
 function branchmenu(brw,branchmenu)
-local log,branch,n
-    run("git branch >log2")
-    branch:=memoread("log2") //branches
-    ferase("log2")
-    branch::=split(chr(10))
+local rl,line
     asize(branchmenu,0)
-    for n:=1 to len(branch)
-        if( "*"$branch[n] )
-            brwMenuName(brw,'['+branch[n][2..]::alltrim+']' )
+    rl:=read_output_of("git branch")
+    while( (line:=rl:readline)!=NIL )
+        if(debug())
+            ?? line
         end
-        aadd(branchmenu,{branch[n],mkblock(branch[n])})
-    next
+        line::=bin2str
+        line::=strtran(chr(10),"")
+        aadd(branchmenu,{line,mkblock(line)})
+        if( "*"$line )
+            brwMenuName(brw,'['+line[2..]::alltrim+']' )
+        end
+    end
+    rl:close
+
     return branchmenu
 
 
@@ -104,7 +129,8 @@ static function mkblock(b)
 function setbranch(b)
     if( !repo_clean )
         alert("There are modified file(s) in the working tree,;";
-              +"checkout would destroy all changes!")
+              +"checkout would destroy all changes!",{"Escape"})
+        return .t.
     else
         b::=strtran("*","")
         run("git checkout -f "+b)      //force nélkül a módosításokat nem írja felül
@@ -118,7 +144,8 @@ function checkout(brw)
 local commit
     if( !repo_clean )
         alert("There are modified file(s) in the working tree,;";
-              +"checkout would destroy all changes!")
+              +"checkout would destroy all changes!",{"Escape"})
+        return .t.
     else
         commit:=brwArray(brw)[brwArrayPos(brw)][1]
         commit::=split(" ")
@@ -126,6 +153,41 @@ local commit
         run("git checkout -f "+commit) //force nélkül a módosításokat nem írja felül
         run("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
     end
+    break("X") //kilép brwLoop-ból
+
+
+********************************************************************************************
+function compare__(brw)
+local scrn:=savescreen()
+local arr:=brwArray(brw)
+local pos:=brwArrayPos(brw)
+local commit:=arr[pos][2]
+    if( pos<len(arr) )
+        run( "gitview.exe "+commit+"^ "+commit )
+    end
+    restscreen(,,,,scrn)
+    return .t.
+
+
+********************************************************************************************
+function compare_h(brw)
+local scrn:=savescreen()
+local arr:=brwArray(brw)
+local pos:=brwArrayPos(brw)
+local commit:=arr[pos][2]
+local head:=arr[1][2]
+    run( "gitview.exe "+commit+" "+head )
+    restscreen(,,,,scrn)
+    return .t.
+
+
+
+********************************************************************************************
+function reset(brw)
+local arr:=brwArray(brw)
+local pos:=brwArrayPos(brw)
+local commit:=arr[pos][2]
+    run( "git reset --soft "+commit)
     break("X") //kilép brwLoop-ból
 
 

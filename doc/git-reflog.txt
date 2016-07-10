@@ -1,0 +1,11 @@
+
+
+git reflog
+
+Mutatja a korábbi HEAD-eket, azokat is, amik korábbi resetek
+miatt máshogy elérhetetlenek. Újra elő lehet venni őket  a 
+'git reset HEAD@{x}' paranccsal. A gc 30 napig nem takarítja ki
+az elérhetetlen commitokat.
+
+Megjegyzés HEAD@{1} (közvetlenül egy reset után) ugyanaz,
+mint ORIG_HEAD.
