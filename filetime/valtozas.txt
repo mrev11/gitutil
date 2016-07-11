@@ -1,5 +1,7 @@
 
+2016.07.11
+    loadhash kikeruli a git merge conflict-okat
 
-2014.06.10
+2016.06.10
     CCC3 kornyezetben is fordul.
     

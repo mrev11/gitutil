@@ -48,6 +48,16 @@ local fd,rl,line,hdata
         rl:=readlineNew(fd)
         while( NIL!=(line:=rl:readline) )
             line::=bin2str
+            
+            if( left(line,7)$"<<<<<<<,=======,>>>>>>>" )
+                //a git merge csinál ilyen sorokat
+                //egyszerűen ki kell kerülni
+                //a fájl így is hasznalható
+                //nem kell a merge confliktok
+                //javításával foglalkozni
+                loop
+            end
+            
             line::=strtran(chr(10),"")
             line::=split(" ")  //{sha1,datetime,fspec}
             hdata:=hash[line[1]]
