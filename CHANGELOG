@@ -1,3 +1,22 @@
+
+
+.git/local egyeni scriptek
+A g-* és *.savex scriptek ignoraltak.
+Uj scriptek: gcl, gco, gst
+Koncepcio az egyeni scriptek elhelyezesere:
+A .git/local-ba (uj directory) tesszuk az egyeni scriptjeinket. 
+Az itt levo dolgok nem kerulnek be a repoba, es nem torli oket 
+a clean. Emellett olyan fájlneveket hasznalunk, amit .gitignored 
+ignoral. A local-ban levo scripteket atlinkeljuk a gyokerbe, 
+a nevuk miatt azonban a linkek sem kerulnek be a mentesbe. 
+Ha ezutan egy git clean letorli a linkeket, akkor ezeket 
+egyszeruen ujra lehet csinalni.  A gitnav-ba bele van epitve
+ezeknek a linkeknek a legyartasa.
+A gcl script letorli az ignoraltakat (ppo, objlin, stb.),
+ezekkel egyutt torlodnek az egyeni scriptjeink linkjei,
+de a linkeket rogton ujra megcsinalja.
+
+
 gitnav: HEAD<>HEAD helyett HEAD<-NEXT osszehasonlitas
 
 Rossz lett a chekout, mert a commit átkerült a 2. oszlopba.

@@ -1,8 +1,0 @@
-#!/bin/bash
-#head <-> index
-
-#head  red
-#index green
-
-git diff HEAD
-

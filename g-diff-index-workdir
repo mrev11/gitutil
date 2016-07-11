@@ -1,8 +1,0 @@
-#!/bin/bash
-#working directory <->  index
-
-#index red
-#workd green
-
-git diff 
-

@@ -1,4 +1,2 @@
 #!/bin/bash
-git log
-
-
+git status

@@ -1,6 +1,0 @@
--s$(HOME)/util/gitutil
--r:.git:
--lx.FILETIME_*
--lxcommit-message
--x.bak.
--mw

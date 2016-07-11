@@ -9,5 +9,7 @@ error
 error--*
 
 commit-message
+g-*
+/*.savex
 
 

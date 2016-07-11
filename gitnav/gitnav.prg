@@ -50,7 +50,7 @@ local err
     brwMenu(brw,"Branch","Set current branch",branchmenu:=branchmenu(brw,{}))
     brwMenu(brw,"Snapshot","Checkout the highlighted commit",{||checkout(brw)})
     brwMenu(brw,"Compare^","View changes caused by this commit",{||compare__(brw)})
-    brwMenu(brw,"Compare-HEAD","View changes between this commit and HEAD",{||compare_h(brw)})
+    brwMenu(brw,"Compare-HEAD","View changes between this commit and HEAD (or index)",{||compare_h(brw)})
     brwMenu(brw,"Reset","Soft reset to the highlighted commit",{||reset(brw)})
 
     brwApplyKey(brw,{|b,k|appkey(b,k)})
@@ -128,12 +128,13 @@ static function mkblock(b)
 ********************************************************************************************
 function setbranch(b)
     if( !repo_clean )
-        alert_not_committed()
+        alert_if_not_committed()
         return .t.
     else
         b::=strtran("*","")
         run("git checkout -f "+b)      //force nélkül a módosításokat nem írja felül
         run("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
+        link_local()
     end
     break("X") //kilép brwLoop-ból
 
@@ -142,12 +143,13 @@ function setbranch(b)
 function checkout(brw)
 local commit
     if( !repo_clean )
-        alert_not_committed()
+        alert_if_not_committed()
         return .t.
     else
         commit:=brwArray(brw)[brwArrayPos(brw)][2]
         run("git checkout -f "+commit) //force nélkül a módosításokat nem írja felül
         run("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
+        link_local()
     end
     break("X") //kilép brwLoop-ból
 
@@ -211,9 +213,23 @@ local result:=.f.
 
     return result // TRUE: clean
 
+
 ********************************************************************************************
-static function alert_not_committed()
+static function alert_if_not_committed()
     alert( "To prevent DISASTER;function is allowed only in fully committed state!",{"Escape"} )
 
+
+********************************************************************************************
+static function link_local()
+local gitloc:=directory(".git/local/*"),n
+    for n:=1 to len(gitloc)
+        run( "ln -s .git/local/"+gitloc[n][1]+" ." )
+    end
+
+// Az a koncepció, .git/local-ban egyéni scriptek vannak
+// amelyek mind ignoráltak, ezért  git clean -fXd törli őket
+// az objectekkel és exekkel együtt, de csak a gyökérben
+// levő linkjüket, a .git/local-ban levő tényleges fájlt nem.
+// Most újra belinkelődnek a gyökérbe.
 
 ********************************************************************************************
