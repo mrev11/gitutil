@@ -7,7 +7,7 @@
  git merge devel
 
 # ez beolvasztja develt a masterba
-# ellenorizni kell a confiltokat
+# ellenorizni kell a conflict-okat
 # egy conflict így néz ki:
 #
 #<<<<<<< HEAD
@@ -20,8 +20,15 @@
 #    devel version
 #>>>>>>> devel
 #
-# ki kell javitani a forrásokat a confliktoknál
+# ki kell javitani a forrásokat a conflict-oknál
 # és újra commitolni, ezután a devel ág megszüntethető
+
+# Hogy néz ki az a conflict, ami úgy keletkezik,
+# hogy az egyik ág mődosít egy fájlt,
+# miközben egy másik ág törli?
+
+
+
 
 git branch -d devel
 
@@ -30,7 +37,4 @@ git branch -d devel
 # új devel ágat csinálunk, és abban dolgozun tovább.
 
 # git branch devel
-
-
-
 
