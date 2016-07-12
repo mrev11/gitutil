@@ -129,14 +129,20 @@ static function mkblock(b)
 function setbranch(b)
     if( !repo_clean )
         alert_if_not_committed()
-        return .t.
     else
         b::=strtran("*","")
         run("git checkout -f "+b)      //force nélkül a módosításokat nem írja felül
         run("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
         link_local()
+        break("X") //kilép brwLoop-ból
     end
-    break("X") //kilép brwLoop-ból
+    
+    //Pulldown menü blokkjának return értékével 
+    //nem lehet szabályozni a brwLoopból való kilépést.
+    //Ha a visszatérési érték szám, akkor a menü
+    //lenyitott állapotban marad, és a return érték
+    //szerinti sor lesz benne kiválasztva,
+    //egyébként becsukódik.
 
 
 ********************************************************************************************
@@ -150,8 +156,8 @@ local commit
         run("git checkout -f "+commit) //force nélkül a módosításokat nem írja felül
         run("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
         link_local()
+        return .f. //kilép brwLoop-ból
     end
-    break("X") //kilép brwLoop-ból
 
 
 ********************************************************************************************
@@ -192,7 +198,16 @@ local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
 local commit:=arr[pos][2]
     run( "git reset --soft "+commit)
-    break("X") //kilép brwLoop-ból
+    return .f. //kilép brwLoop-ból
+    
+    //A resetet általában arra használjuk, hogy lerövidítsük 
+    //az aktuális ágat. A soft reset nem módosítja az indexet
+    //és a working tree-t. A reset után végrehajtunk egy
+    //add-ot és egy commit-ot, amivel a lerövidült branch
+    //végén levő commitban ott lesz az worktree friss tartalma.
+    //Az ágat nem szabad rövidebbre vágni, mint az utoljára 
+    //pusholt commit. Ha a reset után meggondoljuk magunkat,
+    //vissza lehet lépni egy 'git reset ORIG_HEAD' művelettel.
 
 
 ********************************************************************************************

@@ -6,7 +6,7 @@
 #
 # Az a koncepció, .git/local-ban egyéni scriptek vannak
 # amelyek mind ignoráltak, ezért  git clean -fXd törli őket
-# az objectekkel exekkel együtt, de csak a gyökérben
+# az objectekkel es exekkel együtt, de csak a gyökérben
 # levő linkjüket, a .git/local-ban levő tényleges fájlt nem.
 # A második lépésben aztán újra belinkelődnek a gyökérbe.
 

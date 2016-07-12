@@ -9,7 +9,7 @@
 
 
 #ez most durva, 
-#mert egyből minden változást committol,
+#mert egyből minden változást commitol,
 #(hogy gyorsabban menjen a tesztelés)
 #git add --all
 

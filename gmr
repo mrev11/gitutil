@@ -34,7 +34,7 @@ git branch -d devel
 
 
 # majd miután rendbehoztuk a conflict-okat
-# új devel ágat csinálunk, és abban dolgozun tovább.
+# új devel ágat csinálunk, és abban dolgozunk tovább.
 
 # git branch devel
 
