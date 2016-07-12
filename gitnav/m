@@ -1,2 +1,3 @@
 #!/bin/bash
-bapp_unixc.b  '-b../$$(util)'  BUILD_EXE=~/bin
+bapp_unixc.b  '-b../$$(util)'  BUILD_EXE=~/bin   BUILD_SHR=static
+

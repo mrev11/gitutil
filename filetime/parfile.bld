@@ -1,0 +1,5 @@
+-b../$$(util)
+-bccc3_crypto  
+-bcrypto
+BUILD_EXE=$(HOME)/bin   
+BUILD_SHR=static

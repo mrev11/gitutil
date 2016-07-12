@@ -1,4 +1,8 @@
 
+atteres static linkelesre, hogy a CCC clean
+allapotaban is lehessen kezelni a CCC repot
+gitref program a reflog browseolasara
+
 javitgatas, kommenteles
 
 filetime-save/restore-ban a loadhash kikeruli
