@@ -1,5 +1,5 @@
 
-
+#include "inkey.ch"
 
 static context:="3" //a változások körül megjelenített sorok száma
 
@@ -80,11 +80,25 @@ local gitcmd
     //              1   2   3    4    5    6
     brw:getcolumn(1):colorblock:={|x|statcolor(x)}
     sortbystatus(brw)
+    
+    brwApplyKey(brw,{|b,k|appkey_main(b,k)})
 
     brw:gotop
     brwShow(brw)
     brwLoop(brw)
 
+
+********************************************************************************************
+static function appkey_main(b,k)
+local arr,pos,fspec
+    if( k==K_ESC )
+        return .f.
+    elseif( k==K_INS )
+        arr:=brwArray(b)
+        pos:=brwArrayPos(b)
+        fspec:=arr[pos][2]
+        view_blame(fspec)    
+    end
 
 
 ********************************************************************************************
@@ -157,7 +171,7 @@ while( mode!=NIL )
     brw:headsep:="" //nincs oszlopnév!
     brw:cargo[12]:=.f.  //BR_HIGHLIGHT nincs rá API
 
-    brwApplyKey(brw,{|b,k|appkey(b,k,@mode)})
+    brwApplyKey(brw,{|b,k|appkey_diff(b,k,@mode)})
 
     brwCurrent(brw,ascan({"dif","old","new"},mode))
 
@@ -173,12 +187,11 @@ end
 
 
 ********************************************************************************************
-static function appkey(b,k,mode,nomenu)
-    if( k==27 )
+static function appkey_diff(b,k,mode)
+    if( k==K_ESC )
         mode:=NIL //kilép a brwLoop körüli ciklusból
         return .f.
     end
-    return NIL
 
 
 ********************************************************************************************
@@ -266,6 +279,34 @@ local base
             descendant:=.f.
         end
     end
+
+
+********************************************************************************************
+static function view_blame(fname)
+local scrn:=savescreen()
+local tmp:=tempfile()
+    run( "git blame "+fname+" >"+tmp)
+    run( "list.exe "+tmp)
+    ferase(tmp)
+    restscreen(,,,,scrn)
+    return .t.
+
+
+********************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ********************************************************************************************

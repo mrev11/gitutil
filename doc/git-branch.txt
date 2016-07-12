@@ -1,0 +1,53 @@
+
+
+---------------------------------------------------------------------------------
+git branch
+
+    Listázza az ágakat, pl:
+
+    * devel
+      master
+
+    Csillag mutatja az aktuális ágat.
+
+
+---------------------------------------------------------------------------------
+git branch  -a
+
+    Az öszes ágat listázza: lokális + remote, pl:
+
+    * devel
+      master
+      remotes/develsave/devel
+      remotes/origin/master
+
+    Ezzel lehet megtalálni a remote branchokat.
+
+
+---------------------------------------------------------------------------------
+git branch  -r
+
+    A remote ágakat listázza, pl:
+
+    develsave/devel
+    origin/master
+
+    Ezzel is meg lehet találni a remote branchokat.
+
+---------------------------------------------------------------------------------
+git barnch <newbranch>
+
+    Csinál egy új branchot.
+
+---------------------------------------------------------------------------------
+git barnch  -d <branch>
+
+    Törli a branchot, de csak akkor hajtja végre, ha a branch
+    'fully merged' állapotban van. Nem világos, hogy ez pontosan mit 
+    jelent.
+
+---------------------------------------------------------------------------------
+git barnch  -D <branch>
+
+    Erőszakosan törli a branchot.
+    

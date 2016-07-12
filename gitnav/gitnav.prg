@@ -1,11 +1,14 @@
 
+#include "inkey.ch"
 #include "directry.ch"
 
 // browseolja a commitokat
 //
 //  "Branch"    kapcsol a különböző branchok között
-//  "Checkout"  előveszi a kiválasztott commitot  (checkout -f; clean -fdx)
-
+//  "Snapshot"  előveszi a kiválasztott commitot  (checkout -f; clean -fdx)
+//  "Compare^"  összehasonlítja az kiválasztottat az eggyel régebbivel 
+//  "CompareH"  összehasonlítja az kiválasztottat a HEAD-del
+//  "Reset"     A HEAD-et az kiválsztott commit-hoz viszi
 
 static repo_clean:=repo_clean()
 
@@ -22,12 +25,6 @@ local err
 
     setcursor(0)
 
-    //if( !direxist(".git") )
-    //    alert( "Not a git working directory - Quit." )
-    //    quit
-    //end
-    
-    
     if( repo_clean  )
         //alert("repo clean")
     else
@@ -81,7 +78,7 @@ local err
             exit
         end
         
-        fill_status(com)
+        branch_status(com)
 
         brw:gotop
         brwShow(brw)
@@ -95,9 +92,13 @@ local err
 
 ********************************************************************************************
 function appkey(b,k)
-    if( k==27 )
+    if( k==K_ESC )
         quit
+    elseif( k==K_INS )
+        logview(b)
     end
+
+
 
 
 ********************************************************************************************

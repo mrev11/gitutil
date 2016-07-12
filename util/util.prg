@@ -57,4 +57,31 @@ local line
     rl:close
     return branches  //{b1,b2,...}
 
+
+
+**************************************************************************************
+function list_of_remote_branches()
+local rl:=read_output_of("git branch -r")
+local branches:={}
+local line
+    while( (line:=rl:readline)!=NIL )
+        line::=bin2str
+        line::=strtran(chr(10),"")
+        line::=strtran(chr(13),"")
+        line::=alltrim
+        aadd(branches,line)
+    end
+    rl:close
+    return branches  //pl. {"develsave/devel","origin/master" }
+                     // fajlsecifikaciok .git/refs/remotes/ alatt
+
+
+**************************************************************************************
+function commitid_of_remote_branch(b) // -> commitid vagy ""
+local fspec:=".git/refs/remotes/"+b
+local commitid:=memoread(fspec)
+    commitid::=strtran(chr(10),"")
+    return if(len(commitid)==40,commitid,"")
+    
+
 **************************************************************************************
