@@ -1,3 +1,4 @@
 #!/bin/bash
-bapp_unixc.b  '-b../$$(util)'  BUILD_EXE=~/bin   BUILD_SHR=static
+bapp_unixc.b  @parfile.bld
+
 

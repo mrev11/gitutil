@@ -1,6 +1,7 @@
 
 #include "inkey.ch"
 
+
 static context:="3" //a változások körül megjelenített sorok száma
 
 
@@ -44,6 +45,7 @@ local gitcmd
     gitcmd:="git diff --name-status"
     gitcmd+=" "+arg_commit1
     gitcmd+=" "+arg_commit2
+    gitcmd+=" --" //egyezo branch- es fajlnev elkerulese
 
     rl:=read_output_of(gitcmd)
     while( (line:=rl:readline)!=NIL )
@@ -90,14 +92,17 @@ local gitcmd
 
 ********************************************************************************************
 static function appkey_main(b,k)
-local arr,pos,fspec
+local arr,pos
+local fspec,ftext
+
     if( k==K_ESC )
         return .f.
-    elseif( k==K_INS )
+    elseif( k==K_CTRL_B )
         arr:=brwArray(b)
         pos:=brwArrayPos(b)
         fspec:=arr[pos][2]
-        view_blame(fspec)    
+        ftext:=output_of("git blame "+fspec)
+        zbrowseNew(ftext,b:ntop,b:nleft,b:nbottom,b:nright):loop
     end
 
 
@@ -279,34 +284,6 @@ local base
             descendant:=.f.
         end
     end
-
-
-********************************************************************************************
-static function view_blame(fname)
-local scrn:=savescreen()
-local tmp:=tempfile()
-    run( "git blame "+fname+" >"+tmp)
-    run( "list.exe "+tmp)
-    ferase(tmp)
-    restscreen(,,,,scrn)
-    return .t.
-
-
-********************************************************************************************
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ********************************************************************************************

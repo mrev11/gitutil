@@ -1,13 +1,14 @@
 
 git checkout
 
-Az a helyzet, hogy egymástól merőben különböző dolgokra van használva 
-a checkout, ráadásul egyes esetekben a funkció "mellékhatása" a kívánt cél. 
-Másrészről viszont a reset több szempontból hasonló, mint a checkout. 
-Mindkét funkció feladatok sokaságát tudja végrehajtani, és az opciók
-hatására ezen feladatok egy részhalmazát megcsinálják, a maradékot nem.
-A felosztást nehéz megjegyezni, úgyhogy a helyzet zavaros.
-Ezért érdemes, csak néhány gyakori és biztonságos formára korlátozódni.
+Zűrös dolog a checkout és reset. A funkcióikat tekintve legalább
+felerészben átfedés van közöttük. Például mindkettő változtatja
+a HEAD-et, mindkettő változtatja az indexet, változtatja a wt-t.
+Kapcsolók sokaságával lehet szabályozni, mikor mely fájlokra
+terjedjen ki a hatásuk, melyekre ne. Jól össze lehet keverni.
+De nem csak a resettel van átfedésben, hanem a branch-csel is, 
+meg még merge-t is végez, meg még ki tudja mit. Őszintén szólva 
+az alkalmazástervezés csődjének látszik. 
 
 
 I. git checkout filespec nélkül
@@ -15,11 +16,56 @@ I. git checkout filespec nélkül
 
 git checkout [-f] <branch>
 
-    Átvált a <branch> ágra. Ezzel lehet váltogatni a branchek között.
-    Update-eli az indexet az új branch-ból, és update-eli a working
-    tree fájljait. A working tree módosítási megmaradnak (kivéve ha
-    meg van adva a -f opció), így azokat commitolni lehet az újonnan 
-    kiválasztott branch-ba.
+    Átvált a <branch> ágra. Ezzel lehet váltogatni a branchok között.
+    A HEAD-et átállítja a <branch> végére. Update-eli az indexet az új
+    branchból. Update-eli a wt-t az indexből. A wt  módosításait
+    megtartja (hacsak nincs megadva -f opció), így azokat commitolni 
+    lehet az újonnan kiválasztott branch-ba.*
+
+    ----------------------------------------------------------------------
+    *Ez van a man-ban, de ez így pontatlan, így kell érteni:
+    Példa: 'git co B' (A branchról váltunk B-re), miközben 
+    a wt-ben lehetnek olyan fájlok, amiket az utolsó commit óta
+
+    a) kreáltunk: 
+        Megpróbálja végrehajtani a co-t, ha a B-ből kijönne egy 
+        olyan fájl, ami felülírná az A-ban kreált (de nem commitolt) 
+        új fájlunkat, akkor abortál, egyébként az új fájl megmarad,
+        és ott lesz a B-ből elővett fájlok között.
+        
+        Megj: Akkor is abortál, ha a B-ből kijövő fájl pontosan
+        ugyanaz, mint az új fájl, amit felülír. 
+
+
+    m) módosítottunk: 
+        1) Ha olyan F fájlt módosítottunk, ami benne van B-ben is, 
+           és Fa==Fb, akkor az nem akadályozza  a co végrehajtását,
+           F nem íródik felül, hanem F módosított változata 
+           megmarad a B-ből elővett fájlok között, és git st
+           módosítottnak mutatja (B-ben). 
+
+        2) Ha olyan F fáljt módosítottunk, ami nincs benne B-ben,
+           vagy Fa!=Fb, akkor a co abortál.
+
+    d) letöröltünk: 
+        1) Ha olyan F fájlt töröltünk le, ami benne van B-ben is,
+           és Fa==Fb, akkor az nem akadályozza  a co végrehajtását,
+           F nem állítódik vissza B-ből, hanem git st mint töröltet
+           mutatja B-ben. (És visszaváltva, sem jön elő az A-ból,
+           ami már csak a szimmetriából is következik.)
+
+        2) Ha olyan F fáljt töröltünk, ami nincs benne B-ben,
+           vagy Fa!=Fb, akkor a co (nem, nem abortál, hanem)
+           simán átvált és a törlés hatástalan. Ha létezik Fb, 
+           azkkor azt előveszi. Ha  visszaváltunk A-ra, akkor újra 
+           előveszi A-ból az előbb törölt Fa-t.
+
+    A komplikált szabályok megjegyzését könnyíti, ha észrevesszük
+    a szimmetriát:  Ha az A->B váltás sikeres (nem abortál), akkor 
+    visszafelé (B->A) is sikeres lesz. Az ideoda váltogatás (A<->B) 
+    a hatástalan törlések visszaállítása után fixpontra jut, ami
+    után a wt nem változik többet.
+    ----------------------------------------------------------------------
 
     Az ág váltása a .git/HEAD átírásával történik. Például, 
     ha a master branch-ban vagyunk,  
@@ -52,8 +98,9 @@ git checkout -- <filespec>
     akkor felülíródik az index-beli változattal.
 
 git checkout -- .
-    Az indexből előszedi az összes fájlt. A módosult fájlok,
-    felülíródnak az index-beli változattal.
+    Előszedi az indexből az összes fájlt. A wt-hez hozzáadott új fájlok
+    megmaradnak, A wt-ben levő módosult fájlokat felülírja (a módosítások 
+    elvesznek). A törölt fájlokat újra előveszi.
 
 
 
@@ -63,6 +110,7 @@ git chekout #(paraméterek nélkül)
 
     Paraméterek nélkül nem csinál semmit, csak mutatja a változásokat.
     Felesleges, mert a git status jobban mutatja.
+
 
 --------------------------------------------------------------------
 Teljes visszaállás az utolsó commitra:

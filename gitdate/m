@@ -1,2 +1,4 @@
 #!/bin/bash
-bapp_unix_.b  '-b../$$(util)'
+set -x
+bapp_unix_.b  -bccc"$CCCVER"_gitutil.lib
+

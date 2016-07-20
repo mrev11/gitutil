@@ -1,6 +1,16 @@
 
 
-********************************************************************************************
+**************************************************************************************
+function output_of(cmd)
+local output
+local tmp:=tempfile("/tmp/","bak")
+    run( cmd+" >"+tmp+" 2>&1")
+    output:=memoread(tmp)
+    ferase(tmp)
+    return output
+
+
+**************************************************************************************
 function read_output_of(x)
 local pp:=child(x) //{r,w}
 local rl:=readlineNew(pp[1])

@@ -5,10 +5,11 @@
 // browseolja a commitokat
 //
 //  "Branch"    kapcsol a különböző branchok között
-//  "Snapshot"  előveszi a kiválasztott commitot  (checkout -f; clean -fdx)
+//  "Browse"    browse-olja a commitban levő fájlokat
 //  "Compare^"  összehasonlítja az kiválasztottat az eggyel régebbivel 
 //  "CompareH"  összehasonlítja az kiválasztottat a HEAD-del
 //  "Reset"     A HEAD-et az kiválsztott commit-hoz viszi
+//  "Snapshot"  előveszi a kiválasztott commitot  (checkout -f; clean -fdx)
 
 static repo_clean:=repo_clean()
 
@@ -44,11 +45,12 @@ local err
     brwColumn(brw,"Commit",brwAblock(brw,2),replicate("X",7))
     brwColumn(brw,"Message",brwAblock(brw,3),replicate("X",maxcol()-21))
 
-    brwMenu(brw,"Branch","Set current branch",branchmenu:=branchmenu(brw,{}))
-    brwMenu(brw,"Snapshot","Checkout the highlighted commit",{||checkout(brw)})
-    brwMenu(brw,"Compare^","View changes caused by this commit",{||compare__(brw)})
-    brwMenu(brw,"Compare-HEAD","View changes between this commit and HEAD (or index)",{||compare_h(brw)})
-    brwMenu(brw,"Reset","Soft reset to the highlighted commit",{||reset(brw)})
+    brwMenu(brw,"Branch","View/change current branch",branchmenu:=branchmenu(brw,{}))
+    brwMenu(brw,"Browse","Browse files of selected commit",{||browse_commit(brw)})
+    brwMenu(brw,"Compare^","View changes caused by the selected commit",{||compare__(brw)})
+    brwMenu(brw,"Compare-HEAD","View changes between selected commit and HEAD (or index)",{||compare_h(brw)})
+    brwMenu(brw,"Reset","Soft reset to the selected commit",{||reset(brw)})
+    brwMenu(brw,"Snapshot","Checkout the selected commit",{||checkout(brw)})
 
     brwApplyKey(brw,{|b,k|appkey(b,k)})
     brwMenuName(brw,"[GitNavig]")
@@ -91,18 +93,16 @@ local err
 
 
 ********************************************************************************************
-function appkey(b,k)
+static function appkey(b,k)
     if( k==K_ESC )
         quit
     elseif( k==K_INS )
-        logview(b)
+        viewcommit(b)
     end
 
 
-
-
 ********************************************************************************************
-function branchmenu(brw,branchmenu)
+static function branchmenu(brw,branchmenu)
 local rl,line
     asize(branchmenu,0)
     rl:=read_output_of("git branch")
@@ -127,7 +127,7 @@ static function mkblock(b)
 
 
 ********************************************************************************************
-function setbranch(b)
+static function setbranch(b)
     if( !repo_clean )
         alert_if_not_committed()
     else
@@ -147,7 +147,7 @@ function setbranch(b)
 
 
 ********************************************************************************************
-function checkout(brw)
+static function checkout(brw)
 local commit
     if( !repo_clean )
         alert_if_not_committed()
@@ -162,7 +162,7 @@ local commit
 
 
 ********************************************************************************************
-function compare__(brw)
+static function compare__(brw)
 local scrn:=savescreen()
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
@@ -175,7 +175,7 @@ local commit:=arr[pos][2]
 
 
 ********************************************************************************************
-function compare_h(brw)
+static function compare_h(brw)
 local scrn:=savescreen()
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
@@ -194,7 +194,7 @@ local head:=arr[1][2]
 
 
 ********************************************************************************************
-function reset(brw)
+static function reset(brw)
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
 local commit:=arr[pos][2]

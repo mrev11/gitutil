@@ -1,3 +1,12 @@
 #!/bin/bash
-bapp_unix_.b  -lutil
+bapp_unix_.b  @parfile.bld
 
+for so in obj$CCCBIN/*.so; do
+    cp -pf $so $so.new
+    mv $so.new  $CCCDIR/usr/lib/$CCCBIN/`basename $so`
+done
+
+for lib in obj$CCCBIN/*.lib; do
+    cp -pf $lib $lib.new
+    mv $lib.new  $CCCDIR/usr/lib/$CCCBIN/`basename $lib`
+done

@@ -1,4 +1,15 @@
 
+
+
+browseolja a kivalasztott commit fajljait;
+mutatja a kivalasztott fajl tartalmat; 
+zframe/zbrowse objektumok a fajlok megjelenitesere;
+CTRL_B valt a plain es blame modok kozott;
+git mukodes felderitese;
+javitgatas, kommenteles;
+sajat dokumentacio irkalasa
+
+
 gitview-ba INS-re git blame
 timezone teszteles
 gitnav-ban INS-re  mutatjuk a commit log-jat

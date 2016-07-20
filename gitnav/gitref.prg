@@ -57,7 +57,7 @@ local err
 
 
 ********************************************************************************************
-function appkey(b,k)
+static function appkey(b,k)
     if( k==27 )
         quit
     end

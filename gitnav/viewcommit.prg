@@ -1,50 +1,48 @@
 
 ********************************************************************************************
-function logview(brw)
-
+function viewcommit(brw)
 //local scrn:=savescreen()
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
 local commit1:=arr[pos][2]
 local commit2
-local rl,line
-local gitcmd
-local logarr:={}
-local logbrw
 
-
-    if( pos>=len(arr) )
-        return .t.
+    if( pos<len(arr) )
+        commit2:=arr[pos+1][2]  //eggye  régebbi
+        browse(commit1,commit2)
     end
-    
-    commit2:=arr[pos+1][2]  //eggye  régebbi
+
+    //restscreen(,,,,scrn)
+    return .t.
+
+
+********************************************************************************************
+static function browse(commit1, commit2)
+
+local gitcmd,rl,line
+local brw, arr:={}
 
     gitcmd:="git log --date=iso-local --stat --summary "+commit2+".."+commit1
     //memowrit("gitcmd",gitcmd)
     rl:=read_output_of(gitcmd)
     while( NIL!=(line:=rl:readline) )
-        aadd(logarr,{ line::bin2str::strtran(chr(10),"") })
+        aadd(arr,{ line::bin2str::strtran(chr(10),"") })
     end
+    rl:close
 
+    brw:=brwCreate(0,0,maxrow(),maxcol())
+    brwArray(brw,arr)
+    brwColumn(brw,"",brwAblock(brw,1),replicate("X" ,maxcol()-2))
+    brw:colorspec:="w/n,rg+/n,w+/n,rg+/n,r/n"
+    brw:getcolumn(1):colorblock:={|x|linecolor(x)}
+    brw:headsep:=""
+    brwMenuname(brw,arr[1][1]::alltrim)
+    brwMenu(brw,"",arr[3][1]::alltrim,{||.t.})  //írás a help mezőbe 
 
-    logbrw:=brwCreate(0,0,maxrow(),maxcol())
+    brwShow(brw)
+    brwLoop(brw)
+    brwHide(brw)
 
-    brwArray(logbrw,logarr)
-    brwColumn(logbrw,"",brwAblock(logbrw,1),replicate("X" ,maxcol()-2))
-    logbrw:colorspec:="w/n,rg+/n,w+/n,rg+/n,r/n"
-    logbrw:getcolumn(1):colorblock:={|x|linecolor(x)}
-    logbrw:headsep:=""
-    brwMenuname(logbrw,logarr[1][1]::alltrim)
-    brwMenu(logbrw,"",logarr[3][1]::alltrim,{||.t.})  //írás a help mezőbe 
-
-
-
-    brwShow(logbrw)
-    brwLoop(logbrw)
-    brwHide(logbrw)
-
-    //restscreen(,,,,scrn)
-    return .t.
 
 
 ********************************************************************************************
