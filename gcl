@@ -15,7 +15,7 @@ git clean -fXd  2>&1 >/dev/null
 
 if [ -d .git/local  ];then
     for loc in .git/local/* ;do
-        ln -s $loc  .
+        ln -sf $loc  .
     done
 fi
 

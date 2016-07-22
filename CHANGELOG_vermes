@@ -1,4 +1,15 @@
 
+fetch menu; 
+fetch statuszt mutato zbrowseban CTRL_M merge;
+branch status oszlop:
+local branchokat a branch kezdobetuje jeloli (pl. d);
+remote branchokat a remote es branch kezdobetui jelolik (pl. om);
+branchok szokozzel elvalasztva;
+az elagazott branchokat ! jeloli;
+status oszlop szelessege alkalmazkodik branchok szamahoz;
+dirty allapot jelzese a menuname-ben;
+gitnav szetvagdalva;
+gitnav installalja post-checkout-ot;
 
 
 browseolja a kivalasztott commit fajljait;

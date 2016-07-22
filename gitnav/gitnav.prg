@@ -4,32 +4,35 @@
 
 // browseolja a commitokat
 //
-//  "Branch"    kapcsol a különböző branchok között
-//  "Browse"    browse-olja a commitban levő fájlokat
-//  "Compare^"  összehasonlítja az kiválasztottat az eggyel régebbivel 
-//  "CompareH"  összehasonlítja az kiválasztottat a HEAD-del
-//  "Reset"     A HEAD-et az kiválsztott commit-hoz viszi
-//  "Snapshot"  előveszi a kiválasztott commitot  (checkout -f; clean -fdx)
+//  "Branch"    branchok között vált (checkout -f <branch>; clean -fxd)
+//  "Fetch"     fetch kiválasztott remoteból, vagy mindből (fetch --all --prune)
+//  "Browse"    browseolja a commitban levő fájlokat (readonly)
+//  "Compare^"  diffeli a kiválasztottat az eggyel régebbivel (readonly)
+//  "CompareH"  diffeli a kiválasztottat a HEAD-del (readonly)
+//  "Reset"     HEAD-et a kiválasztott commithoz viszi  (reset --soft <commit>)
+//  "Snapshot"  előveszi a kiválasztott commitot (checkout -f <commit>; clean -fxd)
 
-static repo_clean:=repo_clean()
 
 ********************************************************************************************
 function main()
 
 local brw
 local branchmenu
+local fetchmenu
 local com:={{"","",""}},n
 local rl,line,pos
 local err
 
     change_to_gitdir()
+    setup_checkout_hook()
 
     setcursor(0)
 
-    if( repo_clean  )
+    if( repo_clean()  )
         //alert("repo clean")
     else
-        alert( "Working directory is not clean!")
+        //ez feltartja a használatot
+        //alert( "Working directory is not clean!")
         //quit
         //ha most a user továbbmegy és checkout-ol,
         //akkor a working directoriban levő esetleges
@@ -41,11 +44,12 @@ local err
 
     brwArray(brw,com)
 
-    brwColumn(brw,"Branch",brwAblock(brw,1),replicate("X",6))
+    brwColumn(brw,"Branch",brwAblock(brw,1),replicate("X",25))
     brwColumn(brw,"Commit",brwAblock(brw,2),replicate("X",7))
-    brwColumn(brw,"Message",brwAblock(brw,3),replicate("X",maxcol()-21))
+    brwColumn(brw,"Message",brwAblock(brw,3),replicate("X",maxcol()-40))
 
     brwMenu(brw,"Branch","View/change current branch",branchmenu:=branchmenu(brw,{}))
+    brwMenu(brw,"Fetch","Download changes from remotes",fetchmenu:=fetchmenu(brw,{}))
     brwMenu(brw,"Browse","Browse files of selected commit",{||browse_commit(brw)})
     brwMenu(brw,"Compare^","View changes caused by the selected commit",{||compare__(brw)})
     brwMenu(brw,"Compare-HEAD","View changes between selected commit and HEAD (or index)",{||compare_h(brw)})
@@ -81,6 +85,7 @@ local err
         end
         
         branch_status(com)
+        rearrange_col_width(brw)
 
         brw:gotop
         brwShow(brw)
@@ -102,54 +107,9 @@ static function appkey(b,k)
 
 
 ********************************************************************************************
-static function branchmenu(brw,branchmenu)
-local rl,line
-    asize(branchmenu,0)
-    rl:=read_output_of("git branch")
-    while( (line:=rl:readline)!=NIL )
-        if(debug())
-            ?? line
-        end
-        line::=bin2str
-        line::=strtran(chr(10),"")
-        aadd(branchmenu,{line,mkblock(line)})
-        if( "*"$line )
-            brwMenuName(brw,'['+line[2..]::alltrim+']' )
-        end
-    end
-    rl:close
-
-    return branchmenu
-
-
-static function mkblock(b)
-    return {||setbranch(b)}
-
-
-********************************************************************************************
-static function setbranch(b)
-    if( !repo_clean )
-        alert_if_not_committed()
-    else
-        b::=strtran("*","")
-        run("git checkout -f "+b)      //force nélkül a módosításokat nem írja felül
-        run("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
-        link_local()
-        break("X") //kilép brwLoop-ból
-    end
-    
-    //Pulldown menü blokkjának return értékével 
-    //nem lehet szabályozni a brwLoopból való kilépést.
-    //Ha a visszatérési érték szám, akkor a menü
-    //lenyitott állapotban marad, és a return érték
-    //szerinti sor lesz benne kiválasztva,
-    //egyébként becsukódik.
-
-
-********************************************************************************************
 static function checkout(brw)
 local commit
-    if( !repo_clean )
+    if( !repo_clean() )
         alert_if_not_committed()
         return .t.
     else
@@ -211,41 +171,63 @@ local commit:=arr[pos][2]
     //vissza lehet lépni egy 'git reset ORIG_HEAD' művelettel.
 
 
-********************************************************************************************
-static function repo_clean()
+***************************************************************************************
+static function branch_status(com)
 
-local rl,line
-local pipe:=child("git status") //{pr,pw}
-local result:=.f.
+local mb:=merge_status_short()
+local n,id,x,c
+local status:=""
 
-    fclose(pipe[2])
-    rl:=readlineNew(pipe[1])
-    while NIL!=(line:=rl:readline)
-        if( a'nothing to commit, working directory clean' $ line )
-            result:=.t.
+    for n:=1 to len(com)
+        //com[n] = {status, commitid, message}
+        id:=com[n][2]
+        
+        x:=1
+        while( x<=len(mb) )
+            if( !(mb[x][2]!=id) )
+                //id hosszában egyenlő!
+                if( !empty(status) )
+                    status+=" "
+                end
+                status+=mb[x][1]
+                if( mb[x][2]!=mb[x][3] )
+                    status+="!"
+                end
+
+                //kivesszük
+                adel(mb,x)
+                asize(mb,len(mb)-1)
+                
+                //? id, "["+status+"]"
+            else
+                x++
+            end
         end
-    end
-    fclose(pipe[1])
+        com[n][1]:=status
+    next
 
-    return result // TRUE: clean
-
+    //Ez végigmegy az összes commiton,
+    //és mindegyiknél bejelöli, hogy mely branchokban van benne.
+    //Ha egy commit benne van egy lokális branchban, akkor a status 
+    //oszlopban megjelenik a branch kezdőbetűje kisbetűvel.
+    //Ha a commitot már pusholtuk, azaz benne van a remote 
+    //branchban (is), akkor a branch jele nagybetűvel szerepel.
+    //Ez persze csak akkor értelmes, ha az egymáshoz tartozó
+    //lokális és remote branchoknak azonos a neve. Az sem árt,
+    //ha a branch nevek az első betűben különböznek. 
+    //Azért jó látni, hogy egy ág meddig volt pusholva,
+    //mert annál rövidebbre nem szabad visszavágni. 
+    
 
 ********************************************************************************************
-static function alert_if_not_committed()
-    alert( "To prevent DISASTER;function is allowed only in fully committed state!",{"Escape"} )
+static function rearrange_col_width(brw)
+local wstat:=brw::brwarray::atail[1]::len::max(6) //ekkora szélesség kell
+local wmesg:=(maxcol()-wstat-15)::max(10)
 
-
-********************************************************************************************
-static function link_local()
-local gitloc:=directory(".git/local/*"),n
-    for n:=1 to len(gitloc)
-        run( "ln -s .git/local/"+gitloc[n][1]+" ." )
-    end
-
-// Az a koncepció, .git/local-ban egyéni scriptek vannak
-// amelyek mind ignoráltak, ezért  git clean -fXd törli őket
-// az objectekkel és exekkel együtt, de csak a gyökérben
-// levő linkjüket, a .git/local-ban levő tényleges fájlt nem.
-// Most újra belinkelődnek a gyökérbe.
+    brw:column[1]:width:=wstat
+    brw:column[1]:picture:=replicate("X",wstat)
+    brw:column[3]:width:=wmesg
+    brw:column[3]:picture:=replicate("X",wmesg)
+     
 
 ********************************************************************************************

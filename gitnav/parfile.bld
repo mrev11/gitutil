@@ -1,3 +1,4 @@
+-lgitnav
 -bccc$(CCCVER)_gitutil
 -b$(CCCDIR)/tools/$$(z)    
 BUILD_EXE=$(HOME)/bin  

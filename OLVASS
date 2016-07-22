@@ -33,7 +33,7 @@ gitview
         git add --all
   után
         gitview.exe 
-  mutatja az utolsó commit (HEAD) és az index (követlező commit)
+  mutatja az utolsó commit (HEAD) és az index (következő commit)
   közötti eltérést, így a commit véglegesítése előtt vizsgálhatjuk
   annak hatását.
      

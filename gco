@@ -28,7 +28,7 @@ fi
 
 filetime-save.exe
 git add .FILETIME_$USER
-firstpar.exe  CHANGELOG >commit-message
+firstpar.exe  CHANGELOG_vermes >commit-message
 git commit -F commit-message
 rm commit-message
 

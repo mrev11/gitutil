@@ -1,0 +1,6 @@
+#!/bin/bash
+
+#--dry-run
+#--prune
+
+git fetch --all --prune
