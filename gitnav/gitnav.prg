@@ -56,7 +56,7 @@ local err
     brwMenu(brw,"DiffPrev","View changes caused by the selected commit",{||diffprev(brw)})
     brwMenu(brw,"DiffHead","View changes between selected commit and HEAD",{||diffhead(brw)})
     brwMenu(brw,"Reset","Reset tip of current branch to the selected commit",{||reset(brw)})
-    brwMenu(brw,"Snapshot","Checkout the selected commit (->detached head)",{||checkout(brw)})
+    brwMenu(brw,"Snapshot","Checkout the selected commit (->detached head)",{||snapshot(brw)})
 
     brwApplyKey(brw,{|b,k|appkey(b,k)})
     brwMenuName(brw,"[GitNavig]")
@@ -109,10 +109,9 @@ static function appkey(b,k)
 
 
 ********************************************************************************************
-static function checkout(brw)
+static function snapshot(brw)
 local commit
-    if( !repo_clean() )
-        alert_if_not_committed()
+    if( !repo_clean() .and. 2!=alert_if_not_committed_force() )
         return .t.
     else
         commit:=brwArray(brw)[brwArrayPos(brw)][2]

@@ -1,4 +1,8 @@
 
+
+Snapshot DIRTY allapotban force-olhato;
+Snapshot menuben checkout fv nev helyett snapshot;
+
 gitref-ben status oszlop, reset menu
 commit eredmenyenek megjelenitese;
 felesleges scriptek torolve;
