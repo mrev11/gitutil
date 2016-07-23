@@ -1,5 +1,6 @@
 //zbrowse.prg
 
+#include "box.ch"
 #include "inkey.ch"
 
 #define RECT(x) x:top,x:left,x:bottom,x:right
@@ -12,8 +13,9 @@ class zbrowse(zedit)
     method  add_shortcut    //berak egy shortcut-ot
     method  eval_shortcut   //végrehajtja a key-hez rendelt shortcut-ot (ha létezik)
     method  loop            //működteti a zbrowse-t (inkey ciklus)
+    method  help
     
-    attrib  shortcut        //{{key,block},...}
+    attrib  shortcut        //{{key,block,text},...}
     method  add_shortcut
 
     attrib  header1         //csak akkor érdekes, ha zframe-ben van
@@ -43,8 +45,8 @@ static function zbrowse.seltext(this)  //aktuális sor szövege
 
         
 *************************************************************************************
-static function zbrowse.add_shortcut(this,key,block)
-    aadd(this:shortcut,{key,block})
+static function zbrowse.add_shortcut(this,key,block,help)
+    aadd(this:shortcut,{key,block,help})
 
 
 *************************************************************************************
@@ -77,10 +79,10 @@ local key
         inverserect(row(),this:left,row(),this:right)
         dispend()
         key:=inkey(0)
+        key:=this:eval_shortcut(key)
         dispbegin()
         inverserect(row(),this:left,row(),this:right)
-        
-        key:=this:eval_shortcut(key)
+
         
         if( key==K_ESC )
             exit
@@ -136,5 +138,48 @@ local key
     setcursor(cursor)
     restscreen(RECT(this),screen)
     dispend()
+
+*************************************************************************************
+static function zbrowse.help(this)
+
+local menu:={},item
+local wkey:=0
+local wtxt:=0
+local n,sc
+local t,l,b,r
+local ch,result
+local screen,cr,cc
+
+    for n:=1 to len(this:shortcut)
+        sc:=this:shortcut[n]
+        asize(sc,3)
+        wkey::=max(len(inkeycode2name(sc[1])))
+        wtxt::=max(len(sc[3]))
+    next
+    for n:=1 to len(this:shortcut)
+        sc:=this:shortcut[n]
+        item:=sc[1]::inkeycode2name::padr(wkey)+": "
+        if(NIL!=sc[3])
+            item+=sc[3]
+        end
+        menu::aadd(item)
+    next
+    
+    t:=1                      //+6
+    l:=maxcol()-wkey-wtxt-6   //-8
+    b:=t+len(menu)::max(4)+1
+    r:=l+wkey+wtxt+4
+    
+    cr:=row()
+    cc:=col()
+    screen:=drawbox(t,l,b,r)
+    ch:=achoice(t+1,l+1,b-1,r-1,menu)
+    restscreen(t,l,b,r,screen)
+    if( ch>0 )
+        result:=eval(this:shortcut[ch][2],this)
+    end
+    setpos(cr,cc) //nem szabad változnia!
+    return result
+    
 
 *************************************************************************************

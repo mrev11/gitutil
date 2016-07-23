@@ -3,7 +3,7 @@
 
 
 ********************************************************************************************
-#define FETCH_ALL   "All remotes (--all)"
+#define FETCH_ALL   "All remotes (--all --prune)"
 #define FETCH_VIEW  "Only view fetch status"
 
 ********************************************************************************************
@@ -67,14 +67,15 @@ local ms,info,n
     next
     result+=info
     
-    zframe:=zframeNew()
     zbrowse:=zbrowseNew(result)
     zbrowse:header1:=brwMenuname(brw)
     zbrowse:header2:=cmd
-    zbrowse:add_shortcut(K_CTRL_M,{|b|merge(b)})
+    zbrowse:add_shortcut(K_F1,{|b|b:help},"Help")
+    zbrowse:add_shortcut(K_CTRL_M,{|b|merge(b)},"Merge")
+
+    zframe:=zframeNew()
     zframe:set(zbrowse)
     zframe:loop
-
 
     break("X") //kilép brwLoop-ból
     //Pulldown menü blokkjának return értékével 

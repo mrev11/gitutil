@@ -21,7 +21,8 @@ local zbrowse:=zbrowseNew(data)
 
     zbrowse:header1:=head[1]
     zbrowse:header2:=head[3]
-    zbrowse:add_shortcut(K_ENTER,{||view_file(zbrowse,commit)})
+    zbrowse:add_shortcut(K_F1,{|b|b:help},"Help")
+    zbrowse:add_shortcut(K_ENTER,{||view_file(zbrowse,commit)},"View file")
     zframe:set(zbrowse)
     zframe:loop
 
@@ -36,8 +37,11 @@ local fname:=zbrowse:seltext
     zbp:=zbrowseNew(output_of("git show "+commit+":"+fname))
     zbb:=zbrowseNew(output_of("git blame "+fname))
     
-    zbb:add_shortcut(K_CTRL_B, {|z|shortcut_ctrl_b(z,zbb,zbp)})  //ugyanaz
-    zbp:add_shortcut(K_CTRL_B, {|z|shortcut_ctrl_b(z,zbb,zbp)})  //ugyanaz
+    zbb:add_shortcut(K_F1,{|b|b:help},"Help")
+    zbb:add_shortcut(K_CTRL_B, {|z|shortcut_ctrl_b(z,zbb,zbp)},"Toggle blame")  //ugyanaz
+
+    zbp:add_shortcut(K_F1,{|b|b:help},"Help")
+    zbp:add_shortcut(K_CTRL_B, {|z|shortcut_ctrl_b(z,zbb,zbp)},"Toggle blame")  //ugyanaz
 
     zbp:header1:=zbb:header1:=fname
     zbp:color1:=zbb:color1:="gb+/n"
