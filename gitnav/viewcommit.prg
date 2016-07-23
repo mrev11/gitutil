@@ -8,7 +8,9 @@ local commit1:=arr[pos][2]
 local commit2
 
     if( pos<len(arr) )
-        commit2:=arr[pos+1][2]  //eggye  régebbi
+        //commit2:=arr[pos+1][2]  //eggyel régebbi
+        //inkább
+        commit2:=commit1+"^"
         browse(commit1,commit2)
     end
 

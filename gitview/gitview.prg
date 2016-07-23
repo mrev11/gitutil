@@ -45,12 +45,17 @@ local reread,prevpos
     brwColumn(brw,"Stat",brwAblock(brw,1),replicate("X",8))
     brwColumn(brw,"File",brwAblock(brw,2),replicate("X",maxcol()-13))
 
-    brwMenu(brw,"Diff","View changes of highlighted file",{||view_diff(brw,arg_commit1,arg_commit2)})
     if(commitmenu)
         brwMenu(brw,"Add","Add all changes to index",{||addall(brw,@reread)})
+    end
+
+    brwMenu(brw,"Diff","View changes of highlighted file",{||view_diff(brw,arg_commit1,arg_commit2)})
+
+    if(commitmenu)
         brwMenu(brw,"Reset","Eliminate selected file form the next commit",{||resetone(brw,@reread)})
         brwMenu(brw,"Commit","Commit changes",{||commit(brw,@reread)})
     end
+
     //brwMenu(brw,"Sort","Sort file in status or name order",sort) //kell?
     //aadd(sort,{"By name",{|b|sortbyname(b)}})
     //aadd(sort,{"By status",{|b|sortbystatus(b)}})
@@ -149,12 +154,22 @@ local fspec:=arr[pos][2]
 
 ********************************************************************************************
 static function commit(brw,reread)
+local result
     //jó vóna ezeket betenni a pre-commit hook-ba
     //de a hook nem tudja módosítani a commit tartalmát
+
     run("filetime-save.exe")
     run("git add .FILETIME_$USER")
     run("firstpar.exe CHANGELOG_$USER >commit-message")
-    run("git commit -F commit-message")
+
+    //run("git commit -F commit-message")
+    //mégse jó csak úgy elengedni a kimenetet,
+    //mert a júzer nem fogja érteni, mi történt
+    
+    result:=output_of("git commit -F commit-message")
+    zbrowseNew(result,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop
+    
+
     reread:=.f.
     return .f.   //brwloop-bol végleg ki
 
@@ -195,7 +210,17 @@ local base
         //most len(argv)>=2
 
         id1:=name_to_commitid(argv[1])
+        if( len(id1)!=40 )
+            alert("WRONG ARGUMENT;;'"+argv[1]+"' does not identify a commit")
+            quit
+        end
+
         id2:=name_to_commitid(argv[2])
+        if( len(id2)!=40 )
+            alert("WRONG ARGUMENT;;'"+argv[2]+"' does not identify a commit")
+            quit
+        end
+
         base:=commitid_of_mergebase(argv[1],argv[2])
         
         if( base==id1 )

@@ -1,4 +1,14 @@
 
+gitref-ben status oszlop, reset menu
+commit eredmenyenek megjelenitese;
+felesleges scriptek torolve;
+gcl -> gc;
+gco nem kell, mert a gitnav-bol commitolunk
+gfe nem kell, mert a gitnav-bol fetchelunk
+gmr nem kell, mert a gitnav-bol mergelunk
+gst nem kell, mert egyszerubb beirni
+marad: gc clean, gn gitnav, gv gitview
+
 
 gitnav-ba PrepareCommit menu -> gitview;
 (gitview.prg szetvagdalva);

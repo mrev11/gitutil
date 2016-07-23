@@ -1,6 +1,7 @@
 #!/bin/bash
+#export DEBUG=yes
 #git diff viewer
 export CCCTERM_INHERIT=yes
 git add --all
-exec gitview.exe  "$@"
+exec gitview.exe  "$@"  &
 
