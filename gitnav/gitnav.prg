@@ -7,8 +7,9 @@
 //  "Branch"    branchok között vált (checkout -f <branch>; clean -fxd)
 //  "Fetch"     fetch kiválasztott remoteból, vagy mindből (fetch --all --prune)
 //  "Browse"    browseolja a commitban levő fájlokat (readonly)
-//  "Compare^"  diffeli a kiválasztottat az eggyel régebbivel (readonly)
-//  "CompareH"  diffeli a kiválasztottat a HEAD-del (readonly)
+//  "PrepCommit" diffeli a HEAD-et és indexet, végrehajtja a commitot
+//  "DiffPrev"  diffeli a kiválasztottat az eggyel régebbivel (readonly)
+//  "DiffHead"  diffeli a kiválasztottat a HEAD-del (readonly)
 //  "Reset"     HEAD-et a kiválasztott commithoz viszi  (reset --soft <commit>)
 //  "Snapshot"  előveszi a kiválasztott commitot (checkout -f <commit>; clean -fxd)
 
@@ -48,13 +49,14 @@ local err
     brwColumn(brw,"Commit",brwAblock(brw,2),replicate("X",7))
     brwColumn(brw,"Message",brwAblock(brw,3),replicate("X",maxcol()-40))
 
-    brwMenu(brw,"Branch","View/change current branch",branchmenu:=branchmenu(brw,{}))
+    brwMenu(brw,"Branch","Change to another branch",branchmenu:=branchmenu(brw,{}))
     brwMenu(brw,"Fetch","Download changes from remotes",fetchmenu:=fetchmenu(brw,{}))
     brwMenu(brw,"Browse","Browse files of selected commit",{||browse_commit(brw)})
-    brwMenu(brw,"Compare^","View changes caused by the selected commit",{||compare__(brw)})
-    brwMenu(brw,"Compare-HEAD","View changes between selected commit and HEAD (or index)",{||compare_h(brw)})
-    brwMenu(brw,"Reset","Soft reset to the selected commit",{||reset(brw)})
-    brwMenu(brw,"Snapshot","Checkout the selected commit",{||checkout(brw)})
+    brwMenu(brw,"PrepCommit","Prepare and execute commit",{||prepcommit(brw)})
+    brwMenu(brw,"DiffPrev","View changes caused by the selected commit",{||diffprev(brw)})
+    brwMenu(brw,"DiffHead","View changes between selected commit and HEAD",{||diffhead(brw)})
+    brwMenu(brw,"Reset","Reset tip of current branch to the selected commit",{||reset(brw)})
+    brwMenu(brw,"Snapshot","Checkout the selected commit (->detached head)",{||checkout(brw)})
 
     brwApplyKey(brw,{|b,k|appkey(b,k)})
     brwMenuName(brw,"[GitNavig]")
@@ -122,7 +124,7 @@ local commit
 
 
 ********************************************************************************************
-static function compare__(brw)
+static function diffprev(brw)
 local scrn:=savescreen()
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
@@ -135,7 +137,7 @@ local commit:=arr[pos][2]
 
 
 ********************************************************************************************
-static function compare_h(brw)
+static function diffhead(brw)
 local scrn:=savescreen()
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
@@ -144,14 +146,27 @@ local head:=arr[1][2]
     if( pos==1 )
         //HEAD-et a HEAD-del összehasonlítani
         //nincs értelme, helyette: HEAD<->index
-        run( "gitview.exe" )
+        //inkább külön menübe --> prepare commit
+        //run( "gitview.exe" )
     else
-        //run( "gitview.exe "+commit+" "+head )
         run( "gitview.exe "+commit+" HEAD" )
     end
     restscreen(,,,,scrn)
     return .t.
 
+
+********************************************************************************************
+static function prepcommit(brw)
+local scrn:=savescreen()
+local current
+local branch:=list_of_branches(@current)
+local tip:=name_to_commitid(current)
+    run( "gitview.exe" )
+    restscreen(,,,,scrn)
+    return (tip==name_to_commitid(current))
+
+    //ha nem történt commit, TRUE-t ad -> marad brwLoop-ban
+    //ha történt commit, FALSE-t ad -> kilép a brwLoop-ból -> új inicializálások
 
 ********************************************************************************************
 static function reset(brw)

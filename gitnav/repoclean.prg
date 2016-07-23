@@ -2,7 +2,10 @@
 static repo_clean:=repo_clean_init()
 
 ********************************************************************************************
-function repo_clean()
+function repo_clean(reread:=.f.)
+    if(reread)
+        repo_clean:=repo_clean_init()
+    end
     return repo_clean 
 
 ********************************************************************************************

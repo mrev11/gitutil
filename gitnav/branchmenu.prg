@@ -15,7 +15,7 @@ local rl,line,menuname
         if( "*"$line )
             menuname:='['
             menuname+=line[2..]::alltrim
-            if( !repo_clean() )
+            if( !repo_clean(.t.) )
                 menuname+=" DIRTY"
             end
             menuname+=']'

@@ -33,7 +33,7 @@ local base,tip,rbranch
     next
 
 
-#ifndef NOTDEFINED
+#ifdef NOTDEFINED
     //branch info
     run("git branch -a")
     for n:=1 to len(branch)

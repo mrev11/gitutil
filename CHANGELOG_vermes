@@ -1,4 +1,11 @@
 
+
+gitnav-ba PrepareCommit menu -> gitview;
+(gitview.prg szetvagdalva);
+gitview-ba add, (fajlonkenti) reset, commit;
+commit utan gitnav browsea ujra inicializalva;
+merge utan automatikusan run filetime-restore.exe
+
 fetch menu; 
 fetch statuszt mutato zbrowseban CTRL_M merge;
 branch status oszlop:

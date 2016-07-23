@@ -103,6 +103,10 @@ local br,cmd,result,zbrowse
     zbrowse:header1:=zb:header1
     zbrowse:header2:=cmd
     zb:topush:=zbrowse
+
+    //kéne post-merge hook, de nincs
+    run("filetime-restore.exe")
+
     return K_ESC
     
 
