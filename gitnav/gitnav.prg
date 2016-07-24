@@ -14,6 +14,9 @@
 //  "Snapshot"  előveszi a kiválasztott commitot (checkout -f <commit>; clean -fxd)
 
 
+static arg_number:="-32"
+
+
 ********************************************************************************************
 function main()
 
@@ -23,6 +26,13 @@ local fetchmenu
 local com:={{"","",""}},n
 local rl,line,pos
 local err
+
+    for n:=1 to argc()-1
+        if( argv(n)[1]=="-" .and. argv(n)[2..]::val>0 )
+            arg_number:=argv(n) //string
+        end
+    next
+
 
     change_to_gitdir()
     setup_checkout_hook()
@@ -71,11 +81,8 @@ local err
 
         asize(com,0)
         //rl:=read_output_of("git log --oneline --decorate")
-        rl:=read_output_of("git log --pretty=oneline  --abbrev-commit")
+        rl:=read_output_of("git log --pretty=oneline --abbrev-commit "+arg_number)
         while( (line:=rl:readline)!=NIL )
-            if(debug())
-                ?? line
-            end
             line::=bin2str
             line::=strtran(chr(10),"")
             pos:=at(" ",line)
@@ -115,8 +122,8 @@ local commit
         return .t.
     else
         commit:=brwArray(brw)[brwArrayPos(brw)][2]
-        run("git checkout -f "+commit) //force nélkül a módosításokat nem írja felül
-        run("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
+        rundbg("git checkout -f "+commit) //force nélkül a módosításokat nem írja felül
+        rundbg("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
         link_local()
         return .f. //kilép brwLoop-ból
     end
@@ -172,7 +179,7 @@ static function reset(brw)
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
 local commit:=arr[pos][2]
-    run( "git reset --soft "+commit)
+    rundbg( "git reset --soft "+commit)
     return .f. //kilép brwLoop-ból
     
     //A resetet általában arra használjuk, hogy lerövidítsük 

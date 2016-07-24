@@ -80,9 +80,6 @@ local reread,prevpos
         asize(changes,0)                                   
         rl:=read_output_of(gitcmd)                         
         while( (line:=rl:readline)!=NIL )                  
-            if(debug())                                    
-                ?? line                                    
-            end                                            
             line::=bin2str                                 
             //line::=strtran(chr(9),"")                    
             line::=strtran(chr(10),"")                     
@@ -125,7 +122,7 @@ local fspec,ftext
 
 ********************************************************************************************
 static function addall(brw,reread)
-    run("git add --all")
+    rundbg("git add --all")
     reread:=.t.  //uj brw array lesz
     return .f.   //jelenlegi brwloop-bol ki
 
@@ -147,7 +144,7 @@ static function resetone(brw,reread)
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
 local fspec:=arr[pos][2]
-    run("git reset -- "+fspec)
+    rundbg("git reset -- "+fspec)
     reread:=.t.  //uj brw array lesz
     return .f.   //jelenlegi brwloop-bol ki
 
@@ -155,20 +152,14 @@ local fspec:=arr[pos][2]
 ********************************************************************************************
 static function commit(brw,reread)
 local result
-    //jó vóna ezeket betenni a pre-commit hook-ba
+    //jó volna ezeket betenni a pre-commit hook-ba
     //de a hook nem tudja módosítani a commit tartalmát
 
     run("filetime-save.exe")
-    run("git add .FILETIME_$USER")
+    rundbg("git add .FILETIME_$USER")
     run("firstpar.exe CHANGELOG_$USER >commit-message")
-
-    //run("git commit -F commit-message")
-    //mégse jó csak úgy elengedni a kimenetet,
-    //mert a júzer nem fogja érteni, mi történt
-    
     result:=output_of("git commit -F commit-message")
     zbrowseNew(result,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop
-    
 
     reread:=.f.
     return .f.   //brwloop-bol végleg ki

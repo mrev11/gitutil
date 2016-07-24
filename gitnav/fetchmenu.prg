@@ -16,9 +16,6 @@ local rl,line
 
     rl:=read_output_of("git remote")
     while( NIL!=(line:=rl:readline) )
-        if(debug())
-            ?? line
-        end
         line::=bin2str
         line::=strtran(chr(10),"")
         aadd(fetchmenu,{line,mkblock_fetch(brw,line)})

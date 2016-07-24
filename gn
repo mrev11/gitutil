@@ -1,14 +1,10 @@
 #!/bin/bash
 #set -x
 
-#export DEBUG=yes
+export GITDEBUG=yes
 export OREF_SIZE=500000
 export CCCTERM_SIZE=128x48
-
-
 export CCCTERM_INHERIT=yes
-exec gitnav.exe  #&
 
+exec gitnav.exe "$@" >log-gitnav
 
-#ez átkerült a post-checkout hook-ba
-#filetime-restore.exe

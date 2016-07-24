@@ -1,4 +1,8 @@
 
+egyseges debugolas GITDEBUG=yes beallitassal;
+a git parancsokat es azok kimenetet listazza;
+opcio: -<number>, maximalja a browse sorok szamat (default -32); 
+
 a zbrowse-ok F1-re helpet adnak a shortcutokrol;
 
 Snapshot DIRTY allapotban force-olhato;

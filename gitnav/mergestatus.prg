@@ -35,7 +35,7 @@ local base,tip,rbranch
 
 #ifdef NOTDEFINED
     //branch info
-    run("git branch -a")
+    rundbg("git branch -a")
     for n:=1 to len(branch)
         ?? "  "
         ?? if(branch[n][2]==branch[n][3],"","!")

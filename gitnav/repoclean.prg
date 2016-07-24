@@ -8,24 +8,21 @@ function repo_clean(reread:=.f.)
     end
     return repo_clean 
 
+
 ********************************************************************************************
 static function repo_clean_init()
-
 local rl,line
-local pipe:=child("git status") //{pr,pw}
-local result:=.f.
 
-    fclose(pipe[2])
-    rl:=readlineNew(pipe[1])
-    while NIL!=(line:=rl:readline)
-        if( a'nothing to commit, working directory clean' $ line )
-            result:=.t.
-        end
-    end
-    fclose(pipe[1])
+    //return 'nothing to commit, working directory clean' $ output_of("git status") // TRUE: clean
 
-    return result // TRUE: clean
+    //ez jobb
+    //return output_of("git status --short")::empty // TRUE: clean
 
+    //ez még jobb
+    rl:=read_output_of("git status --short")
+    line:=rl:readline
+    rl:close
+    return line::empty // TRUE: clean
 
 
 ********************************************************************************************

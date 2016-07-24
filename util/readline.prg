@@ -27,7 +27,6 @@
 //és így kevésbé terheli a szemétgyűjtést -> gyorsabb.
 
 //Kiegészítve az endofline atribútummal (sorvég karakter).
-//Kiegészítve a close metódussal.
 
 #define INCSIZE 4096
 
@@ -39,7 +38,6 @@ class readline(object)
     attrib nbyte
     attrib endofline
     method readline
-    method close
 
 ****************************************************************************
 static function readline.initialize(this,fd) 
@@ -81,11 +79,6 @@ local line,eolpos,nbyte
         line:=NIL
     end
     return line  //a következő sor, vagy NIL, ha vége a filének
-
-
-****************************************************************************
-static function readline.close(this)
-    return fclose(this:fd)
 
 ****************************************************************************
 

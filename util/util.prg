@@ -7,16 +7,22 @@ local tmp:=tempfile("/tmp/","bak")
     run( cmd+" >"+tmp+" 2>&1")
     output:=memoread(tmp)
     ferase(tmp)
+    if( debug() )
+        ?? "--------------------------------------------------------";?
+        ?? "GITCMD:",cmd;?
+        ?? output;?
+    end
     return output
 
 
 **************************************************************************************
 function read_output_of(x)
 local pp:=child(x) //{r,w}
-local rl:=readlineNew(pp[1])
+local rl:=readlinedbgNew(pp[1])
     fclose(pp[2])
-    if(debug())
-        alert(x)
+    if( debug() )
+        ?? "--------------------------------------------------------";?
+        ?? "GITCMD:",x;?
     end
     return rl //le kell majd zárni (rl:close)
 

@@ -76,7 +76,7 @@ static function reset(brw)
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
 local commit:=arr[pos][2]
-    run( "git reset --soft "+commit)
+    rundbg( "git reset --soft "+commit)
     return .f. //kilép brwLoop-ból
 
 

@@ -29,9 +29,6 @@ while( mode!=NIL )
 
     rl:=read_output_of(gitcmd)
     while( (line:=rl:readline)!=NIL )
-        if(debug())
-            ?? line
-        end
         line::=bin2str
         line::=strtran(chr(10),"")
         

@@ -6,9 +6,6 @@ local rl,line,menuname
     asize(branchmenu,0)
     rl:=read_output_of("git branch")
     while( (line:=rl:readline)!=NIL )
-        if(debug())
-            ?? line
-        end
         line::=bin2str
         line::=strtran(chr(10),"")
         aadd(branchmenu,{line,mkblock_setbranch(line)})
@@ -37,8 +34,8 @@ static function setbranch(b)
         alert_if_not_committed()
     else
         b::=strtran("*","")
-        run("git checkout -f "+b)      //force nélkül a módosításokat nem írja felül
-        run("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
+        rundbg("git checkout -f "+b)      //force nélkül a módosításokat nem írja felül
+        rundbg("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
         link_local()
         break("X") //kilép brwLoop-ból
     end
