@@ -1,0 +1,265 @@
+
+Ezekből a programokból áll a project:
+
+filetime-save
+filetime-restore
+    Commit előtt megjegyzik, checkout után visszaállítják
+    a fájlidőket. Az infó userenként külön, egy .FILETIME_$USER
+    nevű fájlban tárolódik, ami mindig commitolódik a repóba.
+    A gitnav-ba bele van építve ezek indítása, a .FILETIME_$USER
+    fájlok commitolása, másrészt installálódik egy post-checkout 
+    hook, ami checkout után futtatja filetime-restore-t.
+
+
+firstpar
+    A CHANGELOG_$USER fájl legfelső bekezdéséből csinál egy
+    commit-message fájlt, amit a commitnál használ a program.
+    A gitnav automatikusan futtatja a firstpar-t, tehát
+    a gitnavból végrehajtott commitkor már nincs kérdezősködés
+    a commit message után, hanem bármi is a CHANGELOG_$USER első
+    bekezdése, az lesz a commit message.
+ 
+
+gitref
+    Browseolja a reflogot, a kiválasztott commithoz mozgatja
+    a HEAD-et soft resettel.
+
+
+gitview
+    Mutatja két tetszőleges commit diffjét. Például 
+
+    gitview devel master   (a devel és a master ág hegyének diffje) 
+    gitview HEAD^^ [HEAD]  (diff a kettővel ezelőtti committal) 
+
+    Speciális: Paraméter nélkül gitview a HEAD és az index 
+    diffjét muatatja, ilyenkor egy helyett négy menüpontja van:  
+
+    Add    - Minden változást berak az indexbe (git add --all).
+    Diff   - Fájlonként mutatja az indexbeli és a HEAD-beli szöveg diffjét.
+    Reset  - A kiválaszott fájlt kiveszi az indexből.
+    Commit - Az index maradék állapotával végrehajtja a commitot.  
+
+    Tehát: Add-dal minden változást egyszerre beveszünk az indexbe,
+    a változásokat ellenőrizzük a Diff-fel, amelyik mégsem kell, 
+    azt egyenként kihagyjuk a Reset-tel, végül a maradék eredményt
+    a Commit-tal commitoljuk.
+
+
+gitnav
+    Browseolja a commitokat (az aktuális ág commitjait a HEAD-től
+    visszafelé haladva).
+    
+    Oszlopok:
+    
+    1) A branchek állapotjelzője (később)
+    2) A commitok rövid azonosítója
+    3) A commithoz tartozó message eleje  
+
+
+    Shortcut: 
+        K_INS mutatja a commit dátumát, szerőjét, egyéb adatait.
+
+    Menü:
+    
+    [name [DIRTY]]: 
+        Mutatja az aktuális ág nevét, mutatja, hogy a
+        wt-ben (work tree) vannak-e nem commitolt változások.
+    
+    Branch: 
+        Pulldown menü. Ebben lehet branch-ot váltani, illetve 
+        itt is látszik, hogy mi az aktuális ág (* jelzi).  A branch 
+        váltás a "checkout -f <branch>; clean -fxd" parancsokkal történik, 
+        tehát az új branch tiszta állapotába jutunk. Mivel ez a művelet
+        törölné a wt minden változását, a program csak tiszta állapotban
+        engedi a végrehajtást. A branch váltás így mindig tiszta állapotból
+        tiszta állapotba visz. Emellett a checkout hook-ból végrehajtódó
+        filetime-restore miatt a fájlidők is mindig visszaállítódnak
+        az eredeti értékre. Mellékhatásként törlődik az összes ignored
+        fájl (ppo-k, objectek, exe-k, stb.).
+    
+    Fetch: 
+        Pulldown. Megnézhetjük a fetch státuszt, fetchelhetünk
+        az összes remoteból egyszerre, vagy a remoteokból egyenként.
+        Bármelyik választás után a fetch státuszba jutunk, ahol a lokális
+        és remote branchok listját látjuk. Felkiáltójel (!) jelzi azokat
+        a branchokat, amelyekből lehetséges a merge. Ha egy ilyen
+        branchra ráállunk a sávkurzorral és K_CTRL_M-et nyomunk, 
+        megtörténik a merge. Az aktuális branchba (bal felső sarok) 
+        mergelődik a !-jellel jelzett és sávkurzorral kiválasztott branch. 
+        Mellesleg: K_F1 helpet ad a shortcutokról.
+    
+    Browse: 
+        Ad egy listát (browse-t) a kiválasztott commit összes 
+        fájljáról. K_F3-mal lehet keresni a fájlok között. A kiválasztott
+        fájlon entert ütve megjelenik a fájl szövege. Itt K_CTRL_B  
+        váltogat a síma és a blame mód között. K_F3 keres a fájlban.
+    
+    PrepCommit: 
+        Indítja gitview-t, amiben előkészíthetjük a 
+        következő commit-ot, ahogy a gitview-nál írtam.
+    
+    DiffPrev: 
+        A kiválasztott commitot diffeli az eggyel előző
+        committal. A diffelés a gitview indításával történik.
+
+    DiffHead: 
+        A kiválasztott commitot diffeli a HEAD-del. A diffelés 
+        a gitview indításával történik.
+    
+    Reset: 
+        Az aktuális ág (branch) HEAD-jét elmozgatja a sávkurzorral
+        kiválasztott commithoz. Az index és a wt változatlan marad.
+        Szemléletesen: az aktuális ágat lerövidíti. 
+    
+    Snapshot: 
+        Kibontja a sávkurzorral kiválasztott commitot. A kibontás 
+        a "checkout -f <commit>; clean -fxd" parancsokkal történik,
+        tehát az adott commit tiszta állapotába jutunk. Ez a művelet
+        minden wt-beli változást megszüntet, ezért csak külön
+        megerősítés után lehet végrehajtani.
+    
+    
+Branch státusz oszlop
+
+    A local és remote branchok vannak itt megjelenítve kezdőbetűkkel.
+    Local branch egy betű, pl. master -> m.
+    Remote branch két betű, pl. origin/master -> om
+    
+    Ha egy sorban (egy commitnál) szerepel egy branch jele, 
+    az azt jelenti, hogy az adott commit őse az illető branch hegyének.
+    Tegyük fel, hogy az aktuális branch a "master", akkor a browse
+    a master ág commitjait mutatja.  Vegyük példának  a "devel" branchot, 
+    ennek jele "d". Ha a "d" szerepel egy commit sorában, akkor a commit 
+    nemcsak a master ág hegyéből (a HEAD-ből), de a devel ág hegyéből 
+    indulva is elérhető: commit<-...<-parent<-tip_of_devel (jobbról-balra).
+    
+    A branchok (kezdőbetűs) jele mellett egy ! karakter jelzi az elágazást.
+    Ez azt jelenti, hogy az adott ágnak van olyan commitja, ami nem érhető 
+    el az aktuális HEAD-ből (azaz nincs benne az aktuális branchban, 
+    és azért nem is jelenhet meg a browseban).
+    
+    
+
+Hogyan használom 
+(csak példák, lehet máshogy is)     
+
+    Mondjuk van egy repó, ahol tárolódik az origin/master,
+    ebbe viszi fel a munkáját a programozó csoport.
+    
+    A saját, otthoni repómban van egy master branch, amit szinkronban
+    akarok tartani az origin/master-rel, és van egy devel branch, 
+    amiben szemetelhetek. Akkor ezek vannak:
+    
+    devel          d       (local)
+    master         m       (local)
+    origin/master  om      (remote)
+    
+    A d-ben írom a vackaimat, és 10 percenként commitolok.
+    Tegyük fel, hogy eljutottam abba az állapotba, amikor
+    a d ág végeredményét érdemes volna közreadni (többek
+    között megvan a végleges CHANGELOG_vermes, aminek legfelső 
+    bekezdése lesz a commit message). A sok commit miatt azonban
+    a d ág nagyon hosszú, tartalmaz egy csomó olyan állapotot, 
+    ami a többiek számára érdektelen, sőt zavaró.
+    Ezért mielőtt közreadnám megrendszabályozom. 
+    
+        A "Reset" menüvel a devel ág végét elmozgatom a master ág 
+        végéhez (vagyis d-t visszavágom m-ig). A visszavágás nem 
+        változtatja a  wt tartalmát, tehát ha csinálok d-ben egy 
+        új commitot, akkor a d HEAD-je a kívánt végállapotban lesz, 
+        de csak egy committal lesz hosszabb az m-nél. A commit után 
+        tiszta állapotban lesz a wt, ezért a Branch menüvel át tudok 
+        váltani a master branchra. Bemegyek a Fetch menübe (fetchelni 
+        most valójában nem kell, csak a fetch státusz érdekes), itt 
+        látható, hogy lehetséges a merge a devel-ből. Ráállok tehát 
+        a sávkurzorral a devel-re, és K_CTRL_M-mel mergelek.
+        
+        A fő browseban látszik, hogy az m eggyel feljebb jött.
+        Ezután kilépek a gitnav-ból és parancssorból végrehajtom:
+        git push, visszalépek gitnav-ba, látom, hogy om is eggyel
+        feljebb jött.
+    
+    
+    Valami miatt eszembe jut, hogy elő akarom venni a források
+    egy évvel korábbi állapotát. Mondjuk egy régi állapotnak 
+    megfelelő exe-t akarok rekonstruálni. 
+    
+        Tiszta állapotba hozom a a wt-t, a függőben levő dolgokat
+        commitolom vagy letörlöm. Kiválasztom a sávkurzorral a 
+        megfelelő idejű commitot, a Snapshot menüvel kibontom a régi
+        állapotot (filetime-restore visszaállítja az időket).
+        A rendszer ún. detached HEAD állapotba kerül.
+        
+        Megcsináltam, amit akartam, vissza kell térni a jelenbe.
+        Ehhez tiszta állapotba hozom a wt-t, pl. újra végrehajtom
+        a Snapshot menüt (ami tiszta állapotot hagy maga után), 
+        bemegyek a Branch menübe, kiválasztom a kívánt ágat 
+        (a detached HEAD helyett). 
+    
+    Tesztelés céljából, mindenféle printelésekkel feldúltam
+    a wt-t, és vissza szeretnék állni az utolsó commitnak
+    megfelelő tiszta állapotra.
+    
+       A sávkurzorral ráállok a HEAD-re, Snapshot-tal (force) kibontom,
+       a Branch menüvel pedig visszaállítom az HEAD-et. 
+
+
+    Dógozgatok, dógozgatok, de rájövök, hogy amit próbálok hülyeség,
+    nem fog működni. Vagy kiderül, hogy egy munkatárs a közösen
+    fejlesztett ágban sokkal jobb megoldást talált, ezért a saját
+    változatomat el akarom dobni.
+    
+        A sávkurzorral kiválasztom az utolsó commitot, amit még jónak
+        gondolok, a Reset menüvel visszavágom az ágat. A Snapshot
+        menüvel kibontom a commitot, szükség esetén akár force-olva,
+        majd a Branch menüvel a detached HEAD állapotból visszaállok
+        a normál állapotra.
+    
+
+    Át akarom venni más fejlesztők változtatásait.
+    
+        Bemegyek a Fetch menübe, fetchelek egyszerre az összes 
+        remoteból, vagy egyenként azokból a remoteokból, ahonnan
+        változást várok.
+    
+        Bekerülök a fetch státusz ablakba, itt a ! jellel kezdődő
+        sorok mutatják, hogy hova érkezett mergelhető új anyag.
+        A megfelelő sort kiválasztom a sávkurzorral, K_CTRL_M mergel.
+        
+        Ha a merge-ben conflict keletkezik, a szokásos módon kell
+        eljárni. Kézzel ki kell javítani, a változást commitolni.
+        Vagy lehet választani a saját változat eldobását (ahogy
+        leírtam egy kicsit feljebb), és az eldobás után újra 
+        próbálkozni a mergeeléssel.
+        
+
+Scriptek        
+
+    gn inditja gitnav-ot.        
+    gv inditja gitview-t.
+    gr inditja gitref-et.
+    gc erről részletesebben:
+
+    A gc script a 
+    
+        git clean -fXd  2>&1 >/dev/null
+        
+    paranccsal törli az ignored fájlokat és directorykat,
+    pl. az egész ppo-t, objlin-t, minden bak-ot, stb.
+    Nemcsak a git directory gyökerében működik, hanem
+    subdirectorykban is, tehát általános célú clean-nek
+    lehet használni, érdemes azért a path-ban tartani.
+    
+    Az embernek vannak olyan scriptjei, emlékeztetői,
+    miegymás, ami jó, ha kéznél van de nem akarom beletenni
+    a commitba, hogy ne terheljek vele másokat. Ezért olyan 
+    nevet adok ezeknek a fájloknak, amit a git ignorál.
+    Nojó, de akkor viszont mi lesz velük, ha a gc folyton
+    letörli őket. A letörlés ellen úgy védekezek, hogy
+    a scriptek (személyes fájlok) eredeti változatát a 
+    .git/local alá teszem (ott nem törlődnek) a git directory 
+    gyökerében pedig  csak az előbbiekre mutató link van.
+    Ezek a linkek tényleg törlődnek, de a gc mindig újra
+    legyártaja  a linkeket.
+
+           

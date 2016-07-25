@@ -1,0 +1,8 @@
+#!/bin/bash
+#set -x
+
+#export GITDEBUG=yes
+export CCCTERM_SIZE=120x40
+
+exec gitref.exe
+

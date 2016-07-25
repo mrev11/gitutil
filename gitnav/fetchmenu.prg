@@ -3,8 +3,8 @@
 
 
 ********************************************************************************************
-#define FETCH_ALL   "All remotes (--all --prune)"
-#define FETCH_VIEW  "Only view fetch status"
+#define FETCH_VIEW  "View fetch status"
+#define FETCH_ALL   "Fetch from all remotes"
 
 ********************************************************************************************
 function fetchmenu(brw,fetchmenu)
