@@ -1,4 +1,6 @@
 
+atrakva CCC2-re;
+
 egyseges debugolas GITDEBUG=yes beallitassal;
 a git parancsokat es azok kimenetet listazza;
 opcio: -<number>, maximalja a browse sorok szamat (default -32); 
