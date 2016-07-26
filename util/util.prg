@@ -54,6 +54,23 @@ local line:=rl:readline
 
 
 **************************************************************************************
+function current_branch()
+local rl:=read_output_of("git branch")
+local line
+    while( (line:=rl:readline)!=NIL )
+        if( a"*"==line[1..1] )
+            line::=strtran(bin(10),a"")
+            line::=strtran(bin(13),a"")
+            line::=bin2str
+            line::=substr(3)::alltrim
+            exit
+        end
+    end
+    rl:close
+    return line //name of current branch/NIL
+
+
+**************************************************************************************
 function list_of_branches(current)
 local rl:=read_output_of("git branch")
 local branches:={}

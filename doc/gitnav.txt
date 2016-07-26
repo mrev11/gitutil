@@ -34,15 +34,23 @@ gitview
     Speciális: Paraméter nélkül gitview a HEAD és az index 
     diffjét muatatja, ilyenkor egy helyett négy menüpontja van:  
 
-    Add    - Minden változást berak az indexbe (git add --all).
-    Diff   - Fájlonként mutatja az indexbeli és a HEAD-beli szöveg diffjét.
-    Reset  - A kiválaszott fájlt kiveszi az indexből.
-    Commit - Az index maradék állapotával végrehajtja a commitot.  
+    Add     - Minden változást berak az indexbe (git add --all).
+    Diff    - Fájlonként mutatja az indexbeli és a HEAD-beli szöveg diffjét.
+    Reset   - A kiválaszott fájlt kiveszi az indexből.
+    Commit  - Az index maradék állapotával végrehajtja a commitot.  
 
     Tehát: Add-dal minden változást egyszerre beveszünk az indexbe,
     a változásokat ellenőrizzük a Diff-fel, amelyik mégsem kell, 
     azt egyenként kihagyjuk a Reset-tel, végül a maradék eredményt
     a Commit-tal commitoljuk.
+
+    Speciális: Megszakadt REBASE állapotban indítva megint csak 
+    más menüje van:
+
+    Add     - Minden változást berak az indexbe.
+    Diff    - Fájlonként mutatja az index és a HEAD diffjét.
+    Continue- Az index bekerül a kicserélt commitba, lezárja a rebaset. 
+    Abort   - Abortálja a rebaset.
 
 
 gitnav
@@ -57,7 +65,7 @@ gitnav
 
 
     Shortcut: 
-        K_INS mutatja a commit dátumát, szerőjét, egyéb adatait.
+        K_INS mutatja a commit dátumát, szerzőjét, egyéb adatait.
 
     Menü:
     
@@ -77,7 +85,7 @@ gitnav
         az eredeti értékre. Mellékhatásként törlődik az összes ignored
         fájl (ppo-k, objectek, exe-k, stb.).
     
-    Fetch: 
+    FetchMerge: 
         Pulldown. Megnézhetjük a fetch státuszt, fetchelhetünk
         az összes remoteból egyszerre, vagy a remoteokból egyenként.
         Bármelyik választás után a fetch státuszba jutunk, ahol a lokális
@@ -85,18 +93,15 @@ gitnav
         a branchokat, amelyekből lehetséges a merge. Ha egy ilyen
         branchra ráállunk a sávkurzorral és K_CTRL_M-et nyomunk, 
         megtörténik a merge. Az aktuális branchba (bal felső sarok) 
-        mergelődik a !-jellel jelzett és sávkurzorral kiválasztott branch. 
+        mergelődik a !-jellel jelzett és sávkurzorral kiválasztott branch
+        A K_CTRL_R shortcutra merge helyett rebaset hajt végre. 
+        A K_CTRL_D-vel vizsgálható a HEAD és a kiváősztott branch diffje.
         Mellesleg: K_F1 helpet ad a shortcutokról.
     
-    Browse: 
-        Ad egy listát (browse-t) a kiválasztott commit összes 
-        fájljáról. K_F3-mal lehet keresni a fájlok között. A kiválasztott
-        fájlon entert ütve megjelenik a fájl szövege. Itt K_CTRL_B  
-        váltogat a síma és a blame mód között. K_F3 keres a fájlban.
-    
     PrepCommit: 
-        Indítja gitview-t, amiben előkészíthetjük a 
-        következő commit-ot, ahogy a gitview-nál írtam.
+        Indítja gitview-t, előkészíthetjük a következő commit-ot, 
+        lezárhatjuk a megszakadt rebase műveletet, ahogy a gitview-nál 
+        írtam.
     
     DiffPrev: 
         A kiválasztott commitot diffeli az eggyel előző
@@ -105,6 +110,12 @@ gitnav
     DiffHead: 
         A kiválasztott commitot diffeli a HEAD-del. A diffelés 
         a gitview indításával történik.
+
+    Browse: 
+        Ad egy listát (browse-t) a kiválasztott commit összes 
+        fájljáról. K_F3-mal lehet keresni a fájlok között. A kiválasztott
+        fájlon entert ütve megjelenik a fájl szövege. Itt K_CTRL_B  
+        váltogat a síma és a blame mód között. K_F3 keres a fájlban.
     
     Reset: 
         Az aktuális ág (branch) HEAD-jét elmozgatja a sávkurzorral
@@ -184,7 +195,7 @@ Hogyan használom
     egy évvel korábbi állapotát. Mondjuk egy régi állapotnak 
     megfelelő exe-t akarok rekonstruálni. 
     
-        Tiszta állapotba hozom a a wt-t, a függőben levő dolgokat
+        Tiszta állapotba hozom a wt-t, a függőben levő dolgokat
         commitolom vagy letörlöm. Kiválasztom a sávkurzorral a 
         megfelelő idejű commitot, a Snapshot menüvel kibontom a régi
         állapotot (filetime-restore visszaállítja az időket).

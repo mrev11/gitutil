@@ -1,5 +1,12 @@
 
-rovid leiras doc/gitnav.txt-ben
+gitnav: fetch statuszban K_CTRL_R -> rebase (merge helyett rebase);
+gitnav: fetch statuszban K_CTRL_D -> gitview a kivalasztott branchra;
+gitview: rebase continue funkcio;
+gitview: rebase abort funkcio;
+menuk neve, help szovege, sorrendje valtozott;
+doksi bovult;
+
+rovid leiras doc/gitnav.txt-ben;
 
 atrakva CCC2-re;
 

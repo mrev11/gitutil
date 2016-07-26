@@ -6,7 +6,6 @@ function main()
 
 local brw
 local com:={{"","",""}},n
-local current
 local menuname
 local rl,line,pos
 local err
@@ -27,8 +26,7 @@ local err
     brwApplyKey(brw,{|b,k|appkey(b,k)})
 
     menuname:="["
-    list_of_branches(@current)
-    menuname+=current
+    menuname+=current_branch()
     menuname+=" ORIG_HEAD="
     menuname+=name_to_commitid("ORIG_HEAD")[1..7]
     menuname+="]"

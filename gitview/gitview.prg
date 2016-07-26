@@ -6,6 +6,7 @@ static arg_commit2:="HEAD"
 static descendant:=.t.
 static menutitle
 static commitmenu:=.f.
+static rebasemenu:=.f.
 
 ********************************************************************************************
 function main()
@@ -25,7 +26,11 @@ local reread,prevpos
     menutitle:="["+current+": "
     if( arg_commit1=="--staged" )
         menutitle+="HEAD<-NEXT"
-        commitmenu:=.t.
+        if( " rebasing "$current )
+            rebasemenu:=.t.
+        else
+            commitmenu:=.t.
+        end
     else
         menutitle+=arg_commit1
         if( descendant )
@@ -45,7 +50,7 @@ local reread,prevpos
     brwColumn(brw,"Stat",brwAblock(brw,1),replicate("X",8))
     brwColumn(brw,"File",brwAblock(brw,2),replicate("X",maxcol()-13))
 
-    if(commitmenu)
+    if(commitmenu.or.rebasemenu)
         brwMenu(brw,"Add","Add all changes to index",{||addall(brw,@reread)})
     end
 
@@ -54,6 +59,11 @@ local reread,prevpos
     if(commitmenu)
         brwMenu(brw,"Reset","Eliminate selected file form the next commit",{||resetone(brw,@reread)})
         brwMenu(brw,"Commit","Commit changes",{||commit(brw,@reread)})
+    end
+
+    if(rebasemenu)
+        brwMenu(brw,"Continue","Continue pending rebase",{||rebase_continue(brw,@reread)})
+        brwMenu(brw,"Abort","Abort pending rebase",{||rebase_abort(brw,@reread)})
     end
 
     //brwMenu(brw,"Sort","Sort file in status or name order",sort) //kell?
@@ -161,6 +171,24 @@ local result
     result:=output_of("git commit -F commit-message")
     zbrowseNew(result,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop
 
+    reread:=.f.
+    return .f.   //brwloop-bol végleg ki
+
+
+********************************************************************************************
+static function rebase_continue(brw,reread)
+local result
+    result:=output_of("git rebase --continue")
+    zbrowseNew(result,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop
+    reread:=.f.
+    return .f.   //brwloop-bol végleg ki
+
+
+********************************************************************************************
+static function rebase_abort(brw,reread)
+local result
+    result:=output_of("git rebase --abort")
+    //zbrowseNew(result,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop
     reread:=.f.
     return .f.   //brwloop-bol végleg ki
 

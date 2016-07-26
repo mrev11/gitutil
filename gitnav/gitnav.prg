@@ -60,11 +60,11 @@ local err
     brwColumn(brw,"Message",brwAblock(brw,3),replicate("X",maxcol()-40))
 
     brwMenu(brw,"Branch","Change to another branch",branchmenu:=branchmenu(brw,{}))
-    brwMenu(brw,"Fetch","Download changes from remotes",fetchmenu:=fetchmenu(brw,{}))
-    brwMenu(brw,"Browse","Browse files of selected commit",{||browse_commit(brw)})
-    brwMenu(brw,"PrepCommit","Prepare and execute commit",{||prepcommit(brw)})
+    brwMenu(brw,"FetchMerge","Download changes from remotes and do merge/rebase",fetchmenu:=fetchmenu(brw,{}))
+    brwMenu(brw,"PrepCommit","Prepare and execute commit or continue/abort rebase",{||prepcommit(brw)})
     brwMenu(brw,"DiffPrev","View changes caused by the selected commit",{||diffprev(brw)})
     brwMenu(brw,"DiffHead","View changes between selected commit and HEAD",{||diffhead(brw)})
+    brwMenu(brw,"Browse","Browse files of selected commit",{||browse_commit(brw)})
     brwMenu(brw,"Reset","Reset tip of current branch to the selected commit",{||reset(brw)})
     brwMenu(brw,"Snapshot","Checkout the selected commit (->detached head)",{||snapshot(brw)})
 
@@ -164,12 +164,18 @@ local head:=arr[1][2]
 ********************************************************************************************
 static function prepcommit(brw)
 local scrn:=savescreen()
-local current
-local branch:=list_of_branches(@current)
+local current:=current_branch()
 local tip:=name_to_commitid(current)
     run( "gitview.exe" )
     restscreen(,,,,scrn)
-    return (tip==name_to_commitid(current))
+    
+    if( !current==current_branch() )
+        // rebase --continue után
+        // kilép a brwLoop-ból -> új inicializálások
+        return .f. 
+    end
+
+    return tip==name_to_commitid(current) 
 
     //ha nem történt commit, TRUE-t ad -> marad brwLoop-ban
     //ha történt commit, FALSE-t ad -> kilép a brwLoop-ból -> új inicializálások

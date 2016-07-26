@@ -2,7 +2,7 @@
 
 ********************************************************************************************
 function branchmenu(brw,branchmenu)
-local rl,line,menuname
+local rl,line,current
     asize(branchmenu,0)
     rl:=read_output_of("git branch")
     while( (line:=rl:readline)!=NIL )
@@ -10,13 +10,8 @@ local rl,line,menuname
         line::=strtran(chr(10),"")
         aadd(branchmenu,{line,mkblock_setbranch(line)})
         if( "*"$line )
-            menuname:='['
-            menuname+=line[2..]::alltrim
-            if( !repo_clean(.t.) )
-                menuname+=" DIRTY"
-            end
-            menuname+=']'
-            brwMenuName(brw,menuname)
+            current:=line[2..]::alltrim
+            brwMenuName(brw,branch_state_menuname(current))
         end
     end
     rl:close

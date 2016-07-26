@@ -1,0 +1,131 @@
+
+git fetch
+    Elhozza a remoteokból az ottani újabb anyagot.
+
+    Például
+        git fetch origin/master
+    elhozza az origin remoteból a master branchot. (A branch
+    azon objektumait, amik még nincsenek meg a lokális repóban.
+    Mint tudjuk a git objektumok váloztathatatlanok (immutable).)
+
+    Vagy
+        git fetch --all
+    mindenhonnan (minden követett branchból) mindent elhoz.
+    (Az egy komplikált dolog, hogyan konfigurálódnak a "követett"
+    branchok. Direkt konfiguráció is van rá, és egy csomó művelet
+    mellékhatásaként is konfigurálódnak.)
+    
+    Fetchelni mindig lehet, teljesen veszélytelen, egyszerűen 
+    megnézi a remote repókban, hogy van-e letöltetlen objektum, 
+    ha van, azt letölti, és elhelyezi a lokális objektumtárban. 
+    Egy ilyen letöltés után a git tudja, hol tart a remote 
+    branchok hegye. 
+    
+    A gitnav program onnan tudja, hogy van-e mergelni való
+    egy (már letöltött) branchból, hogy megnézi, benne van-e
+    a branch hegye az aktuális ágban. Ha nincs, akkor lehet
+    (van értelme) mergelni.     
+
+
+git merge
+    Például 
+        git merge origin/master
+    mergel az előzőleg fetchelt origin/master branchból.
+    (Az aktuális branchba beolvasztja az origin/master branchot.)
+
+    Vagy 
+        git merge devel
+    mergel a lokális devel branchból. (Vagyis az aktuális branchba 
+    beolvasztja a devel lokális branchot.)
+
+    A mergelést csak tiszta állapotban lehet csinálni.
+    Akkor tiszta az állapot, ha a wt-ben nincsenek commitolható
+    változások (a git st-vel lehet ellenőrizni: ha a git status
+    kimenete üres, akkor tiszta). Nem tiszta állapotban a git
+    hozzá sem kezd a mergeléshez. A mergeléskor a git előszedi
+    az előzőleg fetchelt objektumokból a fájlokat, és egyesíti
+    ezeket a wt-ben levő fájlokkal.
+    
+    1) Ha a merge conflict nélkül végrehajtható, akkor 
+    automatikusan keletkezik egy új commit, és kész.
+    
+    2) Ha a merge során conflictok keletkeznek, a git kiírja, 
+    hogy mely fájlokat nem tudta mergelni, és a merge folyamat 
+    megszakad. Ezt a megszakadt állapotot a git számára az jelzi, 
+    hogy megmarad a .git/MERGE_MODE szemafor fájl. Ilyen esetben
+    (EZT KELL CSINÁLNI MEGSZAKADT MERGE UTÁN) meg kell nézni a 
+    conflictos fájlokat, ki kell őket javítani, git add-dal hozzá 
+    kell adni az indexhez és commitolni kell.  Amíg ezzel el nem
+    készülünk (és MERGE_MODE állapotban vagyunk), addig nem érdemes
+    mással próbálkozni.
+    
+    Így vagy úgy, a merge egy új committal fejeződik be.
+    Az új commit  a mergeben résztvevő mindkét branchnak
+    a hegye lesz.
+    
+    Mi van, ha valami katasztrófa folytán a conflictokat
+    nem lehet kijavítani? Nem tudom, lehet-e ilyen, de mondjuk
+    véletlenül nem összepasszoló dolgokat mergeltünk, az egész
+    úgy rossz, ahogy van, meg kell tőle szabadulni. Gondolom,
+    úgy lehet kimenekülni egy ilyen helyzetből, hogy a commitot
+    mindenképpen megcsináljuk, aztán az ágat visszavágjuk.
+
+
+Miért nem annyira jó a git pull?
+    Úgy tudni, hogy pull=fetch+merge. Ezt nem szeretjük annyira,
+    mert 1) feleslegesen összekapcsol dolgokat, miáltal túl
+    összetett művelet jön létre, másrészt 2) nem teljesen egyszerű
+    érteni, hogy honnan, mit fog fetchelni és mergelni. Az a világos,
+    ha explicite megmondjuk neki, mit hozzon el, például
+        git fetch origin/master
+    és explicite megmondjuk neki, miből kell mergelni, például
+        git merge origin/master 
+    Ha ezzel szemben azt mondjuk,
+        git pull
+    akkor csak leshetjük, mit fog csinálni, és abban kell bíznunk,
+    hogy a repó jól van konfigurálva.
+    
+
+git rebase
+    Már tudjuk, hogy a merge eredménye egy új commit, ami a mergeben 
+    részvevő mindkét branchnak a hegye lesz. Ezzel szemben a rebase
+    úgy olvaszt össze két branchot, hogy az aktuális branch hegyét
+    (vagyis azt a commitot, amire a HEAD mutat) kicseréli (!) egy
+    olyan másik commitra, ami azokat a változásokat is tartalmazza,
+    amik a beolvasztandó ágban vannak. 
+
+    Például legyen az aktuális branch devel. 
+        git rebase origin/master
+    kicseréli az aktuális barnch (devel) hegyén levő commitot egy 
+    újra, az új commit azokat a változásokat is tartalmazni fogja, 
+    amik az origin/master-be belekerültek azóta, hogy az origin/master 
+    és az aktuális branch (devel) szétváltak.
+    
+    A merge és a rebase művelet eredménye a plusz commit, illetve 
+    a kicserélődött új commit tartalmukat tekintve megegyeznek (de 
+    a commit_id-ik eltérnek). A különbség, hogy rebase után eggyel
+    rövidebb ágat kapunk, mint merge után. Kell-e ennek annyira 
+    örülni? Mikor még fogalmam sem volt, mi az a rebase, akkor is
+    foglalkoztam az ágak rövidítgetésével. Nem különösebben nehéz,
+    a commit után soft resettel rövidebbre vágjuk az ágat (legalább
+    kettővel, másképp nincs értelme), majd újra commitolunk. Ha
+    így járunk el egy merge után, gyakorlatilag ugyanott vagyunk,
+    mint a rebasezel. Mindenesetre kényelmes lehet a rebase, ezért 
+    a gitnav program is elérhetővé teszi.
+    
+    A rebaset is csak tiszta állapotban lehet elkezdeni.
+    
+    A rebase során ugyanúgy előfordulnak conflictok, mint a mergenél. 
+    A conflict helyzetből kétféle képpen lehet kimenekülni:
+    
+    1) Abortáljuk
+        git rebase --abort
+     abortálja a rebaset, visszajutunk a rebase előtti állapotba.
+    
+    2) Kijavítjuk a conflictokat, a conflictos fájlokat betesszük 
+    az indexbe (git add), és végrehajtjuk
+        git rebase --continue
+    Vagyis nagyjából ugyanazt csináljuk, mint conflictos mergenél,
+    csak a műveletet nem committal, hanem rebase --continue-val
+    kell lezárni.
+    
