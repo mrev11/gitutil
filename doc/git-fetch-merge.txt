@@ -3,14 +3,19 @@ git fetch
     Elhozza a remoteokból az ottani újabb anyagot.
 
     Például
-        git fetch origin/master
+        git fetch origin master
     elhozza az origin remoteból a master branchot. (A branch
     azon objektumait, amik még nincsenek meg a lokális repóban.
     Mint tudjuk a git objektumok váloztathatatlanok (immutable).)
+    
+    Vagy
+        git fetch origin
+    elhozza az origin remote követett branchaiból, az összes 
+    még le nem töltött anyagot.
 
     Vagy
         git fetch --all
-    mindenhonnan (minden követett branchból) mindent elhoz.
+    az összes remote minden követett branchából mindent elhoz.
     (Az egy komplikált dolog, hogyan konfigurálódnak a "követett"
     branchok. Direkt konfiguráció is van rá, és egy csomó művelet
     mellékhatásaként is konfigurálódnak.)
@@ -77,7 +82,7 @@ Miért nem annyira jó a git pull?
     összetett művelet jön létre, másrészt 2) nem teljesen egyszerű
     érteni, hogy honnan, mit fog fetchelni és mergelni. Az a világos,
     ha explicite megmondjuk neki, mit hozzon el, például
-        git fetch origin/master
+        git fetch origin master
     és explicite megmondjuk neki, miből kell mergelni, például
         git merge origin/master 
     Ha ezzel szemben azt mondjuk,
@@ -96,7 +101,7 @@ git rebase
 
     Például legyen az aktuális branch devel. 
         git rebase origin/master
-    kicseréli az aktuális barnch (devel) hegyén levő commitot egy 
+    kicseréli az aktuális branch (devel) hegyén levő commitot egy 
     újra, az új commit azokat a változásokat is tartalmazni fogja, 
     amik az origin/master-be belekerültek azóta, hogy az origin/master 
     és az aktuális branch (devel) szétváltak.
@@ -128,4 +133,6 @@ git rebase
     Vagyis nagyjából ugyanazt csináljuk, mint conflictos mergenél,
     csak a műveletet nem committal, hanem rebase --continue-val
     kell lezárni.
+
+
     

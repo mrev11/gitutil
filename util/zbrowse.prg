@@ -16,7 +16,6 @@ class zbrowse(zedit)
     method  help
     
     attrib  shortcut        //{{key,block,text},...}
-    method  add_shortcut
 
     attrib  header1         //csak akkor érdekes, ha zframe-ben van
     attrib  header2         //csak akkor érdekes, ha zframe-ben van
@@ -135,8 +134,8 @@ local key
         end
     end
 
-    setcursor(cursor)
     restscreen(RECT(this),screen)
+    setcursor(cursor)
     dispend()
 
 *************************************************************************************
@@ -156,6 +155,7 @@ local screen,cr,cc
         wkey::=max(len(inkeycode2name(sc[1])))
         wtxt::=max(len(sc[3]))
     next
+    
     for n:=1 to len(this:shortcut)
         sc:=this:shortcut[n]
         item:=sc[1]::inkeycode2name::padr(wkey)+": "
@@ -165,10 +165,10 @@ local screen,cr,cc
         menu::aadd(item)
     next
     
-    t:=1                      //+6
-    l:=maxcol()-wkey-wtxt-6   //-8
-    b:=t+len(menu)::max(4)+1
-    r:=l+wkey+wtxt+4
+    t:=this:top+1
+    l:=(this:right-wkey-wtxt-6)::max(1)
+    b:=(t+len(menu)::max(4)+1)::min(maxrow()-1)
+    r:=(l+wkey+wtxt+4)::min(maxcol()-1)
     
     cr:=row()
     cc:=col()

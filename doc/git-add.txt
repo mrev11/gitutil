@@ -8,7 +8,7 @@ git add #(paraméterek nélkül)
 
 git add --all
     a módosult és új fájlokat beveszi az indexbe
-    a wd-ben megszűnt filéket (a törlést) beveszi az indexbe (azaz törli)
+    a wt-ben megszűnt filéket (a törlést) beveszi az indexbe (azaz törli)
     azaz előkészíti a következő commit tartalmát
     
 git add .

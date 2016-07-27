@@ -95,13 +95,13 @@ gitnav
         megtörténik a merge. Az aktuális branchba (bal felső sarok) 
         mergelődik a !-jellel jelzett és sávkurzorral kiválasztott branch
         A K_CTRL_R shortcutra merge helyett rebaset hajt végre. 
-        A K_CTRL_D-vel vizsgálható a HEAD és a kiváősztott branch diffje.
+        A K_CTRL_D-vel vizsgálható a HEAD és a kiválasztott branch diffje.
         Mellesleg: K_F1 helpet ad a shortcutokról.
     
     PrepCommit: 
         Indítja gitview-t, előkészíthetjük a következő commit-ot, 
-        lezárhatjuk a megszakadt rebase műveletet, ahogy a gitview-nál 
-        írtam.
+        vagy lezárhatjuk a megszakadt rebase műveletet, ahogy a 
+        gitview-nál írtam.
     
     DiffPrev: 
         A kiválasztott commitot diffeli az eggyel előző

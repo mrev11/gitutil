@@ -57,7 +57,7 @@ git checkout [-f] <branch>
         2) Ha olyan F fáljt töröltünk, ami nincs benne B-ben,
            vagy Fa!=Fb, akkor a co (nem, nem abortál, hanem)
            simán átvált és a törlés hatástalan. Ha létezik Fb, 
-           azkkor azt előveszi. Ha  visszaváltunk A-ra, akkor újra 
+           akkor azt előveszi. Ha  visszaváltunk A-ra, akkor újra 
            előveszi A-ból az előbb törölt Fa-t.
 
     A komplikált szabályok megjegyzését könnyíti, ha észrevesszük
@@ -119,7 +119,7 @@ Teljes visszaállás az utolsó commitra:
     git checkout .  # előszedi a filék utolsó commit szerinti állapotát
     git clean -fxd  # törli a plusz dolgokat
                     # -f  force
-                    # -x  törli az ignored fájlokat
+                    # -x  törli a plusz (untracked+ignored) fájlokat 
                     # -d  törli a plusz directorykat
 
 --------------------------------------------------------------------

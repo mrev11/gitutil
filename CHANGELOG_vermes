@@ -1,4 +1,7 @@
 
+zbrowse help pozicionalas javitva;
+doksi javitgatva.
+
 gitnav: fetch statuszban K_CTRL_R -> rebase (merge helyett rebase);
 gitnav: fetch statuszban K_CTRL_D -> gitview a kivalasztott branchra;
 gitview: rebase continue funkcio;

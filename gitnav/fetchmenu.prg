@@ -18,7 +18,7 @@ local rl,line
     while( NIL!=(line:=rl:readline) )
         line::=bin2str
         line::=strtran(chr(10),"")
-        aadd(fetchmenu,{line+" (fetch from this branch)",mkblock_fetch(brw,line)})
+        aadd(fetchmenu,{line+" (fetch from this remote)",mkblock_fetch(brw,line)})
     end
     rl:close
 

@@ -35,19 +35,19 @@ git branch  -r
     Ezzel is meg lehet találni a remote branchokat.
 
 ---------------------------------------------------------------------------------
-git barnch <newbranch>
+git branch <newbranch>
 
     Csinál egy új branchot.
 
 ---------------------------------------------------------------------------------
-git barnch  -d <branch>
+git branch  -d <branch>
 
     Törli a branchot, de csak akkor hajtja végre, ha a branch
     'fully merged' állapotban van. Nem világos, hogy ez pontosan mit 
     jelent.
 
 ---------------------------------------------------------------------------------
-git barnch  -D <branch>
+git branch  -D <branch>
 
     Erőszakosan törli a branchot.
     
