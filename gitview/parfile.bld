@@ -1,6 +1,11 @@
--bccc$(CCCVER)_gitutil
+
+#-blibccc$(CCCVER)_gitutil.so
+-bccc$(CCCVER)_gitutil.lib
 -b$(CCCDIR)/tools/$$(z)    
 BUILD_EXE=$(HOME)/bin  
 BUILD_SHR=static
 
-
+#Altalaban az kell, hogy statikusan legyen linkelve,
+#hogy akkor is lehessen hasznalni, ha a CCC le van kopasztva.
+#Amikor viszont a gitutil konyvtarat teszteljuk,
+#akkor jobb, ha a libccc$(CCCVER)_gitutil.so van linkelve

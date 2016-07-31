@@ -185,7 +185,10 @@ static function reset(brw)
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
 local commit:=arr[pos][2]
-    rundbg( "git reset --soft "+commit)
+local result:=output_of("git reset --soft "+commit)
+    if(!empty(result))
+        zbrowseNew(result,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop
+    end
     return .f. //kilép brwLoop-ból
     
     //A resetet általában arra használjuk, hogy lerövidítsük 
