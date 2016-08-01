@@ -1,3 +1,8 @@
+
+intelligensebb fajl-browse:
+a directoryk eloszor "csukva" vannak, K_ENTER-rel lehet belemenni;
+zbrowse helpje kihagyja azokat a shortcutokat, amiknek nincs szovege;
+
 reset eredmenyenek ellenorzese;
 
 zbrowse help pozicionalas javitva;

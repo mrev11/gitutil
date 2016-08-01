@@ -1,30 +1,110 @@
 
 #include "inkey.ch"
 
+static basedata
+
+
+**************************************************************************************
+static class zpbrowse(zbrowse)
+    method  initialize
+    attrib  path
+
+
+**************************************************************************************
+static function zpbrowse.initialize(this,path,t,l,b,r)
+local txt
+    this:path:=path
+    txt:=dirdata(path)
+    this:(zbrowse)initialize(txt,t,l,b,r)
+    return this
+
+
+**************************************************************************************
+static function dirdata(path:="")
+local dirs:={}
+local fils:={}
+local n,line,pos:=9999,prev
+local lenpath:=len(path)
+local dirdata 
+
+    for n:=1 to len(basedata)
+        line:=basedata[n]
+        if( line!=path )
+            //path hosszában eltér
+        elseif( left(line,pos)==prev )
+            //már bevett directory
+        elseif( 0!=(pos:=at(dirsep(),line,lenpath+1)) )
+            prev:=line[1..pos]
+            aadd(dirs,prev[lenpath+1..])
+        else
+            aadd(fils,line[lenpath+1..])
+        end
+    next
+    
+    dirdata:=""
+    for n:=1 to len(dirs)
+        dirdata+=dirs[n]+chr(10)
+    next
+    for n:=1 to len(fils)
+        dirdata+=fils[n]+chr(10)
+    next
+    return dirdata
+
+
+
+**************************************************************************************
+static function init_basedata(commit)
+local n
+    basedata:=output_of( "git ls-tree --name-only -r "+commit )
+    basedata::=split(chr(10))
+    for n:=1 to len(basedata)
+        if( basedata[n]::left(1)=='"' )
+            basedata[n]:=basedata[n][2..len(basedata)-1]
+        end
+    next
+
 
 **************************************************************************************
 function browse_commit(brw)
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
 local commit:=arr[pos][2]
-    browse(commit)
+local head:=read_commit_header(commit)
+local zframe,zbrowse
+
+    init_basedata(commit)
+
+    zbrowse:=zpbrowseNew("") //gyökér
+    zbrowse:header1:=head[1]
+    zbrowse:header2:=head[3]
+    zbrowse:add_shortcut(K_F1,{|b|b:help},"Help")
+    zbrowse:add_shortcut(K_ENTER,{|zb|view_item(zb,commit)},"View")
+
+    zframe:=zframeNew()
+    zframe:set(zbrowse)
+    zframe:loop
+
     return .t.
 
 
 **************************************************************************************
-static function browse(commit)
+static function view_item(zbrowse,commit)
+local fname:=zbrowse:seltext::alltrim
+    if( right(fname,1)==dirsep() )   
+        return view_dir(zbrowse,commit)
+    else
+        return view_file(zbrowse,commit)
+    end
 
-local head:=read_commit_header(commit)
-local data:=output_of( "git ls-tree --name-only -r "+commit )
-local zframe:=zframeNew()
-local zbrowse:=zbrowseNew(data)
-
-    zbrowse:header1:=head[1]
-    zbrowse:header2:=head[3]
-    zbrowse:add_shortcut(K_F1,{|b|b:help},"Help")
-    zbrowse:add_shortcut(K_ENTER,{||view_file(zbrowse,commit)},"View file")
-    zframe:set(zbrowse)
-    zframe:loop
+**************************************************************************************
+static function view_dir(zbrowse,commit)
+local dname:=zbrowse:seltext::alltrim
+local zpbrowse:=zpbrowseNew(zbrowse:path+dname)
+    zpbrowse:shortcut:=zbrowse:shortcut
+    zpbrowse:header1:=zpbrowse:path
+    zpbrowse:header2:=zbrowse:header2
+    zbrowse:topush(zpbrowse)
+    return K_ESC
 
 
 **************************************************************************************
@@ -32,7 +112,11 @@ static function view_file(zbrowse,commit)
 
 local zbp  //plain
 local zbb  //blame
-local fname:=zbrowse:seltext
+local fname:=zbrowse:path+zbrowse:seltext::alltrim
+
+    if(" "$fname)
+        fname:='"'+fname+'"'
+    end
 
     zbp:=zbrowseNew(output_of("git show "+commit+":"+fname))
     zbb:=zbrowseNew(output_of("git blame "+fname))

@@ -161,9 +161,13 @@ local screen,cr,cc
         item:=sc[1]::inkeycode2name::padr(wkey)+": "
         if(NIL!=sc[3])
             item+=sc[3]
+            menu::aadd(item)
         end
-        menu::aadd(item)
     next
+    
+    if( empty(menu) )
+        return 0
+    end
     
     t:=this:top+1
     l:=(this:right-wkey-wtxt-6)::max(1)
