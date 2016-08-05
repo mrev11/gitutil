@@ -5,28 +5,35 @@ static context:="3" //a változások körül megjelenített sorok száma
 
 
 ********************************************************************************************
-function view_diff(parbrw,arg_commit1,arg_commit2)
-
-local arr:=brwArray(parbrw)
-local pos:=brwArrayPos(parbrw)
-local fname:=arr[pos][2]
+function view_diff(commit,fspec) //({com1,com2,...},{fsp1,fsp2,...  })
 
 local crs:=setcursor(1)
 local scrn:=savescreen()
 local rl,line,changes:={}
-local brw
-local gitcmd
-
+local gitcmd:={}
 local mode:="dif"
+local brw,pos,n
 
 while( mode!=NIL )
 
     changes:={}
-    gitcmd:="git diff -U"+context
-    gitcmd+=" "+arg_commit1
-    gitcmd+=" "+arg_commit2
-    gitcmd+=" -- "+fname
 
+    //a szóközt tartalmazó fájlnevek miatt
+    //nem lehet a child-ban levő szóközöknél 
+    //történő darabolásra hagyatkozni
+
+    gitcmd:={}
+    gitcmd::aadd("git")
+    gitcmd::aadd("diff")
+    gitcmd::aadd("-U"+context)
+    for n:=1 to len(commit)
+        gitcmd::aadd(commit[n])
+    next
+    gitcmd::aadd("--")
+    for n:=1 to len(fspec)
+        gitcmd::aadd(fspec[n])
+    next
+    
     rl:=read_output_of(gitcmd)
     while( (line:=rl:readline)!=NIL )
         line::=bin2str
@@ -58,7 +65,7 @@ while( mode!=NIL )
 
 
     brw:=brwCreate(0,0,maxrow(),maxcol())
-    brwMenuName(brw,"["+fname+"]")
+    brwMenuName(brw,"["+fspec[1]+"]")
     brwArray(brw,changes)
     brwColumn(brw,"", brwAblock(brw,1),replicate("X",maxcol()-2))
 
@@ -85,9 +92,6 @@ end
     
     restscreen(,,,,scrn)
     setcursor(crs)
-
-    return .t.
-
 
 
 ********************************************************************************************

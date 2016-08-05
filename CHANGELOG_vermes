@@ -1,4 +1,14 @@
 
+gitnav-ban "Status" menu, diff, add, reset, cehckout funkciokkal;
+gitstat menu funkcioi pontositva (resetone, checkout komplikalt);
+specialis fajlnevek escapelve, idezve, idezojel leszedve, stb.
+megjegyzes:
+    PrepCommit a  "git diff --name-status com1 com2 -- "
+    Status     a  "git status --short" 
+eredmenyebol dolgozik, hasonlo, de megsem ugyanaz;
+gitview subdir torolve (minden atkerult gitnav-ba);
+
+
 git repo automatikus letrehozasa;
 ha nem egy git wt-ben indul a progam,
 felajanlja a repo letrehozasat;

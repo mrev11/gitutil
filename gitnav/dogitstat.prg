@@ -71,7 +71,7 @@ local cr,cc,cursta
             line::=bin2str                                 
             line::=strtran(chr(9),"")                    
             line::=strtran(chr(10),"")                     
-            changes::aadd( {line[1..2],line[4..]}  )             
+            changes::aadd( {line[1..2],line[4..]::unquote}  )             
         end                                                
         rl:close                                           
         if( empty(changes) )
@@ -94,6 +94,7 @@ local cr,cc,cursta
     setpos(cr,cc) //nem szabad változnia!
     setcursor(cursta)
 
+
 ********************************************************************************************
 static function column_stat(blk)
 local x:=eval(blk)
@@ -113,7 +114,7 @@ local fspec,ftext
         arr:=brwArray(b)
         pos:=brwArrayPos(b)
         fspec:=arr[pos][2]
-        ftext:=output_of("git blame "+fspec)
+        ftext:=output_of("git blame "+fn_escape(fspec))
         zbrowseNew(ftext,b:ntop,b:nleft,b:nbottom,b:nright):loop
     end
 
@@ -122,16 +123,31 @@ local fspec,ftext
 static function diff(brw)
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
-local stat:=arr[pos][1]
+local status:=arr[pos][1]
 local fspec:=arr[pos][2]
 
-    if( "@@"$stat )
+    if( status=="@@" )
         //technikai sor
-    elseif( "?"$stat )
-        //untracked fi
-        //nincs mivel összehasonlítani
+
+    elseif( "R"$status )
+
+        //átnevezés: src -> dst
+        //az src diffjét mutatjuk
+
+        fspec::=replace_name
+        if( valtype(fspec)=="A" )
+            fspec:=fspec[1]
+            view_diff({"HEAD"},{fspec})
+        else
+            return .t. //??? 
+        end
+
+    elseif( status=="??" )
+        //untracked file
+        view_diff({"--no-index"},{fspec,"/dev/null"})
+
     else
-        view_diff(brw,"HEAD","")
+        view_diff({"HEAD"},{fspec})
     end
     return .t.
 
@@ -147,9 +163,17 @@ static function addall(brw,reread)
 static function addone(brw,reread)
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
+local status:=arr[pos][1]
 local fspec:=arr[pos][2]
 
-    rundbg("git add "+fspec)
+    if( status[2]==" " )
+        //már indexelve van,
+        //az indexelés után nincs módosítva,
+        //nincs értelme az add-nak
+        return .t.
+    end
+
+    rundbg("git add "+fn_escape(fspec))
     reread:=.t.  //uj brw array lesz
     return .f.   //jelenlegi brwloop-bol ki
 
@@ -178,8 +202,30 @@ static function resetall(brw,reread)
 static function resetone(brw,reread)
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
+local status:=arr[pos][1]
 local fspec:=arr[pos][2]
-    rundbg("git reset -q  -- "+fspec)
+
+    if( status[1]==" " .or. status=="??" )
+        //nincs indexelve
+        //nincs értelme resetelni
+        return .t. //marad a brwloop-ban
+    end
+    
+    if( status[1]=="R" )
+        fspec::=replace_name
+        if( valtype(fspec)=="A" )
+            //az átnevezés esete
+            //így néz ki a browseban:
+            //  R_   regi_nev -> uj_nev
+            //a régi és új fájlt is resetelni kell
+
+            rundbg("git reset -q -- "+fn_escape(fspec[1]))
+            rundbg("git reset -q -- "+fn_escape(fspec[2]))
+        end
+    else
+        rundbg("git reset -q -- "+fn_escape(fspec))
+    end
+
     reread:=.t.  //uj brw array lesz
     return .f.   //jelenlegi brwloop-bol ki
 
@@ -193,47 +239,68 @@ local fspec:=arr[pos][2]::alltrim
 local status:=arr[pos][1]
 local result
 
-    if( "@@"$status )
+    if( status=="@@" )
         //technikai sor
         return .t.
 
-    elseif( right(fspec,1)==dirsep() )
-        //directorykat nem checkoutolunk
+    elseif( status=="??" )
+        //untracked fájl
+        //nincs benne a repóban
+        //nem lehet checkoutolni
         return .t.
 
-    elseif( "R"$status )
-        alert("RENAME")
-        return .t. //ezzel mi legyen?
+    elseif( status=="A " )
+        //ujonnan indexelt fájl
+        //nincs benne a repóban
+        //nem lehet checkoutolni
+        return .t.
+
+    elseif( right(fspec,1)==dirsep() )
+        //directoryt egyelőre nem checkoutolunk
+        return .t.
 
     elseif( "M"$status )
         //módosítások elveszhetnek
-        if( 2>alert("After checking out changes will be lost",{"Escape","Continue"}))
+        if( 2>alert("Checkout may overwrite changes!",{"Escape","Continue"}))
             return .t.
         end
     end
+    
+    if( "R"$status )
+        fspec::=replace_name
+        if( valtype(fspec)=="A" )
+            //mv src dst
+            //mire vonatkozhat a checkout?
+            //src a commitban megvan, a wt-ből kikerült (hacsak...)
+            //dst a wt-ben új, hacsak éppen nem felülírt valamit
+            //mindkettőt lehet értelme checkoutolni
+            //de valószínűbb, hogy az src kell
+            
+            fspec:=fspec[1]
+        else
+            return .t. //??? 
+        end
+    end
 
-    rundbg("git reset -q -- "+fspec)
-    result:=output_of("git checkout -- "+fspec)
+    if( status=="AM" )
+        //új, indexelt, de indexelés után módosított fájl, 
+        //nem a commitból, hanem az indexből checkoutoljuk,
+        //azért itt nem kell resetelni
+
+    //elseif( status=="MM" .and. 2>alert(....) )
+        //itt lehetne checkoutolni
+        //a commitból és az indexből is
+
+    else
+        rundbg("git reset -q -- "+fn_escape(fspec))
+    end
+    result:=output_of("git checkout -- "+fn_escape(fspec))
     if( "error:"$result .or. "fatal:"$result )
         zbrowseNew(result,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop
     end
 
     reread:=.t.  //uj brw array lesz
     return .f.   //jelenlegi brwloop-bol ki
-
-
-********************************************************************************************
-static function commit(brw,reread)
-local result
-
-    run("filetime-save.exe")
-    rundbg("git add .FILETIME_$USER")
-    run("firstpar.exe CHANGELOG_$USER >commit-message")
-    result:=output_of("git commit -F commit-message")
-    zbrowseNew(result,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop
-
-    reread:=.f.
-    return .f.   //brwloop-bol végleg ki
 
 
 ********************************************************************************************
@@ -262,5 +329,22 @@ static function statcolor(x)
         return {3}
     end
     return {1} //normál fehér
+
+
+********************************************************************************************
+static function replace_name(fspec)
+local pos:=at("->",fspec)
+
+    if( pos>0 )
+        fspec:={fspec[1..pos-1]::alltrim,fspec[pos+2..]::alltrim}
+    end
+
+    //az átnevezés esete
+    //így néz ki a browseban:
+    //  R_   regi_nev -> uj_nev
+    //vagyis ilyenkor két fspec is van
+
+    return fspec // "fspec"  vagy {"fspec1","fspec2"}
+
 
 ********************************************************************************************

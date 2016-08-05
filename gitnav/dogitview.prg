@@ -66,7 +66,7 @@ local cr,cc,cursta
         brwMenu(brw,"Add","Add all changes to index",{||addall(brw,@reread)})
     end
 
-    brwMenu(brw,"Diff","View changes of highlighted file",{||view_diff(brw,arg_commit1,arg_commit2)})
+    brwMenu(brw,"Diff","View changes of highlighted file",{|b|diff(b)})
 
     if(commitmenu)
         brwMenu(brw,"Reset","Eliminate selected file form the next commit",{||resetone(brw,@reread)})
@@ -141,9 +141,19 @@ local fspec,ftext
         arr:=brwArray(b)
         pos:=brwArrayPos(b)
         fspec:=arr[pos][2]
-        ftext:=output_of("git blame "+fspec)
+        ftext:=output_of("git blame "+fn_escape(fspec))
         zbrowseNew(ftext,b:ntop,b:nleft,b:nbottom,b:nright):loop
     end
+
+
+
+********************************************************************************************
+static function diff(brw)
+local arr:=brwArray(brw)
+local pos:=brwArrayPos(brw)
+local fspec:=arr[pos][2]
+    view_diff( {arg_commit1,arg_commit2},{fspec} )
+    return .t.
 
 
 ********************************************************************************************
@@ -170,7 +180,7 @@ static function resetone(brw,reread)
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
 local fspec:=arr[pos][2]
-    rundbg("git reset -- "+fspec)
+    rundbg("git reset -- "+fn_escape(fspec))
     reread:=.t.  //uj brw array lesz
     return .f.   //jelenlegi brwloop-bol ki
 

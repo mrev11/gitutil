@@ -121,13 +121,10 @@ local fname:=zbrowse:seltext::alltrim
     end
 
     fname:=zbrowse:path+fname
+    fname::=fn_escape //speciális karakterek
 
-    if(" "$fname)
-        fname:='"'+fname+'"'
-    end
-
-    zbp:=zbrowseNew(output_of("git show "+commit+":"+fname))
-    zbb:=zbrowseNew(output_of("git blame "+fname))
+    zbp:=zbrowseNew(output_of("git show "+commit+":"+fn_escape(fname)))
+    zbb:=zbrowseNew(output_of("git blame "+fn_escape(fname)))
     
     zbb:add_shortcut(K_F1,{|b|b:help},"Help")
     zbb:add_shortcut(K_CTRL_B, {|z|shortcut_ctrl_b(z,zbb,zbp)},"Toggle blame")  //ugyanaz
