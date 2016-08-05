@@ -1,5 +1,8 @@
 
+***************************************************************************************
 function change_to_gitdir()
+
+local curdir:=curdir()
 
     while( empty(directory(".git","D")) )
         //A git diff-ek akkor működnek,
@@ -14,10 +17,17 @@ function change_to_gitdir()
             //hogy Linuxon a /-ben cd .. sikeresnek számít, 
             //holott nyilvánvalóan nem lehet feljebb menni
 
-            alert("Not in a git working tree - quit!")
-            quit
+            if( 2>alert("Not in a git working tree!",{"Quit","Create git repo"}))
+                quit
+            else
+                if( dirchange(curdir)==0 )
+                    create_repo()
+                end
+            end
         end
     end
     if(debug())
         ?? ".git directory found in",curdir();?
     end
+
+***************************************************************************************

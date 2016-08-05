@@ -36,8 +36,8 @@ local outarr:={},n
     
     if( !direxist(".git") )
         ?? "not a git repository";?
-    elseif( !gitstatus() )
-        ?? 'nothing to commit, working directory clean';?
+    elseif( repo_clean() )
+        ?? 'working directory clean';?
         if( 0<ascan(argv(),{|a|a=='-f'}) )
             ?? "save forced";?
         else
@@ -77,26 +77,6 @@ local outarr:={},n
         run( "diff "+bakfile+" "+outfile )
     end
     
-
-*****************************************************************************
-static function gitstatus()
-
-local rl,line
-local pipe:=child("git status") //{pr,pw}
-local result:=.t.
-
-    fclose(pipe[2])
-    rl:=readlineNew(pipe[1])
-    while NIL!=(line:=rl:readline)
-        if( a'nothing to commit' $ line .and. a'working directory clean' $ line )
-            // kulonfele git verziokban eltero szoveg
-            result:=.f.
-        end
-    end
-    fclose(pipe[1])
-    
-    return result // TRUE: van valtozas, FALSE: nincs valtozas
-
 
 *****************************************************************************
 static function sort(x,y)

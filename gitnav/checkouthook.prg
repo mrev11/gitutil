@@ -12,7 +12,7 @@ filetime-restore.exe
 
     if( !file(hspec) )
         memowrit(hspec,script)
-        chmod(hspec,0b111101101)  //744
+        chmod(hspec,0b111101101)  //755
         ?? "install "+hspec;?
     end
 

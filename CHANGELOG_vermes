@@ -1,4 +1,8 @@
 
+git repo automatikus letrehozasa;
+ha nem egy git wt-ben indul a progam,
+felajanlja a repo letrehozasat;
+
 gitview athozva gitnav-ba;
 run gitview.exe fuggvenyesitve -> do_gitview();
 kulon gitview.prg (benne main) az onallo programnak;
