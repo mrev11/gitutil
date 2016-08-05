@@ -1,14 +1,19 @@
 
 #include "directry.ch"
 
+static cmd
 
 
 *****************************************************************************
-function main()
+function main(*)
 
-    set dosconv off
+    if( 0<ascan({*},"-p") )
+        cmd:="git pull"
+    else
+        cmd:="git status -s"
+    end
     
-    doproc()
+    doproc() 
     ?
 
 *****************************************************************************
@@ -27,10 +32,11 @@ local name,n,d,d1:={}
         elseif( name=="." )
         elseif( name==".." )
         elseif( "ARCHIVE"$name)
+
         elseif( name==".git" )
             ? "--------------------------------------------------------------------"
             ? curdir();?
-            run("git status -s")
+            run(cmd)
         else
             aadd(d1,name)
         end

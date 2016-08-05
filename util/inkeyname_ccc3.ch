@@ -31,14 +31,8 @@ K_CTRL_X            24
 K_CTRL_Y            25
 K_CTRL_Z            26
 
-
-K_ENTER             13
-K_SPACE             32
 K_ESC               27
-K_INS               22
-K_DEL                7
-K_TAB                9
-
+K_SPACE             32
 
 K_ALT_A             -1
 K_ALT_B             -2

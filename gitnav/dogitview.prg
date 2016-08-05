@@ -241,7 +241,16 @@ local id1
 local id2
 local base
 
+    //static változók
+    //a "függvényesítés" miatt mindig 
+    //meg kell adni a kezdőértékeket 
+    arg_commit1:="--staged"
+    arg_commit2:="HEAD"
     descendant:=.t.
+    menutitle:=NIL
+    commitmenu:=.f.
+    rebasemenu:=.f.
+
 
     if( argc==0 )
         //default

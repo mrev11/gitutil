@@ -59,13 +59,13 @@ local err
     brwColumn(brw,"Commit",brwAblock(brw,2),replicate("X",7))
     brwColumn(brw,"Message",brwAblock(brw,3),replicate("X",maxcol()-40))
 
-    brwMenu(brw,"Status","Prepare and execute commit or continue/abort rebase",{||do_gitstat(brw),.f.})
+    brwMenu(brw,"Status","View status of worktree, stage/unstage files",{||do_gitstat(brw),.f.})
     brwMenu(brw,"PrepCommit","Prepare and execute commit or continue/abort rebase",{||prepcommit(brw)})
-    brwMenu(brw,"FetchMerge","Download changes from remotes and do merge/rebase/push",fetchmenu:=fetchmenu(brw,{}))
+    brwMenu(brw,"FetchMerge","Download changes from remotes, do merge/rebase/push",fetchmenu:=fetchmenu(brw,{}))
     brwMenu(brw,"DiffPrev","View changes caused by the selected commit",{||diffprev(brw)})
     brwMenu(brw,"DiffHead","View changes between selected commit and HEAD",{||diffhead(brw)})
     brwMenu(brw,"Browse","Browse files of selected commit",{||browse_commit(brw)})
-    brwMenu(brw,"Reset","Reset tip of current branch to the selected commit",{||reset(brw)})
+    brwMenu(brw,"Reset","Move (cut) tip of current branch to the selected commit",{||reset(brw)})
     brwMenu(brw,"Snapshot","Checkout the selected commit (->detached head)",{||snapshot(brw)})
     brwMenu(brw,"Branch","Change to another branch",branchmenu:=branchmenu(brw,{}))
 

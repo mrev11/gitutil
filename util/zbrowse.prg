@@ -25,6 +25,8 @@ class zbrowse(zedit)
     attrib  topush          //csak akkor érdekes, ha zframe-ben van
     attrib  toset           //csak akkor érdekes, ha zframe-ben van
 
+    method  displine
+    attrib  colorblock
 
 *************************************************************************************
 static function zbrowse.initialize(this,txt,t,l,b,r)
@@ -34,6 +36,8 @@ static function zbrowse.initialize(this,txt,t,l,b,r)
 
     this:header1:=""; this:color1:="gr+/n"
     this:header2:=""; this:color2:="w+/n"
+    
+    this:colorblock:={||NIL}
     
     return this    
 
@@ -185,5 +189,58 @@ local screen,cr,cc
     setpos(cr,cc) //nem szabad változnia!
     return result
     
+
+*************************************************************************************
+static function zbrowse.displine(this,x) //áthozva z-ből, egyszerűsítve
+
+local actrow:=this:actrow
+
+    if( x==NIL )
+        x:=actrow
+    elseif( x>len(this:atxt) )
+        return NIL
+    end
+
+    disp(this,x,1,NIL, eval(this:colorblock,this:atxt[x]) )
+
+
+*************************************************************************************
+static function disp(this,x,tbeg,tend,color) //áthozva z-ből, módosítva
+
+local line,pos
+local text:=this:atxt[x]
+local ws:=this:sftcol
+local ww:=this:width
+local twid
+
+    line:=this:top+x-this:sftrow-1
+
+    if( tend==NIL )
+        twid:=ws+ww
+    else
+        twid:=tend-tbeg+1
+    end
+
+    if( ws+ww<tbeg  .or. tbeg+twid<ws )
+        return NIL
+    end
+
+    pos:=tbeg-ws-1
+
+    if( pos<0 )
+        tbeg-=pos
+        twid+=pos
+        pos:=0
+    end
+    
+    twid:=min(twid,ww-pos)
+    pos+=this:left
+    
+    if( !empty(color) )
+        @ line,pos SAY padr(substr(text,tbeg,twid),twid) COLOR color
+    else
+        @ line,pos SAY padr(substr(text,tbeg,twid),twid)
+    end
+
 
 *************************************************************************************

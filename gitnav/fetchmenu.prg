@@ -72,6 +72,7 @@ local ms,info,n
     zbrowse:add_shortcut(K_CTRL_M,{|b|merge(b)},"Merge")
     zbrowse:add_shortcut(K_CTRL_R,{|b|rebase(b)},"Rebase")
     zbrowse:add_shortcut(K_CTRL_P,{|b|push(b)},"Push")
+    zbrowse:colorblock:={|zb|color(zb)}
 
     zframe:=zframeNew()
     zframe:set(zbrowse)
@@ -86,6 +87,13 @@ local ms,info,n
     //egyébként becsukódik.
 
 
+
+********************************************************************************************
+static function color(x)  
+    if(x::alltrim[1..1]=="!")
+        return "r+/n"
+    end
+    return NIL
 
 ********************************************************************************************
 static function diff(zb)

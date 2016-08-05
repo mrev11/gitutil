@@ -73,18 +73,25 @@ gitnav
         Mutatja az aktuális ág nevét, mutatja, hogy a
         wt-ben (work tree) vannak-e nem commitolt változások.
     
-    Branch: 
-        Pulldown menü. Ebben lehet branch-ot váltani, illetve 
-        itt is látszik, hogy mi az aktuális ág (* jelzi).  A branch 
-        váltás a "checkout -f <branch>; clean -fxd" parancsokkal történik, 
-        tehát az új branch tiszta állapotába jutunk. Mivel ez a művelet
-        törölné a wt minden változását, a program csak tiszta állapotban
-        engedi a végrehajtást. A branch váltás így mindig tiszta állapotból
-        tiszta állapotba visz. Emellett a checkout hook-ból végrehajtódó
-        filetime-restore miatt a fájlidők is mindig visszaállítódnak
-        az eredeti értékre. Mellékhatásként törlődik az összes ignored
-        fájl (ppo-k, objectek, exe-k, stb.).
     
+    Status:
+        Browseolja a 'git status --short' parancs eredményét.
+        A browse egy --- vonallal két részre van osztva.
+        A felső részben láthatók a még nem indexelt változások.
+        Az alsó részben láthatók a már indexelt változások.
+
+        Diff     - mutatja a kiválasztott fájl és a HEAD diffjét
+        AddOne   - a kiválsztott fájlt hozzáadja az indexhez (stage) 
+        ResetOne - a kiválsztott fájlt kiveszi az indexből (unstage)
+        AddAll   - minden változást bevesz az indexbe 
+        ResetAll - minden változást kivesz az indexből 
+        Checkout - a kiválasztott fájlt visszaállítja a HEAD-ből
+
+    PrepCommit: 
+        Indítja gitview-t, előkészíthetjük a következő commit-ot, 
+        vagy lezárhatjuk a megszakadt rebase műveletet, ahogy a 
+        gitview-nál írtam.
+
     FetchMerge: 
         Pulldown. Megnézhetjük a fetch státuszt, fetchelhetünk
         az összes remoteból egyszerre, vagy a remoteokból egyenként.
@@ -94,14 +101,14 @@ gitnav
         branchra ráállunk a sávkurzorral és K_CTRL_M-et nyomunk, 
         megtörténik a merge. Az aktuális branchba (bal felső sarok) 
         mergelődik a !-jellel jelzett és sávkurzorral kiválasztott branch
-        A K_CTRL_R shortcutra merge helyett rebaset hajt végre. 
-        A K_CTRL_D-vel vizsgálható a HEAD és a kiválasztott branch diffje.
-        Mellesleg: K_F1 helpet ad a shortcutokról.
-    
-    PrepCommit: 
-        Indítja gitview-t, előkészíthetjük a következő commit-ot, 
-        vagy lezárhatjuk a megszakadt rebase műveletet, ahogy a 
-        gitview-nál írtam.
+        A K_CTRL_R shortcutra merge helyett rebaset hajt végre.
+        
+        Shortcutok:
+        K_F1     - Help
+        K_CTRL_D - Diff (HEAD és a kiválasztott local/remote branch között)
+        K_CTRL_M - Merge (HEAD-et mergeli a kiválasztott local/remote branchcsel)
+        K_CTRL_R - Rebase (HEAD-be mergeli a kiválasztott local/remote branchet)
+        K_CTRL_P - Push (HEAD-et nyomja fel a kiválasztott remote branchba)
     
     DiffPrev: 
         A kiválasztott commitot diffeli az eggyel előző
@@ -128,6 +135,18 @@ gitnav
         tehát az adott commit tiszta állapotába jutunk. Ez a művelet
         minden wt-beli változást megszüntet, ezért csak külön
         megerősítés után lehet végrehajtani.
+
+    Branch: 
+        Pulldown. Ebben lehet branch-ot váltani, illetve 
+        itt is látszik, hogy mi az aktuális ág (* jelzi).  A branch 
+        váltás a "checkout -f <branch>; clean -fxd" parancsokkal történik, 
+        tehát az új branch tiszta állapotába jutunk. Mivel ez a művelet
+        törölné a wt minden változását, a program csak tiszta állapotban
+        engedi a végrehajtást. A branch váltás így mindig tiszta állapotból
+        tiszta állapotba visz. Emellett a checkout hook-ból végrehajtódó
+        filetime-restore miatt a fájlidők is mindig visszaállítódnak
+        az eredeti értékre. Mellékhatásként törlődik az összes ignored
+        fájl (ppo-k, objectek, exe-k, stb.).
     
     
 Branch státusz oszlop

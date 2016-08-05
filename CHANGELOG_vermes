@@ -1,4 +1,9 @@
 
+zbrowseba colorblock, tartalomtol fuggo szinezes;
+directoryk browseolasakor directoryk es fajlok kulonbozo szinnel;
+fetch-statuszban a mergelheto branchok szinnel kiemelve;
+gitview "fuggvenyesitese" javitva
+
 gitnav-ban "Status" menu, diff, add, reset, cehckout funkciokkal;
 gitstat menu funkcioi pontositva (resetone, checkout komplikalt);
 specialis fajlnevek escapelve, idezve, idezojel leszedve, stb.

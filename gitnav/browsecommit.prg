@@ -79,12 +79,23 @@ local zframe,zbrowse
     zbrowse:header2:=head[3]
     zbrowse:add_shortcut(K_F1,{|b|b:help},"Help")
     zbrowse:add_shortcut(K_ENTER,{|zb|view_item(zb,commit)},"View")
+    zbrowse:colorblock:={|x|color(x)}
 
     zframe:=zframeNew()
     zframe:set(zbrowse)
     zframe:loop
 
     return .t.
+
+
+**************************************************************************************
+static function color(x)
+    if( right(x,1)=="/" )
+        return "rg+/n"
+    else
+        return "bg+/n"
+    end
+    return "w/n"
 
 
 **************************************************************************************
@@ -103,15 +114,14 @@ local zpbrowse:=zpbrowseNew(zbrowse:path+dname)
     zpbrowse:shortcut:=zbrowse:shortcut
     zpbrowse:header1:=zpbrowse:path
     zpbrowse:header2:=zbrowse:header2
+    zpbrowse:colorblock:=zbrowse:colorblock
     zbrowse:topush(zpbrowse)
     return K_ESC
 
 
 **************************************************************************************
 static function view_file(zbrowse,commit)
-
-local zbp  //plain
-local zbb  //blame
+local zb
 local fname:=zbrowse:seltext::alltrim
 
     if(empty(fname))
@@ -119,31 +129,32 @@ local fname:=zbrowse:seltext::alltrim
         //marad a zbrowse:loop-ban, nem csinál semmit 
         return NIL
     end
-
     fname:=zbrowse:path+fname
-    fname::=fn_escape //speciális karakterek
-
-    zbp:=zbrowseNew(output_of("git show "+commit+":"+fn_escape(fname)))
-    zbb:=zbrowseNew(output_of("git blame "+fn_escape(fname)))
+    zb:=zbrowseNew(output_of("git show "+commit+":"+fn_escape(fname)))
     
-    zbb:add_shortcut(K_F1,{|b|b:help},"Help")
-    zbb:add_shortcut(K_CTRL_B, {|z|shortcut_ctrl_b(z,zbb,zbp)},"Toggle blame")  //ugyanaz
+    zb:add_shortcut(K_F1,{|b|b:help},"Help")
+    zb:add_shortcut(K_CTRL_B,{|z|shortcut_ctrl_b(z)},"Toggle blame")
 
-    zbp:add_shortcut(K_F1,{|b|b:help},"Help")
-    zbp:add_shortcut(K_CTRL_B, {|z|shortcut_ctrl_b(z,zbb,zbp)},"Toggle blame")  //ugyanaz
-
-    zbp:header1:=zbb:header1:=fname
-    zbp:color1:=zbb:color1:="gb+/n"
-    zbp:header2:=zbb:header2:=zbrowse:header2
-
-    zbrowse:topush(zbp)
+    zb:header1:=fname
+    zb:color1:="gb+/n"
+    zb:header2:=zbrowse:header2
+    zbrowse:topush(zb)
     return K_ESC
-    
+
+static function shortcut_ctrl_b(zb)
+    zb:topush:=view_blame(zb)
+    return K_ESC
 
 **************************************************************************************
-static function shortcut_ctrl_b(zb,zbb,zbp)
-    zb:toset:=if(zb==zbb,zbp,zbb)  //toggle
-    return K_ESC
+static function view_blame(zbrowse,commit)
+local fname:=zbrowse:header1
+local zb:=zbrowseNew(output_of("git blame "+fn_escape(fname)))
+    zb:header1:=fname
+    zb:color1:="gb+/n"
+    zb:header2:=zbrowse:header2
+    zb:add_shortcut(K_F1,{|b|b:help},"Help")
+    zb:add_shortcut(K_CTRL_B,{||K_ESC},"Toggle blame")
+    return zb
 
 
 **************************************************************************************
