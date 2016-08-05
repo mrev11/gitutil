@@ -112,7 +112,15 @@ static function view_file(zbrowse,commit)
 
 local zbp  //plain
 local zbb  //blame
-local fname:=zbrowse:path+zbrowse:seltext::alltrim
+local fname:=zbrowse:seltext::alltrim
+
+    if(empty(fname))
+        //kihagyjuk a dirlist-ek végén levő üres sort,
+        //marad a zbrowse:loop-ban, nem csinál semmit 
+        return NIL
+    end
+
+    fname:=zbrowse:path+fname
 
     if(" "$fname)
         fname:='"'+fname+'"'

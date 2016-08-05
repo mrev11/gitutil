@@ -3,7 +3,7 @@
 
 
 ********************************************************************************************
-#define FETCH_VIEW  "View fetch status do merge/rebase"
+#define FETCH_VIEW  "View fetch status do merge/rebase/push"
 #define FETCH_ALL   "Fetch from all remotes"
 
 ********************************************************************************************
@@ -66,11 +66,12 @@ local ms,info,n
     
     zbrowse:=zbrowseNew(result)
     zbrowse:header1:=brwMenuname(brw)
-    zbrowse:header2:=cmd + "  (F1,CTRL_D,CTRL_M,CTRL_R)"
+    zbrowse:header2:=cmd + "  (F1,CTRL_D,CTRL_M,CTRL_R,CTRL_P)"
     zbrowse:add_shortcut(K_F1,{|b|b:help},"Help")
     zbrowse:add_shortcut(K_CTRL_D,{|b|diff(b)},"Diff")
     zbrowse:add_shortcut(K_CTRL_M,{|b|merge(b)},"Merge")
     zbrowse:add_shortcut(K_CTRL_R,{|b|rebase(b)},"Rebase")
+    zbrowse:add_shortcut(K_CTRL_P,{|b|push(b)},"Push")
 
     zframe:=zframeNew()
     zframe:set(zbrowse)
@@ -89,8 +90,6 @@ local ms,info,n
 ********************************************************************************************
 static function diff(zb)
 
-local screen,cr,cc
-local t,l,b,r //NIL
 local brname
 
     brname:=zb:seltext::alltrim
@@ -109,15 +108,8 @@ local brname
     end
     brname:=brname[1]   //ellenőrzött branch name
     
-    cr:=row()
-    cc:=col()
-    screen:=savescreen(t,l,b,r)
-    
-    run( "gitview.exe "+brname ) //a HEAD-del lesz a diff
+    do_gitview(brname)
 
-    restscreen(t,l,b,r,screen)
-    setpos(cr,cc) //nem szabad változnia!
-    
     //Há ez mér pont itt van?
     //Itt vannak felsorolva könnyen kiválasztható helyzetben
     //a branchek, másrészt az is indokolt, ha a merge/rebase
@@ -131,7 +123,7 @@ local br,cmd,result,zbrowse
 
     br:=zb:seltext::alltrim::split(" ")
     if( empty(br) .or. br[1][1]!="!" )
-        warnsel()
+        warnsel_merge()
         return NIL
     end
 
@@ -158,7 +150,7 @@ local br,cmd,result,zbrowse
 
     br:=zb:seltext::alltrim::split(" ")
     if( empty(br) .or. br[1][1]!="!" )
-        warnsel()
+        warnsel_rebase()
         return NIL
     end
 
@@ -177,8 +169,56 @@ local br,cmd,result,zbrowse
     
 
 ********************************************************************************************
-static function warnsel()
+static function push(zb)
+
+local sel,rem,cur,rbr
+local cmd,result,zbrowse
+
+    sel:=zb:seltext::alltrim::split(" ")
+    if( empty(sel) )
+        warnsel_push()
+        return NIL
+    end
+    sel:=sel[1]::split("/") //{remote,branch}
+    if(len(sel)!=2)
+        warnsel_push()
+        return NIL
+    end
+
+    rem:=sel[1]
+    rbr:=sel[2]
+    cur:=current_branch()
+    
+    if( !cur==rbr )
+        if(2>alert("You are pushing '"+cur+"' to '"+rbr+"'",{"Escape","Continue"}))
+            return NIL
+        end
+    end
+
+    cmd:="git push "+rem+" "+cur+":"+rbr
+    result:=output_of(cmd)
+
+    zbrowse:=zbrowseNew(result)
+    zbrowse:header1:=branch_state_menuname()
+    zbrowse:header2:=cmd
+    zb:header1:=zbrowse:header1
+    zb:topush:=zbrowse
+
+    return K_ESC
+
+
+
+
+
+********************************************************************************************
+static function warnsel_merge()
     alert( "Branches marked with '!' can only be merged")
+
+static function warnsel_rebase()
+    alert( "Branches marked with '!' can only be rebase with")
+
+static function warnsel_push()
+    alert( "You can push only to remote branches")
 
 
 ********************************************************************************************

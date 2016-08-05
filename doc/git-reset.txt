@@ -81,5 +81,6 @@ git reset -- <filespec>
 
 git reset --hard HEAD~3  -- <filespec>
     <filespec> 3 comittal ezelőtti változatát betölti
-    az indexbe és a working tree-be.
-
+    az indexbe és a working tree-be.*
+    *Ezt írja a progit-en.1083.pdf 302.old., ezzel szemben 
+    a program azt feleli 'fatal: Cannot do hard reset with paths.'

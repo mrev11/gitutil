@@ -1,4 +1,13 @@
 
+gitview athozva gitnav-ba;
+run gitview.exe fuggvenyesitve -> do_gitview();
+kulon gitview.prg (benne main) az onallo programnak;
+uj program gitstat;
+run gitstat.exe fuggvenyesitve -> do_gitstat();
+kulon gitstat.prg (benne main) az onallo programnak;
+gitnav-ban uj menu Status: add/reset a fajlokra;
+fetch status zbrowseban CTRL_P pushol a kivalasztott remoteba
+
 intelligensebb fajl-browse:
 a directoryk eloszor "csukva" vannak, K_ENTER-rel lehet belemenni;
 zbrowse helpje kihagyja azokat a shortcutokat, amiknek nincs szovege;

@@ -59,14 +59,15 @@ local err
     brwColumn(brw,"Commit",brwAblock(brw,2),replicate("X",7))
     brwColumn(brw,"Message",brwAblock(brw,3),replicate("X",maxcol()-40))
 
-    brwMenu(brw,"Branch","Change to another branch",branchmenu:=branchmenu(brw,{}))
-    brwMenu(brw,"FetchMerge","Download changes from remotes and do merge/rebase",fetchmenu:=fetchmenu(brw,{}))
+    brwMenu(brw,"Status","Prepare and execute commit or continue/abort rebase",{||do_gitstat(brw),.f.})
     brwMenu(brw,"PrepCommit","Prepare and execute commit or continue/abort rebase",{||prepcommit(brw)})
+    brwMenu(brw,"FetchMerge","Download changes from remotes and do merge/rebase/push",fetchmenu:=fetchmenu(brw,{}))
     brwMenu(brw,"DiffPrev","View changes caused by the selected commit",{||diffprev(brw)})
     brwMenu(brw,"DiffHead","View changes between selected commit and HEAD",{||diffhead(brw)})
     brwMenu(brw,"Browse","Browse files of selected commit",{||browse_commit(brw)})
     brwMenu(brw,"Reset","Reset tip of current branch to the selected commit",{||reset(brw)})
     brwMenu(brw,"Snapshot","Checkout the selected commit (->detached head)",{||snapshot(brw)})
+    brwMenu(brw,"Branch","Change to another branch",branchmenu:=branchmenu(brw,{}))
 
     brwApplyKey(brw,{|b,k|appkey(b,k)})
     brwMenuName(brw,"[GitNavig]")
@@ -131,43 +132,35 @@ local commit
 
 ********************************************************************************************
 static function diffprev(brw)
-local scrn:=savescreen()
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
 local commit:=arr[pos][2]
     if( pos<len(arr) )
-        run( "gitview.exe "+commit+"^ "+commit )
+        do_gitview(commit+"^", commit)
     end
-    restscreen(,,,,scrn)
     return .t.
 
 
 ********************************************************************************************
 static function diffhead(brw)
-local scrn:=savescreen()
 local arr:=brwArray(brw)
 local pos:=brwArrayPos(brw)
 local commit:=arr[pos][2]
 local head:=arr[1][2]
     if( pos==1 )
-        //HEAD-et a HEAD-del összehasonlítani
-        //nincs értelme, helyette: HEAD<->index
-        //inkább külön menübe --> prepare commit
-        //run( "gitview.exe" )
+        //HEAD-et a HEAD-del diffelni értelmetlen
     else
-        run( "gitview.exe "+commit+" HEAD" )
+        do_gitview(commit,"HEAD")
     end
-    restscreen(,,,,scrn)
     return .t.
 
 
 ********************************************************************************************
 static function prepcommit(brw)
-local scrn:=savescreen()
 local current:=current_branch()
 local tip:=name_to_commitid(current)
-    run( "gitview.exe" )
-    restscreen(,,,,scrn)
+
+    do_gitview()
     
     if( !current==current_branch() )
         // rebase --continue után
