@@ -1,4 +1,6 @@
 
+browsecommit atalakitva;
+
 debug GITDEBUG=goc (g:gitcmd, o:output, c:callstack);
 menu szovegek javitgatva;
 

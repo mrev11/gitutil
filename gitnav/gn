@@ -1,0 +1,10 @@
+#!/bin/bash
+#set -x
+
+export GITDEBUG=go
+export OREF_SIZE=500000
+export CCCTERM_SIZE=120x40
+#export CCCTERM_INHERIT=yes
+
+exec gitnav.exe "$@" #>log-gitnav
+

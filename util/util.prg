@@ -54,7 +54,9 @@ local debug:=debug("gc")
 
 **************************************************************************************
 function name_to_commitid(name)
+    return commitid_of_mergebase(name,name)  //ez jobb
 
+#ifdef NOTDEF
 local rl:=read_output_of("git log -n 1 --format=oneline "+name)
 local line:=rl:readline
     rl:close
@@ -62,7 +64,7 @@ local line:=rl:readline
         return ""
     end
     return line[1..40]::bin2str  //40 karakteres commit-id
-
+#endif
 
 
 **************************************************************************************
@@ -109,7 +111,14 @@ local line
         else
             line::=alltrim
         end
-        aadd(branches,line)
+
+        if( " -> "$line )
+            //némelyik repóban
+            //a remoteoknál vannak
+            //ilyen furcsa hivatkozások
+        else
+            aadd(branches,line)
+        end
     end
     rl:close
     return branches  //{b1,b2,...}
@@ -126,19 +135,17 @@ local line
         line::=strtran(chr(10),"")
         line::=strtran(chr(13),"")
         line::=alltrim
-        aadd(branches,line)
+
+        if( " -> "$line )
+            //némelyik repóban
+            //ilyen hivatkozások vannak
+        else
+            aadd(branches,line)
+        end
     end
     rl:close
     return branches  //pl. {"develsave/devel","origin/master" }
                      // fajlsecifikaciok .git/refs/remotes/ alatt
 
-
-**************************************************************************************
-function commitid_of_remote_branch(b) // -> commitid vagy ""
-local fspec:=".git/refs/remotes/"+b
-local commitid:=memoread(fspec)
-    commitid::=strtran(chr(10),"")
-    return if(len(commitid)==40,commitid,"")
-    
 
 **************************************************************************************
