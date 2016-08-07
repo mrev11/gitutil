@@ -2,28 +2,52 @@
 
 **************************************************************************************
 function output_of(cmd)
+
 local output
 local tmp:=tempfile("/tmp/","bak")
+local debug:=debug("goc")
+
     run( cmd+" >"+tmp+" 2>&1")
     output:=memoread(tmp)
     ferase(tmp)
-    if( debug() )
-        ?? "--------------------------------------------------------";?
+    
+    if( !empty(debug) .and. !"g"==debug )
+        ?? "--------------------------------------------------------"
+        if( "c"$debug )
+            callstack()
+        end
+        ?
+    end
+    if( "g"$debug )
         ?? "GITCMD:",cmd;?
+    end
+    if( "o"$debug )
         ?? output;?
     end
+
     return output
 
 
 **************************************************************************************
-function read_output_of(x)
-local pp:=child(x) //{r,w}
+function read_output_of(cmd)
+
+local pp:=child(cmd) //{r,w}
 local rl:=readlinedbgNew(pp[1])
+local debug:=debug("gc")
+
     fclose(pp[2])
-    if( debug() )
-        ?? "--------------------------------------------------------";?
-        ?? "GITCMD:",x;?
+
+    if( !empty(debug) .and. !"g"==debug )
+        ?? "--------------------------------------------------------"
+        if( "c"$debug )
+            callstack()
+        end
+        ?
     end
+    if( "g"$debug )
+        ?? "GITCMD:",cmd;?
+    end
+
     return rl //le kell majd zárni (rl:close)
 
 

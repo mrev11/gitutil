@@ -1,4 +1,7 @@
 
+debug GITDEBUG=goc (g:gitcmd, o:output, c:callstack);
+menu szovegek javitgatva;
+
 zbrowseba colorblock, tartalomtol fuggo szinezes;
 directoryk browseolasakor directoryk es fajlok kulonbozo szinnel;
 fetch-statuszban a mergelheto branchok szinnel kiemelve;

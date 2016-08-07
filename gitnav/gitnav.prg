@@ -4,14 +4,15 @@
 
 // browseolja a commitokat
 //
-//  "Branch"    branchok között vált (checkout -f <branch>; clean -fxd)
-//  "Fetch"     fetch kiválasztott remoteból, vagy mindből (fetch --all --prune)
-//  "Browse"    browseolja a commitban levő fájlokat (readonly)
+//  "Status"    Mutatja a változásokat, add, reset, checkout funkciók
 //  "PrepCommit" diffeli a HEAD-et és indexet, végrehajtja a commitot
+//  "FetchMerge" fetch kiválasztott remoteból, vagy mindből (fetch --all --prune)
 //  "DiffPrev"  diffeli a kiválasztottat az eggyel régebbivel (readonly)
 //  "DiffHead"  diffeli a kiválasztottat a HEAD-del (readonly)
+//  "Browse"    browseolja a commitban levő fájlokat (readonly)
 //  "Reset"     HEAD-et a kiválasztott commithoz viszi  (reset --soft <commit>)
 //  "Snapshot"  előveszi a kiválasztott commitot (checkout -f <commit>; clean -fxd)
+//  "Branch"    branchok között vált (checkout -f <branch>; clean -fxd)
 
 
 static arg_number:="-32"

@@ -1,0 +1,52 @@
+
+Egy fájlnak sok állapota van, amelyek között diffet lehet nézni.
+
+    1) wt
+    2) index
+    3) a sok commit
+
+Ha a sok commit helyett mondjuk csak a HEAD-et nézzük, akkor is
+három lehetőség van: wt<->ix, wt<->hd, hd<->ix    
+
+
+=============================================================
+
+git diff -U3 HEAD -- OLVASS
+
+Ez mutatja az OLVASS fájl különbségét a 
+    wt-beli állapot és a
+    hd-beli állapot
+között. 
+
+A parancs mutatja a még nem indexelt fájl változását.
+Ebből következik, hogy az egyik összehasonlított elem a wt.
+Miután a fájlt beveszem az indexbe (add), ugyanaz a diff
+ugyanazt az eltérést mutatja, ebből következik, hogy a másik
+összehasonlított elem a hd (mert a wt és ix között az indexelés
+után már nincs különbség).
+
+=============================================================
+
+git diff -U3 --staged HEAD -- OLVASS 
+
+Ez mutatja az OLVASS fájl különbségét az
+    ix-beli állapot és a
+    hd-beli állapot között
+között.
+
+Frissen bevitt, nem indexelt változást nem mutat, tehát a wt
+nem lehet benne az összehasonlításban. Ha a fájlt beveszem az
+indexbe a diff eredényében megjelenik a különbség. 
+
+=============================================================
+
+git diff -U3 -- OLVASS 
+
+Ez mutatja az OLVASS fájl különbségét az
+    wt-beli állapot és a
+    ix-beli állapot között
+között.
+
+
+
+=============================================================

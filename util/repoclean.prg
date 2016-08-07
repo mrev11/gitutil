@@ -1,9 +1,9 @@
 
-static repo_clean:=repo_clean_init()
 
 ********************************************************************************************
 function repo_clean(reread:=.f.)
-    if(reread)
+static repo_clean
+    if( repo_clean==NIL .or. reread )
         repo_clean:=repo_clean_init()
     end
     return repo_clean 
@@ -12,13 +12,6 @@ function repo_clean(reread:=.f.)
 ********************************************************************************************
 static function repo_clean_init()
 local rl,line
-
-    //return 'nothing to commit, working directory clean' $ output_of("git status") // TRUE: clean
-
-    //ez jobb
-    //return output_of("git status --short")::empty // TRUE: clean
-
-    //ez még jobb
     rl:=read_output_of("git status --short")
     line:=rl:readline
     rl:close

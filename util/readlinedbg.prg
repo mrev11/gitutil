@@ -11,7 +11,7 @@ class readlinedbg(readline)
 ****************************************************************************
 static function readlinedbg.readline(this)
 local line:=this:(readline)readline
-    if( line!=NIL .and. debug() )
+    if( line!=NIL .and. "o"$debug("o") )
         ?? line //a végén bin(10)
     end
     return line  //a következő sor, vagy NIL, ha vége a filének

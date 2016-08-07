@@ -1,6 +1,7 @@
 #!/bin/bash
-#export DEBUG=yes
+
+export GITDEBUG=g
 #git diff viewer
 
-exec gitview.exe  "$@"
+exec gitview.exe  "$@" # &
 

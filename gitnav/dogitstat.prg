@@ -43,11 +43,11 @@ local cr,cc,cursta
     brwColumn(brw,"File",blk2,replicate("X",maxcol()-13))
 
     brwMenu(brw,"Diff","View diff between worktree and the last commit",{|b|diff(b)})
-    brwMenu(brw,"AddOne","Stage the selected file/directory (add to commit)",{|b|addone(b,@reread)})
-    brwMenu(brw,"ResetOne","Unstage the selected file/directory (eliminate from commit)",{|b|resetone(b,@reread)})
-    brwMenu(brw,"AddAll","Stage the selected file/directory",{|b|addall(b,@reread)})
-    brwMenu(brw,"ResetAll","Unstage the selected file/directory",{|b|resetall(b,@reread)})
-    brwMenu(brw,"Checkout","Restore file from the last commit",{|b|checkout(b,@reread)})
+    brwMenu(brw,"AddOne","Prepare selected file/directory for the next commit (stage)",{|b|addone(b,@reread)})
+    brwMenu(brw,"ResetOne","Eliminate selected file from the next commit (unstage)",{|b|resetone(b,@reread)})
+    brwMenu(brw,"AddAll","Stage all changes of all files/directories",{|b|addall(b,@reread)})
+    brwMenu(brw,"ResetAll","Unstage all files/directories",{|b|resetall(b,@reread)})
+    brwMenu(brw,"Checkout","Restore file in worktree from the last commit",{|b|checkout(b,@reread)})
 
     brw:colorspec:="w/n,n/w,r+/n,g+/n,w+/n,rg+/n,n/n"
     //              1   2   3    4    5    6     7
@@ -261,7 +261,7 @@ local result
 
     elseif( "M"$status )
         //módosítások elveszhetnek
-        if( 2>alert("Checkout may overwrite changes!",{"Escape","Continue"}))
+        if( 2>alert("Checkout may overwrite changes in worktree!",{"Escape","Continue"}))
             return .t.
         end
     end

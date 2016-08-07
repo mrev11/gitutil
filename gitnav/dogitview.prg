@@ -7,13 +7,15 @@
 static arg_commit1:="--staged"
 static arg_commit2:="HEAD"
 static descendant:=.t.
-static menutitle
-static commitmenu:=.f.
-static rebasemenu:=.f.
 
 
 ********************************************************************************************
 function do_gitview(*)
+
+local menutitle
+local commitmenu:=.f.
+local rebasemenu:=.f.
+local diffhelp:="of highlighted file"
 
 local brw,sort:={}
 local changes:={}
@@ -38,6 +40,7 @@ local cr,cc,cursta
     menutitle:="["+current+": "
     if( arg_commit1=="--staged" )
         menutitle+="HEAD<-NEXT"
+        diffhelp:="between HEAD and index (next commit)"
         if( " rebasing "$current )
             rebasemenu:=.t.
         else
@@ -51,6 +54,7 @@ local cr,cc,cursta
             menutitle+="<>"
         end
         menutitle+=arg_commit2
+        diffhelp:="between "+arg_commit1+" and "+arg_commit2
     end
     menutitle+="]"
 
@@ -63,13 +67,13 @@ local cr,cc,cursta
     brwColumn(brw,"File",brwAblock(brw,2),replicate("X",maxcol()-13))
 
     if(commitmenu.or.rebasemenu)
-        brwMenu(brw,"Add","Add all changes to index",{||addall(brw,@reread)})
+        brwMenu(brw,"AddAll","Add all changes of all files/directories to the index (stage all)",{||addall(brw,@reread)})
     end
 
-    brwMenu(brw,"Diff","View changes of highlighted file",{|b|diff(b)})
+    brwMenu(brw,"Diff","View changes "+diffhelp,{|b|diff(b)})
 
     if(commitmenu)
-        brwMenu(brw,"Reset","Eliminate selected file form the next commit",{||resetone(brw,@reread)})
+        brwMenu(brw,"ResetOne","Eliminate selected file form the next commit (unstage one)",{||resetone(brw,@reread)})
         brwMenu(brw,"Commit","Commit changes",{||commit(brw,@reread)})
     end
 
@@ -247,10 +251,6 @@ local base
     arg_commit1:="--staged"
     arg_commit2:="HEAD"
     descendant:=.t.
-    menutitle:=NIL
-    commitmenu:=.f.
-    rebasemenu:=.f.
-
 
     if( argc==0 )
         //default
