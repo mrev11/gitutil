@@ -1,18 +1,14 @@
 
 
 ********************************************************************************************
-function branchmenu(brw,branchmenu)
-local rl,line,current
+function branchmenu(branchmenu)
+local rl,line
     asize(branchmenu,0)
     rl:=read_output_of("git branch")
     while( (line:=rl:readline)!=NIL )
         line::=bin2str
         line::=strtran(chr(10),"")
         aadd(branchmenu,{line,mkblock_setbranch(line)})
-        if( "*"$line )
-            current:=line[2..]::alltrim
-            brwMenuName(brw,branch_state_menuname(current))
-        end
     end
     rl:close
 
