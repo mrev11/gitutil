@@ -8,6 +8,7 @@ static context:="3" //a változások körül megjelenített sorok száma
 function view_diff(commit,fspec) //({com1,com2,...},{fsp1,fsp2,...  })
 
 local crs:=setcursor(1)
+local cr:=row(),cc:=col()
 local scrn:=savescreen()
 local rl,line,changes:={}
 local gitcmd:={}
@@ -91,6 +92,7 @@ while( mode!=NIL )
 end
     
     restscreen(,,,,scrn)
+    setpos(cr,cc)
     setcursor(crs)
 
 

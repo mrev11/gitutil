@@ -14,6 +14,7 @@ class zbrowse(zedit)
     method  eval_shortcut   //végrehajtja a key-hez rendelt shortcut-ot (ha létezik)
     method  loop            //működteti a zbrowse-t (inkey ciklus)
     method  help
+    method  copy            //copy whole text to z clipboard
     
     attrib  shortcut        //{{key,block,text},...}
 
@@ -31,6 +32,7 @@ class zbrowse(zedit)
 *************************************************************************************
 static function zbrowse.initialize(this,txt,t,l,b,r)
     this:(zedit)initialize(txt,t,l,b,r)
+    this:clipfile:=zhome()+"clipbrd.z"
 
     this:shortcut:={} //{{key,block},...}
 
@@ -134,6 +136,9 @@ local key
 
         elseif( key==K_CTRL_F3 )    
             this:searchagain("p")
+
+        elseif( key==K_ALT_C )    
+            this:copy
 
         end
     end
@@ -242,5 +247,33 @@ local twid
         @ line,pos SAY padr(substr(text,tbeg,twid),twid)
     end
 
+
+*************************************************************************************
+static function zbrowse.copy(this)
+    this:clipboard:=aclone(this:atxt)
+
+
+*************************************************************************************
+static function zhome() //áthozva z-ből
+static home
+
+    if( home==NIL )
+
+        #ifdef _UNIX_
+        home:=getenv("HOME")+"/.z/"  
+        #else
+        home:=fpath(exename()) 
+        #endif
+    
+        if( !empty(getenv("ZHOME")) )
+            home:=getenv("ZHOME")
+        end
+
+        if( !right(home,1)==dirsep() )
+            home+=dirsep()
+        end
+    end
+    
+    return home
 
 *************************************************************************************

@@ -58,15 +58,17 @@ local head:=name_to_commitid("HEAD")
 local ms:=merge_status() //{{branch1,base1,tip1},{branch2,base2,tip2}, ... }
 local status:=chr(10)
 
-#define RM_F    op+=if("/"$ms[n][1],"[F]","[ ]")    //fetch
-#define OP_D    op+="[D]"                           //diff
-#define OP_M    op+="[M]"                           //merge
-#define OP_R    op+="[R]"                           //rebase
-#define RM_P    op+=if("/"$ms[n][1],"[P]","[ ]")    //push
-#define XX_D    op+="[ ]"                           //diff
-#define XX_M    op+="[ ]"                           //merge
-#define XX_R    op+="[ ]"                           //rebase
-#define XX_P    op+="[ ]"                           //rebase
+#define RM_F    op+=if("/"$ms[n][1],"[F]","[ ]")    // fetch if remote
+#define RM_P    op+=if("/"$ms[n][1],"[P]","[ ]")    // push if remote
+
+#define OP_D    op+="[D]"                           // diff
+#define OP_M    op+="[M]"                           // merge
+#define OP_R    op+="[R]"                           // rebase
+
+#define XX_D    op+="[ ]"                           // no diff
+#define XX_M    op+="[ ]"                           // no merge
+#define XX_R    op+="[ ]"                           // no rebase
+#define XX_P    op+="[ ]"                           // no push
 
     for n:=1 to len(ms)
         line:=" "

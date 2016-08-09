@@ -1,4 +1,15 @@
 
+branch menu atalakitva;
+Korabban csak commitolt allapotban lehetett branchot valtani,
+az uj valtozat egyszeruen vegrehajtja a "git co <branch>"-ot
+es tudosit az eredmenyrol. Az eredmenyt mutato zbrowse fel van
+szerelve kenyelmi funkciokkal: K_TAB valtogat a ket branch
+kozott, K_CTRL_D mutatja a modosult fajlok diffjet;
+doksi hozzaigazitva a valtozasokhoz;
+
+
+zbrowse felszerelve a copy (edit) funkcioval;
+
 fetch statusz zbrowse atalakitva;
 
 browsecommit atalakitva;

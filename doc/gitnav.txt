@@ -95,20 +95,29 @@ gitnav
     FetchMerge: 
         Pulldown. Megnézhetjük a fetch státuszt, fetchelhetünk
         az összes remoteból egyszerre, vagy a remoteokból egyenként.
-        Bármelyik választás után a fetch státuszba jutunk, ahol a lokális
-        és remote branchok listját látjuk. Felkiáltójel (!) jelzi azokat
-        a branchokat, amelyekből lehetséges a merge. Ha egy ilyen
-        branchra ráállunk a sávkurzorral és K_CTRL_M-et nyomunk, 
-        megtörténik a merge. Az aktuális branchba (bal felső sarok) 
-        mergelődik a !-jellel jelzett és sávkurzorral kiválasztott branch
-        A K_CTRL_R shortcutra merge helyett rebaset hajt végre.
+        Bármelyik választás után a fetch státuszba jutunk, ahol a 
+        lokális és remote branchok listját látjuk.  Például:
+
+        devel            656ac0b949 656ac0b949  [ ][D][ ][ ][ ]  behind with 1 commit(s)    
+        master           6e1c16484d 6e1c16484d  [ ][ ][ ][ ][ ]  HEAD                       
+        develsave/devel  656ac0b949 656ac0b949  [F][D][ ][ ][P]  behind with 1 commit(s)    
+        origin/master    656ac0b949 656ac0b949  [F][D][ ][ ][P]  behind with 1 commit(s)    
+        
+        Az SHA1 kódok közül az baloldali az aktuális branch és az 
+        adott branch merge-base-ét mutatja, a jobboldali az adott 
+        branch hegyét. A [F][D][M][R][P] kódok mutatják, ha az branchból
+        lehet [F]etchelni, [D]iffelni, [M]ergelni, [R]ebaselni, illetve
+        lehet bele [P]usholni. Például, ha a sávkurzorral ráállunk
+        egy [M]-mel jelölt branchra, és CTRL_M-et nyomunk, akkor
+        meghívódik a merge művelet. 
         
         Shortcutok:
         K_F1     - Help
-        K_CTRL_D - Diff (HEAD és a kiválasztott local/remote branch között)
-        K_CTRL_M - Merge (HEAD-et mergeli a kiválasztott local/remote branchcsel)
-        K_CTRL_R - Rebase (HEAD-be mergeli a kiválasztott local/remote branchet)
-        K_CTRL_P - Push (HEAD-et nyomja fel a kiválasztott remote branchba)
+        K_CTRL_F - Fetch a kiválasztott local/remote branchból
+        K_CTRL_D - Diff HEAD és a kiválasztott local/remote branch között
+        K_CTRL_M - Merge, HEAD-et mergeli a kiválasztott local/remote branchcsel
+        K_CTRL_R - Rebase, HEAD-be mergeli a kiválasztott local/remote branchet
+        K_CTRL_P - Push, HEAD-et tölti fel a kiválasztott remote branchba
     
     DiffPrev: 
         A kiválasztott commitot diffeli az eggyel előző
@@ -138,7 +147,9 @@ gitnav
 
     Branch: 
         Pulldown. Ebben lehet branch-ot váltani, illetve 
-        itt is látszik, hogy mi az aktuális ág (* jelzi).  A branch 
+        itt is látszik, hogy mi az aktuális ág (* jelzi).  
+       
+        {Ez volt az eredeti koncepció, de változtattam: A branch 
         váltás a "checkout -f <branch>; clean -fxd" parancsokkal történik, 
         tehát az új branch tiszta állapotába jutunk. Mivel ez a művelet
         törölné a wt minden változását, a program csak tiszta állapotban
@@ -146,7 +157,13 @@ gitnav
         tiszta állapotba visz. Emellett a checkout hook-ból végrehajtódó
         filetime-restore miatt a fájlidők is mindig visszaállítódnak
         az eredeti értékre. Mellékhatásként törlődik az összes ignored
-        fájl (ppo-k, objectek, exe-k, stb.).
+        fájl (ppo-k, objectek, exe-k, stb.).}
+        
+        Az új koncepcióban a menüpont egyszerűen végrehajtja
+        a "git checkout <branch>" parancsot, és az eredményről tudósít. 
+        Nem könnyű előre kiszámítani, hogy mikor lesz sikeres a művelet, 
+        az eseteket leírtam a git-checkout.txt fájlban. Mindenesetre  
+        a checkout nem írja felül a wt-ben levő változásokat. 
     
     
 Branch státusz oszlop
@@ -164,9 +181,7 @@ Branch státusz oszlop
     indulva is elérhető: commit<-...<-parent<-tip_of_devel (jobbról-balra).
     
     A branchok (kezdőbetűs) jele mellett egy ! karakter jelzi az elágazást.
-    Ez azt jelenti, hogy az adott ágnak van olyan commitja, ami nem érhető 
-    el az aktuális HEAD-ből (azaz nincs benne az aktuális branchban, 
-    és azért nem is jelenhet meg a browseban).
+    Ez azt jelenti, hogy az adott ág hegye nem érhető el a HEAD-ből.
     
     
 
@@ -176,7 +191,7 @@ Hogyan használom
     Mondjuk van egy repó, ahol tárolódik az origin/master,
     ebbe viszi fel a munkáját a programozó csoport.
     
-    A saját, otthoni repómban van egy master branch, amit szinkronban
+    Az otthoni repómban van egy master branch, amit szinkronban
     akarok tartani az origin/master-rel, és van egy devel branch, 
     amiben szemetelhetek. Akkor ezek vannak:
     
@@ -190,48 +205,36 @@ Hogyan használom
     között megvan a végleges CHANGELOG_vermes, aminek legfelső 
     bekezdése lesz a commit message). A sok commit miatt azonban
     a d ág nagyon hosszú, tartalmaz egy csomó olyan állapotot, 
-    ami a többiek számára érdektelen, sőt zavaró.
-    Ezért mielőtt közreadnám megrendszabályozom. 
+    ami a többiek számára érdektelen, sőt zavaró. Ezért mielőtt 
+    közreadnám megrendszabályozom. 
     
         A "Reset" menüvel a devel ág végét elmozgatom a master ág 
         végéhez (vagyis d-t visszavágom m-ig). A visszavágás nem 
-        változtatja a  wt tartalmát, tehát ha csinálok d-ben egy 
-        új commitot, akkor a d HEAD-je a kívánt végállapotban lesz, 
+        változtatja a wt tartalmát, tehát ha csinálok d-ben egy 
+        új commitot, akkor a  HEAD a kívánt végállapotban lesz, 
         de csak egy committal lesz hosszabb az m-nél. A commit után 
-        tiszta állapotban lesz a wt, ezért a Branch menüvel át tudok 
-        váltani a master branchra. Bemegyek a Fetch menübe (fetchelni 
-        most valójában nem kell, csak a fetch státusz érdekes), itt 
-        látható, hogy lehetséges a merge a devel-ből. Ráállok tehát 
-        a sávkurzorral a devel-re, és K_CTRL_M-mel mergelek.
+        átváltok a master branchra. Bemegyek a FetchMerge menübe 
+        (fetchelni most nem kell, csak a fetch státusz érdekes), 
+        itt látható, hogy lehetséges a merge a devel-ből. Ráállok 
+        tehát a sávkurzorral a devel-re, és K_CTRL_M-mel mergelek.
+        Mondjuk, rögtön pusholni is akarom a változást az originba,
+        ráállok tehát a sávkurzorral az origin/master branchra,
+        és K_CTRL_P_vel pusholok. A program az origin/master flagjei
+        közül kiveszi a [P]-t. A fő browseban látszik, hogy az m és
+        om eggyel följebb jött.
         
-        A fő browseban látszik, hogy az m eggyel feljebb jött.
-        Ezután kilépek a gitnav-ból és parancssorból végrehajtom:
-        git push, visszalépek gitnav-ba, látom, hogy om is eggyel
-        feljebb jött.
+        Megjegyzés: Nem feltétlenül szükséges a local master
+        branch közbeiktatása. Közvetlenül lehet a local devel-t 
+        az origin/master-be pusholni. 
+
+
+    Tesztelés céljából, mindenféle printelésekkel feldúltam a wt-t, 
+    és vissza szeretnék állni az utolsó commitnak megfelelő tiszta 
+    állapotra.
     
-    
-    Valami miatt eszembe jut, hogy elő akarom venni a források
-    egy évvel korábbi állapotát. Mondjuk egy régi állapotnak 
-    megfelelő exe-t akarok rekonstruálni. 
-    
-        Tiszta állapotba hozom a wt-t, a függőben levő dolgokat
-        commitolom vagy letörlöm. Kiválasztom a sávkurzorral a 
-        megfelelő idejű commitot, a Snapshot menüvel kibontom a régi
-        állapotot (filetime-restore visszaállítja az időket).
-        A rendszer ún. detached HEAD állapotba kerül.
-        
-        Megcsináltam, amit akartam, vissza kell térni a jelenbe.
-        Ehhez tiszta állapotba hozom a wt-t, pl. újra végrehajtom
-        a Snapshot menüt (ami tiszta állapotot hagy maga után), 
-        bemegyek a Branch menübe, kiválasztom a kívánt ágat 
-        (a detached HEAD helyett). 
-    
-    Tesztelés céljából, mindenféle printelésekkel feldúltam
-    a wt-t, és vissza szeretnék állni az utolsó commitnak
-    megfelelő tiszta állapotra.
-    
-       A sávkurzorral ráállok a HEAD-re, Snapshot-tal (force) kibontom,
-       a Branch menüvel pedig visszaállítom az HEAD-et. 
+       A sávkurzorral ráállok a HEAD-re (felső sor), Snapshot-tal 
+       (force) kibontom, a Branch menüvel pedig visszaállítom az 
+       HEAD-et az előző branchra. 
 
 
     Dógozgatok, dógozgatok, de rájövök, hogy amit próbálok hülyeség,
@@ -245,6 +248,29 @@ Hogyan használom
         majd a Branch menüvel a detached HEAD állapotból visszaállok
         a normál állapotra.
     
+    
+    Valami miatt eszembe jut, hogy elő akarom venni a források
+    egy évvel korábbi állapotát. Mondjuk egy régi állapotnak 
+    megfelelő exe-t akarok rekonstruálni. 
+    
+        Tiszta állapotba hozom a wt-t, a függőben levő dolgokat
+        commitolom vagy letörlöm. A biztonság kedvéért kűlön
+        megjegyzem a legfelső commit SHA1 id-jét. A git is megjegyzi,
+        de abban az ember nem mindig ismeri ki magát. Kiválasztom 
+        a sávkurzorral a megfelelő idejű commitot, a Snapshot menüvel 
+        kibontom a régi állapotot (filetime-restore visszaállítja az 
+        időket). A rendszer ún. detached HEAD állapotba kerül.
+
+        Dolgozok a régi verzióban.
+            
+        Megcsináltam, amit akartam, vissza kell térni a jelenbe.
+        A branch menüben kiválasztom a korábbi branchot, mire a
+        browse tetején visszakapom az előbb levágott commitokat.
+        A wt-ben azonban az előző snapshothoz tartozó tartalom van.
+        Ezért a borwse felső sorával megint végrehajtom a Snapshotot,
+        és a Branch menüben megint kiválasztom a kívánt branchot.
+        
+
 
     Át akarom venni más fejlesztők változtatásait.
     
@@ -252,15 +278,16 @@ Hogyan használom
         remoteból, vagy egyenként azokból a remoteokból, ahonnan
         változást várok.
     
-        Bekerülök a fetch státusz ablakba, itt a ! jellel kezdődő
-        sorok mutatják, hogy hova érkezett mergelhető új anyag.
-        A megfelelő sort kiválasztom a sávkurzorral, K_CTRL_M mergel.
+        Bekerülök a fetch státusz ablakba, itt az [M] és [R] flagek
+        mutatják, hova érkezett mergelhető új anyag. A sorra ráállok
+        a sávkurzorral, K_CTRL_M mergel vagy K_CTRL_R rebaseel.
         
-        Ha a merge-ben conflict keletkezik, a szokásos módon kell
+        Ha a merge conflict keletkezik, a szokásos módon kell
         eljárni. Kézzel ki kell javítani, a változást commitolni.
-        Vagy lehet választani a saját változat eldobását (ahogy
-        leírtam egy kicsit feljebb), és az eldobás után újra 
-        próbálkozni a mergeeléssel.
+        (Vagy lehet választani a saját változat eldobását, ahogy
+        leírtam egy kicsit feljebb.)  Rebase esetén a PrepCommit
+        menüben a Continue vagy Abort funkciókkal lehet a rebaset
+        befejezni vagy eldobni.
         
 
 Scriptek        

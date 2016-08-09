@@ -92,8 +92,11 @@ local err
             aadd(com,{"?",line[1..pos-1],line[pos+1..]})
         end
         rl:close
+
         if(empty(com))
             exit
+        elseif( len(com)<brwArrayPos(brw)  )
+            brw:gotop
         end
         
         branch_status(com)
@@ -127,6 +130,7 @@ local commit
         rundbg("git checkout -f "+commit) //force nélkül a módosításokat nem írja felül
         rundbg("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
         link_local()
+        brw:gotop
         return .f. //kilép brwLoop-ból
     end
 
@@ -183,6 +187,7 @@ local result:=output_of("git reset --soft "+commit)
     if(!empty(result))
         zbrowseNew(result,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop
     end
+    brw:gotop
     return .f. //kilép brwLoop-ból
     
     //A resetet általában arra használjuk, hogy lerövidítsük 
