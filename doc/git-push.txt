@@ -1,0 +1,68 @@
+
+git push  <remote>  <locbranch>:<rembranch>
+
+A <remote> repository <rembranch> ágába feltölti a <locbranch> ágat.
+
+Megkérdezi a remote repót, kell-e neki az update. Mármint, hogy megvannak-e
+neki azok az objektumok, amik a <locbranch> hegyéből visszafelé haladva
+elérhetők a lokális repóban. Megkaphatta máshonnan is. Ha megvannak neki, 
+akkor az ügylet tárgytalan. Megkérdezi, hogy hajlandó-e átállítani a remote 
+repóban a <rembranch> hegyét arra, amit küldünk neki (<locbranch>-ra).
+Akkor felel igent, ha a <rembranch>-hoz FAST-FORWARD-dal hozzáilleszthető
+a <locbranch>. A fast-forward jelentése: a branch korábbi hegye elérhető
+marad a rá mutató referencia átállítása után is (az új hegyből), vagyis 
+az ág a hegyéből nő tovább, nem pedig oldalágat hajt.
+
+Ha <remote> nincs megadva, akkor a config-ban a 'branch.<curbranch>.remote' 
+paramétert nézi. Ha az sincs megadva, akkor az "origin"-t veszi. A <remote>  
+helyén állhat egy URL is. 
+
+Ha a <locbranch>:<rembranch> hiányzik, akkor a .git/config-ban megadható 
+'remote.<remote>.push' paraméterből veszi a defaultot. 
+
+A '+<locbranch>:<rembranch>' alakkal kierőszakolható a fast-forward szabály
+felülbírálata. Merge ilyenkor sem történik, hanem a remote repó egyes 
+objektumai elérhetetlenné  válnak.
+
+
+Példák:
+    
+git push
+    Ua. mint 'git push <remote>', ahol <remote> a 'branch.<curbranch>.remote'
+    paraméterből kiolvasott érték, vagy 'origin'.
+
+git push origin
+    Feltölti a current barnchot a konfigurált (?) remote branchba.
+
+git push origin :
+    Feltölti origin-be az egyező nevű párral rendelkező ágakat.
+
+
+A man-ban sok példa van, hogy  hiányzó paraméterek esetén a push milyen 
+sorrendben és honnan veszi a defaultokat. Ezek így néhány hónap gites
+vacakolás után elég zagyvának tűnnek, mint ahogy a .git/config is elég zagyva.
+Ezért egyszerűbb megtanulni, hogyan kell explicite megadni a paramétereket.
+Az alábbiak viszont egyszerűbbek, és önálló jelentőséggel bírnak:
+
+git push origin master
+    A master branchot feltölti origin/master-ba
+
+git push origin HEAD
+    A current branchot feltölti az ugyanolyan nevű branchba.
+
+git push origin HEAD:master
+    A current branchot feltölti masterba, bármi is a neve.
+
+git push origin master:refs/heads/experimental
+    Az origin repóban létrehozza az experimantal ágat, ami a master ág
+    pillanatnyi végéből fog indulni. 
+    
+    Ez az alak csak az eltérő névvel történő kreáláshoz szükséges.
+    Ha nem kell kreálni elég: git push origin master:experimental
+    Ha egyezik a név, elég: git push origin experimental:experimental
+
+git push origin :experimental
+    Az origin repóban TÖRLI az experimental ágat. 
+
+
+

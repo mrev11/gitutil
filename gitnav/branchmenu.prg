@@ -136,7 +136,7 @@ static function old__setbranch(b)
         b::=strtran("*","")
         rundbg("git checkout -f "+b)      //force nélkül a módosításokat nem írja felül
         rundbg("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
-        link_local()
+        local_profile()
         break("X") //kilép brwLoop-ból
     end
     

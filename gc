@@ -10,12 +10,13 @@
 # levő linkjüket, a .git/local-ban levő tényleges fájlt nem.
 # A második lépésben aztán újra belinkelődnek a gyökérbe.
 
+# Illetve általánosabb: végrehajtja .git/local/profile-t,
+# ami azt csinál, amit akar, ha akar linkel.
 
 git clean -fXd  2>&1 >/dev/null
 
-if [ -d .git/local  ];then
-    for loc in .git/local/* ;do
-        ln -sf $loc  .
-    done
+if [ -f .git/local/profile  ];then
+   . .git/local/profile
 fi
+
 

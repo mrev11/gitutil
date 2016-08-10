@@ -1,4 +1,9 @@
 
+.git/local/profile script;
+.git/local/log-commit-ban naplozza a commitokat;
+gc,gn,gv scriptek felujitva;
+
+
 branch menu atalakitva;
 Korabban csak commitolt allapotban lehetett branchot valtani,
 az uj valtozat egyszeruen vegrehajtja a "git co <branch>"-ot

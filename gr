@@ -1,8 +1,11 @@
 #!/bin/bash
 #set -x
 
-#export GITDEBUG=g
+#export GITDEBUG=goc
+#g: git commands
+#o: output of git commands
+#c: callstack when invoking git commands
+
 export CCCTERM_SIZE=120x40
 
 exec gitref.exe
-

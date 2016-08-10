@@ -1,8 +1,66 @@
 
+
+Előzetes a gitnav használatához
+
+A csupasz git-hez képest használunk néhány konvenciót, és
+a programnak is van egy saját berendezkedése. Ha a gitnavot
+elindítjuk egy git working tree-ben, akkor első dolgaként 
+megkeresi a wt gyökerét (ahol a .git van), oda cd-zik, 
+és a továbbiakban onnan dolgozik. Ha nem egy git wt-ből
+indítottuk, akkor felajánlja, hogy az aktuális directoryban 
+létrehoz egy új repót, amiben berendezkedik, és rögtön 
+commitolja a wt kezdeti tartalmát. (Vigyázzunk ezért, nehogy 
+egy óvatlan indítással valami nagy-nagy directoryt kezdjünk 
+el véletlenül bepakkolni a gitbe.) Ha viszont elindítjuk
+egy üres directoryban, és hagyjuk, hogy létrehozza az új repót,
+akkor alkalmunk nyílik szemügyre venni a gitnav berendezkedését.
+
+Abból indulunk ki, hogy programozók egy csoportja közösen 
+dolgozik egy projekten. Első körben minden tag a saját otthoni
+repójába commitol és időnként a változásokat feltölti a közös 
+repóba. Mindenki vezet egy naplót (changelogot) a változtatásairól,
+és ez a changelog szintén bekerül a közös repóba, amin keresztül
+a fetchelések során minden changelog eljut minden egyéni repóba. 
+Ha mindenki ugyanazt a changelog fájlt használná, akkor állandóan 
+bajlódni kellene a merge conflictokkal. Ezért megállapodás szerint 
+mindenki a CHANGELOG_$USER fájlba írja a változásokat.
+
+Gyakori, akár 10 percenkénti committal dolgozunk. Természetesen
+ezeket a commitokat nem mind töltjük fel a központi repóba. 
+(A közreadásra szánt commitokat külön meg kell szerkeszteni.)
+A gyors commitot mindenesetre akadályozza, ha a git folyvást
+a commit message után érdeklődik. Ezért a gitnav program 
+automatikuksan a CHANGELOG_$USER fájl legfelső, üres sorokkal
+határolt bekezdéséből készít egy commit message-et.
+
+Szerintünk dokumentációs értéke van a fájlok valódi módosítási 
+idejének. Az én szívemet például melegség árasztja el, ha találkozom
+egy régi programommal, ami már a múlt évezred óta változatlan.
+A fájlidők megőrzésére szolgálnak a .FILETIME_$USER nevű szöveges
+adatbázisfájlok, amikbe commitkor automatikusan beíródik minden
+fájl dátumideje. Ezek a .FILETIME_$USER fájlok a közös repón
+keresztül szintén forognak, mindegyik eljut minden egyéni repóba.
+Az automatikusan elinduló checkout hook minden fájlra megkeresi a 
+.FILETIME fájlokban található legrégebbi időt, amit feltesz a fájlra.
+Így néhány commit-fetch-checkout kör után minden programozónál
+beáll a fájlok eredeti (legrégebbi) ideje.
+
+A gitnav létrehozza a .git/local directoryt, amibe a programozó
+olyan egyéni akármiket tárolhat, amiket nem akar feltölteni
+a közös repóba. A gitnav induláskor végrehajtja  (source-olja) a 
+.git/local/profile scriptet, ami tetszés szerint bármire használható.
+A gitnav vezet egy naplót .git/local/log-commit-ban, amibe commitkor
+beírja a commit SHA1 ID-jét, hogy összevissza resetelések után is 
+visszataláljunk az elhagyott ágak végére. (A reflog is erre való, 
+de a túl sok információ miatt nehezebb benne kiigazodni.)
+
+
+
 Ezekből a programokból áll a project:
 
-filetime-save
-filetime-restore
+============================================================================
+filetime-save, filetime-restore
+============================================================================
     Commit előtt megjegyzik, checkout után visszaállítják
     a fájlidőket. Az infó userenként külön, egy .FILETIME_$USER
     nevű fájlban tárolódik, ami mindig commitolódik a repóba.
@@ -11,7 +69,9 @@ filetime-restore
     hook, ami checkout után futtatja filetime-restore-t.
 
 
+============================================================================
 firstpar
+============================================================================
     A CHANGELOG_$USER fájl legfelső bekezdéséből csinál egy
     commit-message fájlt, amit a commitnál használ a program.
     A gitnav automatikusan futtatja a firstpar-t, tehát
@@ -20,12 +80,16 @@ firstpar
     bekezdése, az lesz a commit message.
  
 
+============================================================================
 gitref
+============================================================================
     Browseolja a reflogot, a kiválasztott commithoz mozgatja
     a HEAD-et soft resettel.
 
 
+============================================================================
 gitview
+============================================================================
     Mutatja két tetszőleges commit diffjét. Például 
 
     gitview devel master   (a devel és a master ág hegyének diffje) 
@@ -53,25 +117,28 @@ gitview
     Abort   - Abortálja a rebaset.
 
 
+============================================================================
 gitnav
+============================================================================
     Browseolja a commitokat (az aktuális ág commitjait a HEAD-től
     visszafelé haladva).
     
-    Oszlopok:
+Oszlopok:
     
     1) A branchek állapotjelzője (később)
     2) A commitok rövid azonosítója
     3) A commithoz tartozó message eleje  
 
 
-    Shortcut: 
-        K_INS mutatja a commit dátumát, szerzőjét, egyéb adatait.
+Shortcut: 
+    K_INS mutatja a commit dátumát, szerzőjét, egyéb adatait.
 
-    Menü:
+
+Menü:
     
     [name [DIRTY]]: 
         Mutatja az aktuális ág nevét, mutatja, hogy a
-        wt-ben (work tree) vannak-e nem commitolt változások.
+        wt-ben (worktree) vannak-e nem commitolt változások.
     
     
     Status:
@@ -81,8 +148,8 @@ gitnav
         Az alsó részben láthatók a már indexelt változások.
 
         Diff     - mutatja a kiválasztott fájl és a HEAD diffjét
-        AddOne   - a kiválsztott fájlt hozzáadja az indexhez (stage) 
-        ResetOne - a kiválsztott fájlt kiveszi az indexből (unstage)
+        AddOne   - a kiválasztott fájlt hozzáadja az indexhez (stage) 
+        ResetOne - a kiválasztott fájlt kiveszi az indexből (unstage)
         AddAll   - minden változást bevesz az indexbe 
         ResetAll - minden változást kivesz az indexből 
         Checkout - a kiválasztott fájlt visszaállítja a HEAD-ből
@@ -103,9 +170,9 @@ gitnav
         develsave/devel  656ac0b949 656ac0b949  [F][D][ ][ ][P]  behind with 1 commit(s)    
         origin/master    656ac0b949 656ac0b949  [F][D][ ][ ][P]  behind with 1 commit(s)    
         
-        Az SHA1 kódok közül az baloldali az aktuális branch és az 
+        Az SHA1 kódok közül a baloldali az aktuális branch és az 
         adott branch merge-base-ét mutatja, a jobboldali az adott 
-        branch hegyét. A [F][D][M][R][P] kódok mutatják, ha az branchból
+        branch hegyét. Az [F][D][M][R][P] kódok mutatják, ha a branchból
         lehet [F]etchelni, [D]iffelni, [M]ergelni, [R]ebaselni, illetve
         lehet bele [P]usholni. Például, ha a sávkurzorral ráállunk
         egy [M]-mel jelölt branchra, és CTRL_M-et nyomunk, akkor
@@ -149,7 +216,7 @@ gitnav
         Pulldown. Ebben lehet branch-ot váltani, illetve 
         itt is látszik, hogy mi az aktuális ág (* jelzi).  
        
-        {Ez volt az eredeti koncepció, de változtattam: A branch 
+        {***Ez volt az eredeti koncepció, de változtattam: A branch 
         váltás a "checkout -f <branch>; clean -fxd" parancsokkal történik, 
         tehát az új branch tiszta állapotába jutunk. Mivel ez a művelet
         törölné a wt minden változását, a program csak tiszta állapotban
@@ -157,7 +224,7 @@ gitnav
         tiszta állapotba visz. Emellett a checkout hook-ból végrehajtódó
         filetime-restore miatt a fájlidők is mindig visszaállítódnak
         az eredeti értékre. Mellékhatásként törlődik az összes ignored
-        fájl (ppo-k, objectek, exe-k, stb.).}
+        fájl (ppo-k, objectek, exe-k, stb.).***}
         
         Az új koncepcióban a menüpont egyszerűen végrehajtja
         a "git checkout <branch>" parancsot, és az eredményről tudósít. 
@@ -169,6 +236,7 @@ gitnav
 Branch státusz oszlop
 
     A local és remote branchok vannak itt megjelenítve kezdőbetűkkel.
+
     Local branch egy betű, pl. master -> m.
     Remote branch két betű, pl. origin/master -> om
     
@@ -271,7 +339,6 @@ Hogyan használom
         és a Branch menüben megint kiválasztom a kívánt branchot.
         
 
-
     Át akarom venni más fejlesztők változtatásait.
     
         Bemegyek a Fetch menübe, fetchelek egyszerre az összes 
@@ -282,12 +349,11 @@ Hogyan használom
         mutatják, hova érkezett mergelhető új anyag. A sorra ráállok
         a sávkurzorral, K_CTRL_M mergel vagy K_CTRL_R rebaseel.
         
-        Ha a merge conflict keletkezik, a szokásos módon kell
-        eljárni. Kézzel ki kell javítani, a változást commitolni.
-        (Vagy lehet választani a saját változat eldobását, ahogy
-        leírtam egy kicsit feljebb.)  Rebase esetén a PrepCommit
-        menüben a Continue vagy Abort funkciókkal lehet a rebaset
-        befejezni vagy eldobni.
+        Ha merge conflict keletkezik, a szokásos módon kell eljárni. 
+        Kézzel ki kell javítani, a változást commitolni. Vagy lehet 
+        választani a saját változat eldobását, ahogy írtam egy kicsit 
+        feljebb.  Rebase esetén a PrepCommit menüben a Continue vagy 
+        az Abort funkciókkal lehet a rebaset befejezni vagy eldobni.
         
 
 Scriptek        

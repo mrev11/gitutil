@@ -38,6 +38,7 @@ local dep:=0
     chmod(".git/hooks/post-checkout",0b111101101)//755
 
     dirmake( ".git/local")
+    memowrit(".git/local/profile",profile())
     memowrit(".git/local/g-log",g_log())
     memowrit(".git/local/g-log1",g_log1())
     memowrit(".git/local/g-log-graph",g_log_graph())
@@ -69,6 +70,18 @@ local spec:=output_of("which "+dep)
 
 ***************************************************************************************
 //script szovegek
+***************************************************************************************
+static function profile()
+local x:=<<XX>>
+for GSCRIPT in .git/local/g-*; do
+    if ! [ -f $(basename $GSCRIPT) ]; then
+        ln -s $GSCRIPT .
+    fi
+done
+<<XX>>
+    return x
+
+
 ***************************************************************************************
 static function gitignore() 
 local x:=<<XX>>
@@ -221,13 +234,13 @@ local x:=<<XX>>#!/bin/bash
 # levő linkjüket, a .git/local-ban levő tényleges fájlt nem.
 # A második lépésben aztán újra belinkelődnek a gyökérbe.
 
+# Illetve általánosabb: végrehajtja .git/local/profile-t,
+# ami azt csinál, amit akar, ha akar linkel.
 
 git clean -fXd  2>&1 >/dev/null
 
-if [ -d .git/local  ];then
-    for loc in .git/local/* ;do
-        ln -sf $loc  .
-    done
+if [ -f .git/local/profile  ];then
+   . .git/local/profile
 fi
 
 
@@ -239,7 +252,11 @@ static function script_gn()
 local x:=<<XX>>#!/bin/bash
 #set -x
 
-#export GITDEBUG=yes
+#export GITDEBUG=goc
+#g: git commands
+#o: output of git commands
+#c: callstack when invoking git commands
+
 export OREF_SIZE=500000
 export CCCTERM_SIZE=120x40
 #export CCCTERM_INHERIT=yes
@@ -254,7 +271,11 @@ static function script_gr()
 local x:=<<XX>>#!/bin/bash
 #set -x
 
-#export GITDEBUG=yes
+#export GITDEBUG=goc
+#g: git commands
+#o: output of git commands
+#c: callstack when invoking git commands
+
 export CCCTERM_SIZE=120x40
 
 exec gitref.exe
@@ -265,8 +286,12 @@ exec gitref.exe
 ***************************************************************************************
 static function script_gv()
 local x:=<<XX>>#!/bin/bash
-#export DEBUG=yes
 #git diff viewer
+
+#export GITDEBUG=goc
+#g: git commands
+#o: output of git commands
+#c: callstack when invoking git commands
 
 exec gitview.exe  "$@"
 <<XX>>

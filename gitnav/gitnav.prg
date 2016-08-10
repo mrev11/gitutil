@@ -37,6 +37,7 @@ local err
 
     change_to_gitdir()
     setup_checkout_hook()
+    local_profile()
 
     setcursor(0)
 
@@ -129,7 +130,7 @@ local commit
         commit:=brwArray(brw)[brwArrayPos(brw)][2]
         rundbg("git checkout -f "+commit) //force nélkül a módosításokat nem írja felül
         rundbg("git clean -fxd")          //-f(force) -x(ignored files) -d(directories)
-        link_local()
+        local_profile()
         brw:gotop
         return .f. //kilép brwLoop-ból
     end

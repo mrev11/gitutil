@@ -1,7 +1,9 @@
 #!/bin/bash
-
-export GITDEBUG=g
 #git diff viewer
 
-exec gitview.exe  "$@" # &
+#export GITDEBUG=goc
+#g: git commands
+#o: output of git commands
+#c: callstack when invoking git commands
 
+exec gitview.exe  "$@"

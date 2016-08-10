@@ -144,7 +144,7 @@ local fspec:=arr[pos][2]
 
     elseif( status=="??" )
         //untracked file
-        view_diff({"--no-index"},{fspec,"/dev/null"})
+        view_diff({"--no-index"},{"/dev/null",fspec})
 
     else
         view_diff({"HEAD"},{fspec})

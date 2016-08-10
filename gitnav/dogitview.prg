@@ -3,6 +3,7 @@
 //eredetileg ez egy main volt
 
 #include "inkey.ch"
+#include "fileio.ch"
 
 static arg_commit1:="--staged"
 static arg_commit2:="HEAD"
@@ -199,6 +200,7 @@ local result
     rundbg("git add .FILETIME_$USER")
     run("firstpar.exe CHANGELOG_$USER >commit-message")
     result:=output_of("git commit -F commit-message")
+    commitlog(result)
     zbrowseNew(result,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop
 
     reread:=.f.
@@ -307,4 +309,25 @@ static function statcolor(x)
     end
     return {1} //normál fehér
 
+
 ********************************************************************************************
+static function commitlog(result)
+local pos:=at(chr(10),result)
+local fd:=fopen(".git/local/log-commit",FO_CREATE+FO_APPEND+FO_READWRITE)
+    if( pos>0 )
+        result::=left(pos)
+    elseif(!empty(result))
+        result+=chr(10)
+    end
+    if( fd>=0 )
+        fwrite(fd,result)
+        fclose(fd)
+    end
+
+
+********************************************************************************************
+
+
+
+
+
