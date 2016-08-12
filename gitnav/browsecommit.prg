@@ -186,7 +186,7 @@ local zb:=zbrowseNew(output_of("git blame "+fn_escape(fname)))
 
 **************************************************************************************
 static function read_commit_header(commit)
-local gitcmd:="git log --date=iso-local --stat --summary "+commit+"^.."+commit
+local gitcmd:="git log --pretty=medium --date=iso-local --stat --summary "+commit+"^.."+commit
 local rl,line,arr:={}
     rl:=read_output_of(gitcmd)
     while( NIL!=(line:=rl:readline) .and. len(arr)<3 )

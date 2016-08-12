@@ -15,11 +15,14 @@
 //  "Branch"    branchok között vált (checkout -f <branch>; clean -fxd)
 
 
-static arg_number:="-32"
-
 
 ********************************************************************************************
 function main()
+
+local logcmd
+local pretty:=config_value_of("format.pretty")
+local dtform:=config_value_of("log.date")
+local number:="-32"
 
 local brw
 local branchmenu:={}
@@ -28,16 +31,37 @@ local com:={{"","",""}},n
 local rl,line,pos
 local err
 
-    for n:=1 to argc()-1
-        if( argv(n)[1]=="-" .and. argv(n)[2..]::val>0 )
-            arg_number:=argv(n) //string
-        end
-    next
-
-
     change_to_gitdir()
     setup_checkout_hook()
     local_profile()
+
+
+    //szóközök miatt a {} paraméterezés kell
+    logcmd:={}
+    logcmd::aadd("git")
+    logcmd::aadd("log")
+
+    for n:=1 to argc()-1
+        if( argv(n)[1]=="-" .and. argv(n)[2..]::val>0 )
+            number:=argv(n) //string
+        elseif( argv(n)[1..9]=="--pretty=" )
+            pretty:=argv(n)[10..]
+        elseif( argv(n)[1..7]=="--date=" )
+            dtform:=argv(n)[8..]
+        else
+            logcmd::aadd(argv(n))
+        end
+    next
+    if( pretty::empty )
+        pretty:="%h %s"
+    end
+    if( dtform::empty )
+        dtform:="short"
+    end
+    logcmd::aadd("--pretty="+pretty)
+    logcmd::aadd("--date="+dtform)
+    logcmd::aadd(number)
+
 
     setcursor(0)
 
@@ -77,15 +101,13 @@ local err
     brw:colorspec:="w/n,n/w,w+/n,rg+/n"
     brw:getcolumn(1):colorblock:={|x|{3}}
     brw:getcolumn(2):colorblock:={|x|{4}}
-    
 
     while(.t.)
         branchmenu(branchmenu) //frissíti
         brwMenuName(brw,branch_state_menuname())
 
         asize(com,0)
-        //rl:=read_output_of("git log --oneline --decorate")
-        rl:=read_output_of("git log --pretty=oneline --abbrev-commit "+arg_number)
+        rl:=read_output_of(logcmd)
         while( (line:=rl:readline)!=NIL )
             line::=bin2str
             line::=strtran(chr(10),"")

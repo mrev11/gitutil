@@ -24,8 +24,7 @@ static function browse(commit1, commit2)
 local gitcmd,rl,line
 local brw, arr:={}
 
-    gitcmd:="git log --date=iso-local --stat --summary "+commit2+".."+commit1
-    //memowrit("gitcmd",gitcmd)
+    gitcmd:="git log --pretty=medium --date=iso-local --stat --summary "+commit2+".."+commit1
     rl:=read_output_of(gitcmd)
     while( NIL!=(line:=rl:readline) )
         aadd(arr,{ line::bin2str::strtran(chr(10),"") })

@@ -1,4 +1,13 @@
 
+gitnav atveszi a parancssori parametereket; 
+A parancssori parametereket tovabbadja a git log parancsnak, 
+ezzel alakithato a browse message oszlopanak tartalma,
+pl. "--pretty=%h %cd %s" beveszi a message oszlopba a datumot.
+Olyan --pretty opciot kell megadni, ami "%h "-val kezdődik.
+Hagyja ervenyesulni a .git/config-ban megadott format.pretty 
+es log.date parametereket. A program sajat defaultja:
+"--pretty=%h %s" es "--date=short".
+
 .git/local/profile script;
 .git/local/log-commit-ban naplozza a commitokat;
 gc,gn,gv scriptek felujitva;
