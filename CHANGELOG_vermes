@@ -1,3 +1,5 @@
+zbrowse:loop-ban K_HOME, K_END fel-le mozgat;
+a tree (directory) browseba beteve ".." a felfele valtashoz;
 
 gitnav atveszi a parancssori parametereket; 
 A parancssori parametereket tovabbadja a git log parancsnak, 

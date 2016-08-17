@@ -110,6 +110,12 @@ local key
         elseif( key==K_CTRL_PGUP )    
             this:ctrlpgup
 
+        elseif( key==K_END )    
+            this:ctrlpgdn
+
+        elseif( key==K_HOME )    
+            this:ctrlpgup
+
         elseif( key==K_RIGHT )
             this:wincol:=this:width-1  
             this:moveright

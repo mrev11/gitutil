@@ -73,7 +73,7 @@ local dirdata
     asort(fils,,,{|a,b|FNAME(a)<FNAME(b)})
     asort(dirs,,,{|a,b|FNAME(a)<FNAME(b)})
     
-    dirdata:=""
+    dirdata:=space(NAMEPOS-1)+".."+chr(10)
     for n:=1 to len(dirs)
         dirdata+=dirs[n]+chr(10)
     next
@@ -107,7 +107,9 @@ local zframe,zbrowse
 
 **************************************************************************************
 static function color(x)
-    if( x[8..11]=="tree" )
+    if( ".."$x )
+        return "rg+/n"
+    elseif( x[8..11]=="tree" )
         return "rg+/n"
     else
         return "bg+/n"
@@ -118,7 +120,9 @@ static function color(x)
 **************************************************************************************
 static function view_item(zbrowse,commit)
 local line:=zbrowse:seltext::alltrim
-    if( ISTREE(line) )
+    if( line==".." )
+        return K_ESC
+    elseif( ISTREE(line) )
         return view_dir(zbrowse)
     else
         return view_file(zbrowse,commit)
