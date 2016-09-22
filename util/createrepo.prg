@@ -54,7 +54,9 @@ local dep:=0
     memowrit("ftr",script_ftr()); chmod("ftr",0b111101101)//755
 
     run("filetime-save.exe")    
-    run("git add --all")
+
+    //run("git add --all")
+    run("git add "+"CHANGELOG_"+user) //epp csak ne kegyenures
     run("git commit -F commit-message")
     //quit
 
@@ -87,6 +89,19 @@ static function gitignore()
 local x:=<<XX>>
 *.bak
 *~
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.class
+*.jar
+
+compopt
+outcpp
+rsplib
+rsplink
+gccver.opt
 
 *.exe
 objlin/

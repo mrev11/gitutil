@@ -1,3 +1,7 @@
+createrepo initial import csak a CHANGELOG-ot veszi be;
+(hogy legyen alkalom a tenyleges import elott .gitignore-t modositani)
+.gitignore bovult ilyenekkel: o, obj, a, lib, so, class, jar... 
+
 zbrowse:loop-ban K_HOME, K_END fel-le mozgat;
 a tree (directory) browseba beteve ".." a felfele valtashoz;
 
