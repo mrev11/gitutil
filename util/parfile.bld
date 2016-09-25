@@ -1,2 +1,2 @@
--sccc$(CCCVER)_gitutil
+
 -b$(CCCDIR)/tools/$$(z)    

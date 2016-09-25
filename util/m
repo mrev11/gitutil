@@ -1,5 +1,6 @@
 #!/bin/bash
-bapp_unix_.b  @parfile.bld
+
+bapp_unix_.b -sccc"$CCCVER"_gitutil  @parfile.bld
 
 for so in obj$CCCBIN/*.so; do
     cp -pf $so $so.new

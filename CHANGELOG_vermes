@@ -1,3 +1,5 @@
+parfile-k javitgatva, hogy linuxon es win-en is jo legyen;
+
 createrepo initial import csak a CHANGELOG-ot veszi be;
 (hogy legyen alkalom a tenyleges import elott .gitignore-t modositani)
 .gitignore bovult ilyenekkel: o, obj, a, lib, so, class, jar... 

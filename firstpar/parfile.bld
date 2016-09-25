@@ -1,2 +1,2 @@
--bccc$(CCCVER)_gitutil
+-bccc$(CCCVER)_gitutil.lib
 BUILD_EXE=$(CCCDIR)/usr/bin/$(CCCUNAME) 
