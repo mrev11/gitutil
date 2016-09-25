@@ -54,6 +54,8 @@ local err
     next
     if( pretty::empty )
         pretty:='"%h %s"'
+    elseif(" "$pretty)
+        pretty::=quote
     end
     if( dtform::empty )
         dtform:="short"

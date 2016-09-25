@@ -1,3 +1,6 @@
+a 'git config'-bol kapott pretty erteket idezetbe kell rakni
+(szokozoket tartalmazhat, amitol az ujabb git hibat ad);
+
 leforditva windowson;
 fspec.prg atteve filetime-bol az util-ba;
 .gitignore bovitve objmng/-vel;
