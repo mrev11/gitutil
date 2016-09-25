@@ -1,0 +1,10 @@
+leforditva windowson;
+fspec.prg atteve filetime-bol az util-ba;
+.gitignore bovitve objmng/-vel;
+egyseges parfile.bld-k windows/linuxon;
+gitnav.prg-ben --pretty:="%h %s" helyett --pretty:='"%h %s"';
+a .git directory keresesekor bekapcsolva a H attributum;
+util.prg: windowson a tempfile nem tud /tmp/-ben keletkezni;
+mindenhol letrehozva az m.bat-ok;
+a parancsokban levo $USER-t mar a prograban kell helyettesiteni;
+mergestatus.prg: remote/branch elvalasztoja mindig '/', nem pedig dirsep();  

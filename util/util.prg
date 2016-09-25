@@ -4,10 +4,10 @@
 function output_of(cmd)
 
 local output
-local tmp:=tempfile("/tmp/","bak")
+local tmp:=tempfile(,"bak")
 local debug:=debug("goc")
 
-    run( cmd+" >"+tmp+" 2>&1")
+    run( cmd+" >"+tmp+" 2>&1") 
     output:=memoread(tmp)
     ferase(tmp)
     

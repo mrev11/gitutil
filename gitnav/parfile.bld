@@ -1,9 +1,9 @@
--lgitnav
--blibccc$(CCCVER)_gitutil.so
-#-bccc$(CCCVER)_gitutil.lib
+#-lgitnav
+-bccc$(CCCVER)_gitutil
 -b$(CCCDIR)/tools/$$(z)    
-BUILD_EXE=$(HOME)/bin  
+
 BUILD_SHR=static
+BUILD_EXE=$(CCCDIR)/usr/bin/$(CCCUNAME) 
 
 
 #Altalaban az kell, hogy statikusan legyen linkelve,

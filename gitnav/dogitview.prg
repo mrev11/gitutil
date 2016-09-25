@@ -197,8 +197,8 @@ local result
     //de a hook nem tudja módosítani a commit tartalmát
 
     run("filetime-save.exe")
-    rundbg("git add .FILETIME_$USER")
-    run("firstpar.exe CHANGELOG_$USER >commit-message")
+    rundbg("git add .FILETIME_$USER"::strtran("$USER",username()))
+    run("firstpar.exe CHANGELOG_$USER >commit-message"::strtran("$USER",username()))
     result:=output_of("git commit -F commit-message")
     commitlog(result)
     zbrowseNew(result,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop

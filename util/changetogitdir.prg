@@ -4,7 +4,7 @@ function change_to_gitdir()
 
 local curdir:=curdir()
 
-    while( empty(directory(".git","D")) )
+    while( empty(directory(".git","HD")) )
         //A git diff-ek akkor működnek,
         //ha a git tree gyökeréből vannak indítva.
         //Hogy ne kelljen folyton váltogatni a directorykat,

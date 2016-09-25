@@ -1,5 +1,2 @@
--bccc$(CCCVER)_gitutil.lib
-BUILD_EXE=$(HOME)/bin  
-BUILD_SHR=static
-
-
+-bccc$(CCCVER)_gitutil
+BUILD_EXE=$(CCCDIR)/usr/bin/$(CCCUNAME) 

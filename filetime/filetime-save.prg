@@ -27,7 +27,7 @@ static hash
 *****************************************************************************
 function main()
 
-local outfile:=".FILETIME_"+getenv("USER")
+local outfile:=".FILETIME_"+username()
 local bakfile:=outfile+".bak"
 local hdata
 local outarr:={},n
@@ -67,7 +67,7 @@ local outarr:={},n
     set console off
 
     for n:=1 to len(outarr)
-        ?? outarr[n][1], outarr[n][2], outarr[n][3]; ?
+        ?? outarr[n][1], outarr[n][2], outarr[n][3]::strtran('\','/'); ?
     next
 
     set alternate off

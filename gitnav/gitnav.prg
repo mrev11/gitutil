@@ -53,7 +53,7 @@ local err
         end
     next
     if( pretty::empty )
-        pretty:="%h %s"
+        pretty:='"%h %s"'
     end
     if( dtform::empty )
         dtform:="short"

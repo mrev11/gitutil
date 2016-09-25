@@ -169,6 +169,7 @@ firstpar.exe  CHANGELOG_$USER >commit-message
 git commit -F commit-message
 rm commit-message
 <<XX>>
+    x::=strtran("$USER",username())
     return x
 
 

@@ -52,7 +52,7 @@ local base,tip,rbranch
 function merge_status_short(branch:=merge_status())
 local n,sn
     for n:=1 to len(branch)
-        sn:=branch[n][1]::split(dirsep())
+        sn:=branch[n][1]::split("/") //nem dirsep!
         if( sn::len>=2 )
             sn:=sn[1][1]+sn[2][1] //[r]remote [b]ranch
         else
