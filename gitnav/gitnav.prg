@@ -19,7 +19,6 @@
 ********************************************************************************************
 function main()
 
-local gitversion:=output_of("git --version")
 local logcmd
 local pretty:=config_value_of("format.pretty")
 local dtform:=config_value_of("log.date")
@@ -43,7 +42,7 @@ local err
     //Nehany helyen hozza lett igazitva 2.10.0-hez.
     //Ami viszont elrontott korabban jol mukodo reszeket 2.7.4-en.
     //Tovabbi meglepetesek varhatok.
-    ? gitversion
+    ? "git version",gitversion()
 
     change_to_gitdir()
     setup_checkout_hook()
@@ -69,10 +68,27 @@ local err
 
     //kell-e ezt idezni?
     //(ha szokozt tartalmaz)
-    if( pretty::empty )
-        pretty:='%h %s'
-    elseif(" "$pretty)
-        //pretty::=quote
+    if(  gitversion("ge",{2,10,0}) )
+        //alert("GE")
+        //2.10.0 folott idezek
+        //ez egyelore az en gepeimen jo
+        //mas verziokat nem ismerek
+
+        if( pretty::empty )
+            pretty:='"%h %s"'
+        elseif(" "$pretty)
+            pretty::=quote
+        end
+    else
+        //alert("LT")
+        //2.10.0 alatt nem idezek
+        //2.7.4-en nemidezve jo
+
+        if( pretty::empty )
+            pretty:='%h %s'
+        elseif(" "$pretty)
+            //pretty::=quote
+        end
     end
     //alert(pretty)
 

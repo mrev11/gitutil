@@ -1,6 +1,6 @@
 @echo off
 
-set GITDEBUG=go
+:set GITDEBUG=go
 :g: git commands
 :o: output of git commands
 :c: callstack when invoking git commands

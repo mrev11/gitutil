@@ -1,3 +1,8 @@
+filetime-ban a kizart directoryk es kiterjesztesek
+megadasa array helyett hashtablaban;
+pretty idezese: 2.10.0 folott idez, alatta nem idez
+(nem tudom igazabol, hol a hatarvonal, egyelore igy)
+
 filetime-save/restore sha1 kepzes elott kiszedi a fajlokbol a CR-t;
 hogyan kell a pretty-t idezni?
 nincs eltalava, hol igy rossz, hol ugy
