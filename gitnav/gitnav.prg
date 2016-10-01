@@ -19,6 +19,7 @@
 ********************************************************************************************
 function main()
 
+local gitversion:=output_of("git --version")
 local logcmd
 local pretty:=config_value_of("format.pretty")
 local dtform:=config_value_of("log.date")
@@ -30,6 +31,19 @@ local fetchmenu:={}
 local com:={{"","",""}},n
 local rl,line,pos
 local err
+
+
+    //Ez egy git frontend program: 
+    //git parancsokat ad ki, es olvassa a parancsok eredmenyet.
+    //Hogy ez jol mukodjon, az kell, hogy a git kulonfele verzioi 
+    //ugyanugy ertsek a parancsokat, es az eredmenyt ugyanugy formazzak.
+    //A kulonfele git verziok azonban elteroen mukodnek.
+    //
+    //A program 2.7.4-en volt fejlesztve.
+    //Nehany helyen hozza lett igazitva 2.10.0-hez.
+    //Ami viszont elrontott korabban jol mukodo reszeket 2.7.4-en.
+    //Tovabbi meglepetesek varhatok.
+    ? gitversion
 
     change_to_gitdir()
     setup_checkout_hook()
@@ -52,11 +66,16 @@ local err
             logcmd::aadd(argv(n))
         end
     next
+
+    //kell-e ezt idezni?
+    //(ha szokozt tartalmaz)
     if( pretty::empty )
-        pretty:='"%h %s"'
+        pretty:='%h %s'
     elseif(" "$pretty)
-        pretty::=quote
+        //pretty::=quote
     end
+    //alert(pretty)
+
     if( dtform::empty )
         dtform:="short"
     end

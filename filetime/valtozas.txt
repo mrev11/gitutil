@@ -1,3 +1,5 @@
+2016.10.01
+    sha1 kepzes elott kiszedi a fajlokbol a CR-t
 
 2016.07.11
     loadhash kikeruli a git merge conflict-okat

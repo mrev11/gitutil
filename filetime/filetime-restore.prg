@@ -35,7 +35,7 @@ function main()
 function procfile(fspec,date,time) //callback
 
 local x:=memoread(fspec,.t.)
-local sha1:=x::crypto_sha1::crypto_bin2hex::bin2str
+local sha1:=x::removecr::crypto_sha1::crypto_bin2hex::bin2str
 local hdata:=hash[sha1]
 local da,ti
 

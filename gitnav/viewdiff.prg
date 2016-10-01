@@ -26,6 +26,14 @@ while( mode!=NIL )
     gitcmd:={}
     gitcmd::aadd("git")
     gitcmd::aadd("diff")
+
+    // -w opcio
+    // Ne nezze osszehasonlitaskor a whitespace-eket. 
+    // Maskepp a crlf-es fajlok minden sorukban kulonboznek.
+    // Uj neve "--ignore-all-spaces", a 2.7.4 nem fogadja el.
+    // gitcmd::aadd("--ignore-all-spaces")
+    gitcmd::aadd("-w")
+
     gitcmd::aadd("-U"+context)
     for n:=1 to len(commit)
         gitcmd::aadd(commit[n])

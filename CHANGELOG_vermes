@@ -1,3 +1,22 @@
+filetime-save/restore sha1 kepzes elott kiszedi a fajlokbol a CR-t;
+hogyan kell a pretty-t idezni?
+nincs eltalava, hol igy rossz, hol ugy
+git verzioszam kiirasa indulaskor;
+
+a 'git config'-bol kapott pretty erteket idezetbe kell rakni
+(szokozoket tartalmazhat, amitol az ujabb git hibat ad);
+
+leforditva windowson;
+fspec.prg atteve filetime-bol az util-ba;
+.gitignore bovitve objmng/-vel;
+egyseges parfile.bld-k windows/linuxon;
+gitnav.prg-ben --pretty:="%h %s" helyett --pretty:='"%h %s"';
+a .git directory keresesekor bekapcsolva a H attributum;
+util.prg: windowson a tempfile nem tud /tmp/-ben keletkezni;
+mindenhol letrehozva az m.bat-ok;
+a parancsokban levo $USER-t mar a prograban kell helyettesiteni;
+mergestatus.prg: remote/branch elvalasztoja mindig '/', nem pedig dirsep();  
+
 parfile-k javitgatva, hogy linuxon es win-en is jo legyen;
 
 createrepo initial import csak a CHANGELOG-ot veszi be;
