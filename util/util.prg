@@ -47,6 +47,13 @@ local debug:=debug("gc")
     if( "g"$debug )
         ?? "GITCMD:",cmd;?
     end
+    
+    #ifdef _UNIX_
+        //termelodnek a zombik,
+        //itt egy kicsit ritkitjuk oket, 
+        //ne szaporodjanak fel nagyon
+        while( 0<waitpid(,,1) ); end
+    #endif
 
     return rl //le kell majd zárni (rl:close)
 
