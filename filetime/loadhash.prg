@@ -28,7 +28,7 @@ local hash:=simplehashNew()
 
 local ftdir, n
 local fd,rl,line,hdata
-
+local da,ti,utcdati
     
     ftdir:=directory(".FILETIME_*")
 
@@ -59,7 +59,14 @@ local fd,rl,line,hdata
             end
             
             line::=strtran(chr(10),"")
+            line::=strtran(chr(13),"")
             line::=split(" ")  //{sha1,datetime,fspec}
+            if( !"UTC"$line[2] )
+                da:=line[2][1..8]::stod
+                ti:=line[2][9..16]
+                utcdati:=localtime2utctime(da,ti)
+                line[2]:=utcdati[1]::dtos+utcdati[2]+"-UTC"
+            end
             hdata:=hash[line[1]]
             if( hdata==NIL .or. hdata[2]>line[2] )
                 hash[line[1]]:=line

@@ -92,7 +92,8 @@ function procfile(fspec,date,time)  //callback
 local x:=memoread(fspec,.t.)
 local sha1:=x::removecr::crypto_sha1::crypto_bin2hex::bin2str
 local hdata:=hash[sha1]
-local dtime:=date::dtos+time
+local utcdati:=localtime2utctime(date,time)
+local dtime:=utcdati[1]::dtos+utcdati[2]+"-UTC"
 
     if( hdata==NIL )
         //hash[sha1]:=hdata:={sha1,dtime,fspec}

@@ -37,13 +37,16 @@ function procfile(fspec,date,time) //callback
 local x:=memoread(fspec,.t.)
 local sha1:=x::removecr::crypto_sha1::crypto_bin2hex::bin2str
 local hdata:=hash[sha1]
-local da,ti
+local da,ti,locdati
 
-    if( NIL!=hdata .and. hdata[2]<dtos(date)+time )
-        da:=hdata[2][1..8]::stod
-        ti:=hdata[2][9..16]
-        ?? date,time, " <- ", da,ti, fspec;?
-        setfdati(fspec,da,ti)
+    if( NIL!=hdata )
+        locdati:=utctime2localtime( hdata[2][1..8]::stod, hdata[2][9..16] )
+        da:=locdati[1]
+        ti:=locdati[2]
+        if( da<date .or. da==date .and. ti<time )
+            ?? date,time, " <- ", da,ti, fspec;?
+            setfdati(fspec,da,ti)
+        end
     end
 
 
