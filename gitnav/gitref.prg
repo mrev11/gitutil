@@ -22,6 +22,7 @@ local err
     brwColumn(brw,"Message",brwAblock(brw,3),replicate("X",maxcol()-40))
 
     brwMenu(brw,"Reset","Move HEAD to the highlighted commit",{||reset(brw)})
+    brwMenu(brw,"Browse","Browse files of selected commit",{||browse_commit(brw)})
 
     brwApplyKey(brw,{|b,k|appkey(b,k)})
 

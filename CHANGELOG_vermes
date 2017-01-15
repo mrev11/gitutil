@@ -1,3 +1,6 @@
+gitref is tudja browseolni a korabbi (esetleg hivatkozas nelkuli)
+commitok tartalmat
+
 Local helyett UTC idoket hasznal a fajlidok mentesere; 
 
 README: Yet another Git frontend. 
