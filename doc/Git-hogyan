@@ -40,7 +40,7 @@ git commit -F "fspec containing the commit message"
 
 A folyamat:
 
-                                  wroking tree
+                                  working tree
                                         |
                                         | git add --all
                                         |

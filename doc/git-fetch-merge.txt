@@ -6,7 +6,7 @@ git fetch
         git fetch origin master
     elhozza az origin remoteból a master branchot. (A branch
     azon objektumait, amik még nincsenek meg a lokális repóban.
-    Mint tudjuk a git objektumok váloztathatatlanok (immutable).)
+    Mint tudjuk a git objektumok változtathatatlanok (immutable).)
     
     Vagy
         git fetch origin

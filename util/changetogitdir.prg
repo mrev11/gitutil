@@ -29,5 +29,6 @@ local curdir:=curdir()
     if( !empty(debug()) )
         ?? ".git directory found in",curdir();?
     end
+    setcaption(curdir())
 
 ***************************************************************************************
