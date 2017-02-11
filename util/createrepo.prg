@@ -14,7 +14,7 @@
 ***************************************************************************************
 function create_repo()
 
-local user:=getenv("USER")
+local user:=username() //getenv("USER") vagy getenv("USERNAME")
 local dep:=0
 
     ? "These programs will be searched in the path:"
