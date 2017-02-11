@@ -35,9 +35,13 @@ local dep:=0
     memowrit("commit-message","initial import")    
     memowrit(".gitignore",gitignore())
     memowrit(".git/hooks/post-checkout",post_checkout())
+#ifndef _WINDOWS_
     chmod(".git/hooks/post-checkout",0b111101101)//755
+#endif
 
     dirmake( ".git/local")
+#ifndef _WINDOWS_
+    //Linux_
     memowrit(".git/local/profile",profile())
     memowrit(".git/local/g-log",g_log())
     memowrit(".git/local/g-log1",g_log1())
@@ -45,13 +49,26 @@ local dep:=0
     memowrit(".git/local/g-commit",g_commit())
     memowrit(".git/local/g-merge",g_merge())
     memowrit(".git/local/g-initial-upload",g_initial_upload())
+#else
+    //Windows
+    memowrit(".git/local/profile.bat",profile_bat())
+#endif
 
+#ifndef _WINDOWS_
+    //Linux_
     memowrit("gc",script_gc());   chmod("gc",0b111101101)//755
     memowrit("gn",script_gn());   chmod("gn",0b111101101)//755
     memowrit("gr",script_gr());   chmod("gr",0b111101101)//755
     memowrit("gv",script_gv());   chmod("gv",0b111101101)//755
     memowrit("fts",script_fts()); chmod("fts",0b111101101)//755
     memowrit("ftr",script_ftr()); chmod("ftr",0b111101101)//755
+#else
+    //Windows
+    memowrit("gc.bat",script_gc_bat())
+    memowrit("gn.bat",script_gn_bat())
+    memowrit("fts.bat",script_fts_bat())
+    memowrit("ftr.bat",script_ftr_bat())
+#endif
 
     run("filetime-save.exe")    
 
@@ -75,11 +92,19 @@ local spec:=output_of("which "+dep)
 ***************************************************************************************
 static function profile()
 local x:=<<XX>>
+exit 0
+
 for GSCRIPT in .git/local/g-*; do
     if ! [ -f $(basename $GSCRIPT) ]; then
         ln -s $GSCRIPT .
     fi
 done
+<<XX>>
+    return x
+
+
+static function profile_bat()
+local x:=<<XX>>@echo off
 <<XX>>
     return x
 
@@ -240,18 +265,8 @@ git pull
 static function script_gc()
 local x:=<<XX>>#!/bin/bash
 
-#1) törli az összes .gitignored fájlt
-#2) átlinkeli az .git/local-ban levő scripteket
-#
-#
-# Az a koncepció, .git/local-ban egyéni scriptek vannak
-# amelyek mind ignoráltak, ezért  git clean -fXd törli őket
-# az objectekkel es exekkel együtt, de csak a gyökérben
-# levő linkjüket, a .git/local-ban levő tényleges fájlt nem.
-# A második lépésben aztán újra belinkelődnek a gyökérbe.
-
-# Illetve általánosabb: végrehajtja .git/local/profile-t,
-# ami azt csinál, amit akar, ha akar linkel.
+# torli az osszes .gitignored fajlt
+# vegrehajtja .git/local/profile-t
 
 git clean -fXd  2>&1 >/dev/null
 
@@ -260,6 +275,19 @@ if [ -f .git/local/profile  ];then
 fi
 
 
+<<XX>>
+    return x
+
+static function script_gc_bat()
+local x:=<<XX>>@echo off
+: torli a .gitignored fajlokat
+: vegrehajtja .git/local/profile.bat-ot
+
+git clean -fXd  2>&1 >NUL
+
+if not exist .git/local/profile.bat goto endprofile
+    call .git/local/profile.bat
+:endprofile
 <<XX>>
     return x
 
@@ -279,6 +307,23 @@ export CCCTERM_SIZE=120x40
 
 exec gitnav.exe "$@" #>log-gitnav
 
+<<XX>>
+    return x
+
+
+static function script_gn_bat()
+local x:=<<XX>>@echo off
+
+:set GITDEBUG=go
+:g: git commands
+:o: output of git commands
+:c: callstack when invoking git commands
+
+set OREF_SIZE=500000
+set CCCTERM_SIZE=120x32
+:set CCCTERM_INHERIT=yes
+
+gitnav.exe %1 %2 %3 %4 | tee log-gitnav
 <<XX>>
     return x
 
@@ -321,11 +366,25 @@ exec filetime-save.exe  "$@"
 <<XX>>
     return x
 
+static function script_fts_bat()
+local x:=<<XX>>@echo off
+set OREF_SIZE=500000
+filetime-save.exe  %1 %2 %3 %4
+<<XX>>
+    return x
+
 ***************************************************************************************
 static function script_ftr()
 local x:=<<XX>>#!/bin/bash
 export OREF_SIZE=100000
 exec filetime-restore.exe
+<<XX>>
+    return x
+
+static function script_ftr_bat()
+local x:=<<XX>>@echo off
+set OREF_SIZE=100000
+filetime-restore.exe
 <<XX>>
     return x
 

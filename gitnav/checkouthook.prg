@@ -16,3 +16,6 @@ filetime-restore.exe
         ?? "install "+hspec;?
     end
 
+// kerdes lehet,
+// hogy mitol mukodik Windowson a bash szintaktikaju script
+// nem tudom, mitol, de az ellenorzes mutatja, hogy mukodik
