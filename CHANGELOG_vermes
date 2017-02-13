@@ -1,3 +1,8 @@
+uj repo krealas elott ellenorzi, hogy be vannak-e allitva a
+    user.email
+    user.name
+ha nincsenek, akkor nem lehet commitolni;
+
 create_repo elkesziti a scriptek windowsos valtozatat;
 scriptek egyszerusitve;
 

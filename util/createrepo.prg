@@ -17,6 +17,9 @@ function create_repo()
 local user:=username() //getenv("USER") vagy getenv("USERNAME")
 local dep:=0
 
+
+    verif_ident()
+
     ? "These programs will be searched in the path:"
     dep+=dep("filetime-save.exe")
     dep+=dep("filetime-restore.exe")
