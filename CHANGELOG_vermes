@@ -1,3 +1,6 @@
+ellenorzi, hogy legyen aktualis branch (es legalabb egy commit)
+ha nincs branch/commit, lefuttatja create_repo-t, ami egyet commitol; 
+
 uj repo krealas elott ellenorzi, hogy be vannak-e allitva a
     user.email
     user.name

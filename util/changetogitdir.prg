@@ -26,6 +26,15 @@ local curdir:=curdir()
             end
         end
     end
+
+    if( empty(output_of("git branch")) )
+        //alert("no branch")
+        //"git init" utan, de meg az elso commit elott
+        //ha igy tovabmenne, elszallna a program
+        //ezert kell legyen legalabb egy commit
+        create_repo()
+    end
+
     if( !empty(debug()) )
         ?? ".git directory found in",curdir();?
     end
