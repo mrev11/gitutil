@@ -83,8 +83,8 @@ while( mode!=NIL )
     brwMenu(brw,"New","New version",{||mode:="new",.f.})
     brwMenu(brw,"Context-"+context,"Number of lines around changes",{||context::=getcontext,.f.})
     
-    brw:colorspec:="w/n,n/w,r+/n,g+/n,w+/n,bg+/n"
-    //              1   2   3    4    5    6
+    brw:colorspec:="w/n,n/w,,,,,,,,,,,r+/n,g+/n,w+/n,bg+/n"
+    //              1   2             13   14   15   16
 
     brw:getcolumn(1):colorblock:={|x|diffcolor(x)}
     
@@ -115,19 +115,19 @@ static function appkey_diff(b,k,mode)
 ********************************************************************************************
 static function diffcolor(x)
     if( "---"==x[1..3] )
-        return {5}
+        return {15}
     elseif( "+++"==x[1..3] )
-        return {5}
+        return {15}
     elseif( " "==x[1..1] )
         return {1}
     elseif( "-"==x[1..1] )
-        return {3}
+        return {13}
     elseif( "+"==x[1..1] )
-        return {4}
+        return {14}
     elseif( "@@"==x[1..2] )
-        return {6}
+        return {16}
     end
-    return {5} //kiemelt fehér
+    return {15} //kiemelt fehér
 
 
 ********************************************************************************************

@@ -1,0 +1,113 @@
+
+Ez a doksi mutatja, hogy miért baromi nehéz a man
+alapján használni a git-et. Azért mert a man a parancsok 
+szerint csoportosítja az anyagot, ezzel szemben 
+a gyakorlatban arra van szükség, hogy egy témakörben
+használható, egymás keze alá dolgozó parancsokat ismerjünk. 
+Jelen esetben, a remote branch-ek kezelése témakörben 
+felmerülő parancsok:
+
+    push
+    fetch
+    branch
+    checkout
+
+---------------------------------------------------------------------------------
+A remote branch témakörben 4 dologgal kell foglalkozni:
+
+1) Branch a local repóban.
+2) Branch a remote repóban.
+3) Remote branch a local repóban
+4) Tracking infó a local repóban
+
+(VIGYÁZAT: Nem szabad összekeverni a 2) és 3) esetet!)
+
+
+1) Branch a local repóban.
+
+  Létrejöhet pl. a  "git branch devel" paranccsal
+    (az aktuális branch head-jéből ágazik le, nem checkoutol devel-re),
+
+  vagy checkout-tal, pl. "git ceheckout -b devel"
+    (az aktuális branch head-jéből ágazik le, checkoutol devel-re),
+  
+  vagy checkout-tal, pl. "git ceheckout -b devel origin/devel"
+    (korábban fetch-elt branch-ből ágazik le, checkoutol, tracking infó).
+
+
+2) Branch a remote repóban.
+
+  Létrehozhatták a remote-ban lokálisan, mint fentebb,
+
+  vagy létrejöhet push-olással pl. "git push origin devel",
+  amivel egyúttal létrejön a (lokálisan) a tracking branch.
+  
+
+3) Remote branch (a local repóban)
+  
+  Ez a remote-ban levő branch nálunk is meglevő objektumait jelenti,
+  plusz egy head referenciát .git/refs/remotes-ban. Ezek közvetlenül 
+  nem módosíthatók, a push/fetch módosítja őket.
+
+  Létrejöhet push-sal vagy fetch-csel (mint 1-ben, 2-ben).
+
+4) Tracking branch
+
+  Egy lokális branch-et tracking branch-nek nevezünk, 
+  ha a configban explicite össze van kapcsolva egy remote branch-csel,
+  azaz meg van adva, hogy mely repó, mely branch-ét követi. 
+  
+  Mondjuk, van egy proba1 branch a remote-ban, amit már fetcheltünk
+  és ezért megvan az origin/proba1 remote branch a local repóban
+  (KÉT KÜLÖN DOLOG: branch a remote-ban, remote branch a local-ban),
+  akkor az alábbi parancs: 
+
+    git branch -u origin/proba1 devel
+
+  összekacsolja az origin/proba1 remote branch-et a devel-lel.
+  Az összekapcsolás mindössze egy config bejegyzést jelent:
+
+    [branch "devel"]
+        remote = origin
+        merge = refs/heads/proba1
+        
+  Megjegyzés: 'merge = refs/heads/proba1' a remote (!) repóban 
+  tárolt head referenciát jelent.
+
+
+  Alternatívák a tracking (config)infó létrehozására;
+  
+  a) push mellékhatásaként
+
+        git branch devel
+        git push -u origin devel:proba1 
+
+    Ezekkel egyszerre létrejön:
+        devel (a local-ban) 
+        proba1 (a remote-ban)
+        origin/proba1 (remote branch a local-ban)
+        tracking infó (a config-ban (a -u opció hatására))        
+
+  b) cheeeckout mellékhatásaként
+  
+    (feltételezzük, hogy origin-ben létezik a proba1 branch)
+  
+        git fetch origin proba1
+        git checkout -b devel --track origin/proba1
+
+    Ezekkel egyszerre létrejön:
+        origin/proba1 (remote branch a local-ban (fetch lehozza))
+        devel (branch a local-ban, (checkout létrehozza)) 
+        tracking infó (a config-ban, (--track hatására))        
+
+    Az aktuális branch devel lesz, 'git checkout master'-rel
+    lehet visszaállni a master-re.
+
+
+---------------------------------------------------------------------------------
+Remote branch-ek megszüntetése
+
+
+
+
+---------------------------------------------------------------------------------

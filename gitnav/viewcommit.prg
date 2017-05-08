@@ -34,7 +34,7 @@ local brw, arr:={}
     brw:=brwCreate(0,0,maxrow(),maxcol())
     brwArray(brw,arr)
     brwColumn(brw,"",brwAblock(brw,1),replicate("X" ,maxcol()-2))
-    brw:colorspec:="w/n,rg+/n,w+/n,rg+/n,r/n"
+    brw:colorspec:="w/n,rg+/n,,,,,,,,,,,w+/n,rg+/n,r/n"
     brw:getcolumn(1):colorblock:={|x|linecolor(x)}
     brw:headsep:=""
     brwMenuname(brw,arr[1][1]::alltrim)
@@ -50,11 +50,11 @@ local brw, arr:={}
 static function linecolor(x)
 local color
     if( x[1..6] == "commit"  )
-        color:={4}
+        color:={14}
     elseif( x[1..7] == "Author:"  )
-        color:={3}
+        color:={13}
     elseif( x[1..5] == "Date:"  )
-        color:={3}
+        color:={13}
     else
         color:={1}
     end

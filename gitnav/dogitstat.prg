@@ -49,8 +49,8 @@ local cr,cc,cursta
     brwMenu(brw,"ResetAll","Unstage all files/directories",{|b|resetall(b,@reread)})
     brwMenu(brw,"Checkout","Restore file in worktree from the last commit",{|b|checkout(b,@reread)})
 
-    brw:colorspec:="w/n,n/w,r+/n,g+/n,w+/n,rg+/n,n/n"
-    //              1   2   3    4    5    6     7
+    brw:colorspec:="w/n,n/w,,,,,,,,,,,r+/n,g+/n,w+/n,rg+/n,n/n"
+    //              1   2             13   14   15   16    17
     brw:getcolumn(1):colorblock:={|x|statcolor(x)}
     
     brwApplyKey(brw,{|b,k|appkey_main(b,k)})
@@ -318,15 +318,15 @@ local a:=brwArray(b)
 ********************************************************************************************
 static function statcolor(x)
     if( "A"$x )
-        return {4}
+        return {14}
     elseif( "D"$x )
-        return {3}
+        return {13}
     elseif( "M"$x )
-        return {6}
+        return {16}
     elseif( "R"$x )
-        return {6}
+        return {16}
     elseif( "?"$x )
-        return {3}
+        return {13}
     end
     return {1} //normál fehér
 

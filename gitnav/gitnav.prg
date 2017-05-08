@@ -135,9 +135,9 @@ local err
     brwApplyKey(brw,{|b,k|appkey(b,k)})
     brwMenuName(brw,"[GitNavig]")
 
-    brw:colorspec:="w/n,n/w,w+/n,rg+/n"
-    brw:getcolumn(1):colorblock:={|x|{3}}
-    brw:getcolumn(2):colorblock:={|x|{4}}
+    brw:colorspec:="w/n,n/w,,,,,,,,,,,w+/n,rg+/n"
+    brw:getcolumn(1):colorblock:={|x|{13}}
+    brw:getcolumn(2):colorblock:={|x|{14}}
 
     while(.t.)
         branchmenu(branchmenu) //frissíti

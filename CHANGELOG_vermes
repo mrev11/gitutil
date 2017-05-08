@@ -1,3 +1,9 @@
+a browse colorspec-ek utkozese javitva;
+Az alkalmazasban hasznalt szinek a browse:colorspec 3,4,5 ... 
+helyerol atkerultek a 13,14,15, ... helyekre, igy nem utkoznek
+az ujabban hasznalatba vett 3-as szinnel, ami a browse savkurzoranak
+szinet tartalmazza.
+ 
 ellenorzi, hogy legyen aktualis branch (es legalabb egy commit)
 ha nincs branch/commit, lefuttatja create_repo-t, ami egyet commitol; 
 

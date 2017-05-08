@@ -87,8 +87,8 @@ local cr,cc,cursta
     //aadd(sort,{"By name",{|b|sortbyname(b)}})
     //aadd(sort,{"By status",{|b|sortbystatus(b)}})
 
-    brw:colorspec:="w/n,n/w,r+/n,g+/n,w+/n,rg+/n"
-    //              1   2   3    4    5    6
+    brw:colorspec:="w/n,n/w,,,,,,,,,,,r+/n,g+/n,w+/n,rg+/n"
+    //              1   2             13   14   15   16
     brw:getcolumn(1):colorblock:={|x|statcolor(x)}
     
     brwApplyKey(brw,{|b,k|appkey_main(b,k)})
@@ -299,13 +299,13 @@ local base
 ********************************************************************************************
 static function statcolor(x)
     if( "A"$x )
-        return {4}
+        return {14}
     elseif( "D"$x )
-        return {3}
+        return {13}
     elseif( "M"$x )
-        return {6}
+        return {16}
     elseif( "R"$x )
-        return {6}
+        return {16}
     end
     return {1} //normál fehér
 
