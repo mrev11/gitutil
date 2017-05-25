@@ -4,13 +4,22 @@ function username()
 
 local un
 
-#ifndef WINDOWS
-    un:=getenv("USER")
-#else
-    un:=getenv("USERNAME")
-#endif
+    if( empty(un) )
+        un:=getenv("GITUSER") //custom
+    end
+
+    if( empty(un) )
+        un:=getenv("USER") //Linux
+    end
+
+    if( empty(un) )
+        un:=getenv("USERNAME") //Windows
+    end
 
     return un
+
+
+
 
 
 
