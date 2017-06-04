@@ -67,39 +67,23 @@ local err
         end
     next
 
-    //kell-e ezt idezni?
-    //(ha szokozt tartalmaz)
-    if(  gitversion("ge",{2,10,0}) )
-        //alert("GE")
-        //2.10.0 folott idezek
-        //ez egyelore az en gepeimen jo
-        //mas verziokat nem ismerek
-
-        if( pretty::empty )
-            pretty:='"%h %s"'
-        elseif(" "$pretty)
-            pretty::=quote
-        end
-    else
-        //alert("LT")
-        //2.10.0 alatt nem idezek
-        //2.7.4-en nemidezve jo
-
-        if( pretty::empty )
-            pretty:='%h %s'
-        elseif(" "$pretty)
-            //pretty::=quote
-        end
+    if( pretty::empty )
+        pretty:='%h %s'
     end
-    //alert(pretty)
-
     if( dtform::empty )
         dtform:="short"
     end
-    logcmd::aadd("--pretty="+pretty)
+
+    //kell-e ezt idezni, ha szokozt tartalmaz?
+    #ifdef _WINDOWS_
+      //Windowson idezni kell
+      logcmd::aadd('"--pretty='+pretty+'"')
+    #else
+      //Linuxon nem szabad idezni
+      logcmd::aadd('--pretty='+pretty)
+    #endif
     logcmd::aadd("--date="+dtform)
     logcmd::aadd(number)
-
 
     setcursor(0)
 

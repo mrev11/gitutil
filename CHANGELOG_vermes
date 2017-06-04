@@ -1,3 +1,9 @@
+Szokozoket tartalmazo parameterek;
+Tevesen gondoltam korabban, hogy a szokozoket tartamazo parameterek
+kezelese valtozott a git-ben. A kulonbseg a Windows es Linux kozott van.
+Windowson idezojelbe kell tenni a szokozt tartalmazo parametert (miert?).
+Linuxon nem szabad idezojelbe tenni. 
+
 A GITUSER-rel keresi a .FILETIME_* es CHANGELOG_* fajlokat; 
 Problema volt, hogy kulonbozo gepeken az eltero USER nevek
 megnehezitettek a commitolast.  Igy a GITUSER valtozo megadasaval
