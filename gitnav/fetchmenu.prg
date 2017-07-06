@@ -34,8 +34,8 @@ static function fetch_status_loop(remote)
 local zframe,zbrowse
 
     zbrowse:=zbrowseNew("REMOTE="+remote)
-    zbrowse:add_shortcut(K_CTRL_F,{|zb|fetch(zb)})
-    keyboard chr(K_CTRL_F)
+    zbrowse:add_shortcut(K_ALT_F,{|zb|fetch(zb)})
+    keyboard chr(K_ALT_F)
     zframe:=zframeNew()
     zframe:set(zbrowse)
     zframe:loop
@@ -129,13 +129,13 @@ local status:=chr(10)
     
     zbrowse:=zbrowseNew(status)
     zbrowse:header1:=branch_state_menuname()
-    zbrowse:header2:=cmd+"  (F1,CTRL_F,CTRL_D,CTRL_M,CTRL_R,CTRL_P)"
+    zbrowse:header2:=cmd+"  (F1,ALT-F,ALT-D,ALT-M,ALT-R,ALT-P)"
     zbrowse:add_shortcut(K_F1,{|b|b:help},"Help")
-    zbrowse:add_shortcut(K_CTRL_F,{|b|fetch(b)},"Fetch")
-    zbrowse:add_shortcut(K_CTRL_D,{|b|diff(b)},"Diff")
-    zbrowse:add_shortcut(K_CTRL_M,{|b|merge(b)},"Merge")
-    zbrowse:add_shortcut(K_CTRL_R,{|b|rebase(b)},"Rebase")
-    zbrowse:add_shortcut(K_CTRL_P,{|b|push(b)},"Push")
+    zbrowse:add_shortcut(K_ALT_F,{|b|fetch(b)},"Fetch")
+    zbrowse:add_shortcut(K_ALT_D,{|b|diff(b)},"Diff")
+    zbrowse:add_shortcut(K_ALT_M,{|b|merge(b)},"Merge")
+    zbrowse:add_shortcut(K_ALT_R,{|b|rebase(b)},"Rebase")
+    zbrowse:add_shortcut(K_ALT_P,{|b|push(b)},"Push")
     zbrowse:colorblock:={|zb|color(zb)}
 
     //maradjon helyben a sáv

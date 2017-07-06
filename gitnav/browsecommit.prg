@@ -164,7 +164,7 @@ local fname:=FNAME(zbrowse:seltext::alltrim)
     zb:=zbrowseNew(output_of("git show "+commit+":"+fn_escape(fname)))
     
     zb:add_shortcut(K_F1,{|b|b:help},"Help")
-    zb:add_shortcut(K_CTRL_B,{|z|shortcut_ctrl_b(z)},"Toggle blame")
+    zb:add_shortcut(K_ALT_B,{|z|shortcut_ctrl_b(z)},"Toggle blame")
 
     zb:header1:=fname
     zb:color1:="gb+/n"
@@ -184,7 +184,7 @@ local zb:=zbrowseNew(output_of("git blame "+fn_escape(fname)))
     zb:color1:="gb+/n"
     zb:header2:=zbrowse:header2
     zb:add_shortcut(K_F1,{|b|b:help},"Help")
-    zb:add_shortcut(K_CTRL_B,{||K_ESC},"Toggle blame")
+    zb:add_shortcut(K_ALT_B,{||K_ESC},"Toggle blame")
     return zb
 
 

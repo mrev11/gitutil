@@ -74,7 +74,7 @@ local x
 
         zbrowse:add_shortcut(K_F1,{|zb|zb:help},"Help")
         zbrowse:add_shortcut(K_TAB,{|zb|toggle(zb,br)},"Toggle")
-        zbrowse:add_shortcut(K_CTRL_D,{|zb|diff(zb)},"Diff")
+        zbrowse:add_shortcut(K_ALT_D,{|zb|diff(zb)},"Diff")
     end
     
     if( zb==NIL )

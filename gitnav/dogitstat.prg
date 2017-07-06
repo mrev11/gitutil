@@ -110,7 +110,7 @@ local fspec,ftext
 
     if( k==K_ESC )
         return .f.
-    elseif( k==K_CTRL_B )
+    elseif( k==K_ALT_B )
         arr:=brwArray(b)
         pos:=brwArrayPos(b)
         fspec:=arr[pos][2]
