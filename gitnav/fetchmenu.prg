@@ -34,8 +34,9 @@ static function fetch_status_loop(remote)
 local zframe,zbrowse
 
     zbrowse:=zbrowseNew("REMOTE="+remote)
-    zbrowse:add_shortcut(K_ALT_F,{|zb|fetch(zb)})
-    keyboard chr(K_ALT_F)
+    zbrowse:add_shortcut(asc("F"),{|zb|fetch(zb)})
+    keyboard("F")
+
     zframe:=zframeNew()
     zframe:set(zbrowse)
     zframe:loop

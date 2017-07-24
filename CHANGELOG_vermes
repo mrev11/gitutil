@@ -1,3 +1,7 @@
+Javitas: keyboard(chr(K_ALT_F)) rossz, helyette keyboard("F");
+  (Megjegyzes: keyboard() csak normalis karakterekkel  mukodik, ezzel 
+  szemben K_ALT_F egy negativ szam, nem ertelmezheto karakterkodnak)
+
 Atteres ALT-os shortcutokra (CTRL helyett);
 
 Szokozoket tartalmazo parameterek;
