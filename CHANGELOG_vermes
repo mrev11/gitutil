@@ -1,3 +1,5 @@
+Javitas: tovabbi helyeken --date=iso-local  helyett  --date=iso
+
 Javitas: --date=iso-local  helyett  --date=iso
   (elobbi hianyzik 2.7.2-bol -> elszall);
 

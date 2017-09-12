@@ -155,7 +155,7 @@ filetime-restore.exe
 ***************************************************************************************
 static function  g_log()
 local x:=<<XX>>#!/bin/bash
-git log  --date=iso-local
+git log  --date=iso
 <<XX>>
     return x
 
