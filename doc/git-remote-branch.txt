@@ -107,7 +107,31 @@ A remote branch témakörben 4 dologgal kell foglalkozni:
 ---------------------------------------------------------------------------------
 Remote branch-ek megszüntetése
 
+Ez törli a a lokális branch-et:
+    git branch --delete <branch>
+
+Ez törli a branch-et a remote-ban (a remote szerveren):
+    git push <remote> --delete <branch>
+
+Ez törli lokálisan  a remote tracking branch-et:
+    git branch --delete --remotes <remote>/<branch>
+
+Ez törli az "obsolete" tracking branch-eket (melyek azok?):
+    git fetch <remote> --prune
 
 
+Megjegyzés: Szükség lehet arra, hogy bare repo-ban branch-et váltsunk.
+Például, ha ez a helyzet
+
+    * devel
+      master
+
+és törölni akarom a devel-t, akkor baj van, mert az aktuális branch-et nem 
+lehet törölni. Csak nagyon nyakatekert megoldások vannak egy bare repóban
+való branch váltásra, nem lehet megjegyezni, nem lehet eldönteni, hogy a 
+hülye receptek közül mit lehet komolyan venni. Jobb  kézzel megcsinálni:
+
+    config/HEAD-ben  "devel" helyére "master"-t kell írni
+    config/refs/heads/devel törölhető (amivel rögtön törlődött a branch)
 
 ---------------------------------------------------------------------------------
