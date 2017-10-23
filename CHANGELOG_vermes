@@ -1,3 +1,7 @@
+A browse menu funkcioban a commit mindenhol megjelenitve;
+A blame modban is megadva a kivalasztott commit 
+    (korabban tevesen a head valtozatot mutatta);  
+
 Javitas: tovabbi helyeken --date=iso-local  helyett  --date=iso
 
 Javitas: --date=iso-local  helyett  --date=iso

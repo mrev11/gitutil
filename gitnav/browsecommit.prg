@@ -123,13 +123,13 @@ local line:=zbrowse:seltext::alltrim
     if( line==".." )
         return K_ESC
     elseif( ISTREE(line) )
-        return view_dir(zbrowse)
+        return view_dir(zbrowse,commit)
     else
         return view_file(zbrowse,commit)
     end
 
 **************************************************************************************
-static function view_dir(zbrowse)
+static function view_dir(zbrowse,commit)
 local zdirbrowse
 local line:=zbrowse:seltext::alltrim
 local treeid:=OBJID(line)
@@ -143,7 +143,7 @@ local dname:=FNAME(line)
 
     zdirbrowse:=zdirbrowseNew(treeid,zbrowse:path+dname+"/")
     zdirbrowse:shortcut:=zbrowse:shortcut
-    zdirbrowse:header1:=zdirbrowse:path
+    zdirbrowse:header1:=commit+":"+zdirbrowse:path
     zdirbrowse:header2:=zbrowse:header2
     zdirbrowse:colorblock:=zbrowse:colorblock
     zbrowse:topush(zdirbrowse)
@@ -166,7 +166,7 @@ local fname:=FNAME(zbrowse:seltext::alltrim)
     zb:add_shortcut(K_F1,{|b|b:help},"Help")
     zb:add_shortcut(K_ALT_B,{|z|shortcut_ctrl_b(z)},"Toggle blame")
 
-    zb:header1:=fname
+    zb:header1:=commit+":"+fname
     zb:color1:="gb+/n"
     zb:header2:=zbrowse:header2
     zbrowse:topush(zb)
@@ -177,10 +177,12 @@ static function shortcut_ctrl_b(zb)
     return K_ESC
 
 **************************************************************************************
-static function view_blame(zbrowse,commit)
-local fname:=zbrowse:header1
-local zb:=zbrowseNew(output_of("git blame "+fn_escape(fname)))
-    zb:header1:=fname
+static function view_blame(zbrowse)
+local hdr:=zbrowse:header1::split(":")
+local commit:=hdr[1]
+local fname:=hdr[2]
+local zb:=zbrowseNew(output_of("git blame "+commit+" "+fn_escape(fname)))
+    zb:header1:=commit+":"+fname
     zb:color1:="gb+/n"
     zb:header2:=zbrowse:header2
     zb:add_shortcut(K_F1,{|b|b:help},"Help")
