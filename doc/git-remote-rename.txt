@@ -1,0 +1,11 @@
+
+Hogyan lehet átnevezni egy remote-ot?
+=====================================
+
+
+Példa:
+
+    git remote rename origin comfirm
+
+
+    

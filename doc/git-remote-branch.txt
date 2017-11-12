@@ -107,7 +107,7 @@ A remote branch témakörben 4 dologgal kell foglalkozni:
 ---------------------------------------------------------------------------------
 Remote branch-ek megszüntetése
 
-Ez törli a a lokális branch-et:
+Ez törli a lokális branch-et:
     git branch --delete <branch>
 
 Ez törli a branch-et a remote-ban (a remote szerveren):
