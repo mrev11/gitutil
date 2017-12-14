@@ -193,15 +193,17 @@ local fspec:=arr[pos][2]
 ********************************************************************************************
 static function commit(brw,reread)
 local result
+local ftsave
+
     //jó volna ezeket betenni a pre-commit hook-ba
     //de a hook nem tudja módosítani a commit tartalmát
 
-    run("filetime-save.exe")
+    ftsave:=output_of("filetime-save.exe")
     rundbg("git add .FILETIME_$USER"::strtran("$USER",username()))
     run("firstpar.exe CHANGELOG_$USER >commit-message"::strtran("$USER",username()))
     result:=output_of("git commit -F commit-message")
     commitlog(result)
-    zbrowseNew(result,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop
+    zbrowseNew(result+ftsave,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop
 
     reread:=.f.
     return .f.   //brwloop-bol végleg ki

@@ -205,7 +205,7 @@ local cmd,result,zbrowse
     cmd:="git merge "+brname
     result:=output_of(cmd)
     //kéne post-merge hook, de nincs
-    run("filetime-restore.exe")
+    result+=output_of("filetime-restore.exe")
 
     zb:toset:=zbstatus(zb,cmd,result) //utolsó parancs és annak eredménye
     return K_ESC
@@ -226,7 +226,7 @@ local cmd,result,zbrowse
 
     cmd:="git rebase "+brname
     result:=output_of(cmd)
-    run("filetime-restore.exe")
+    result+=output_of("filetime-restore.exe")
 
     zb:toset:=zbstatus(zb,cmd,result) //utolsó parancs és annak eredménye
     return K_ESC

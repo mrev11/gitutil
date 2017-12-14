@@ -1,11 +1,11 @@
-567dfc4e23b9ffb28a829487dbc42eeec0b35a97 2017111209:12:31-UTC ./CHANGELOG_vermes
+71b9c1fa7c6ecd1643c6ef6e3bbd1a86c2f0f394 2017121410:53:56-UTC ./CHANGELOG_vermes
+ec92ef23ae594f5e604f5e239f33ed788102de0e 2017121410:50:28-UTC ./gitnav/fetchmenu.prg
+4fd8cd57a040c441258aac5780eb734ae519f7c4 2017121410:37:30-UTC ./gitnav/dogitview.prg
 05c22bac0ddec425620e28220b5d0d6876954d8e 2017111209:11:18-UTC ./doc/git-remote-rename.txt
 b28ec508c5374ceefd2c150913f6c8c8b864b466 2017111209:04:32-UTC ./doc/git-remote-branch.txt
 e20e82a45d153fc2c4d3807fa19e338eb6f0d0eb 2017102308:11:02-UTC ./gitnav/browsecommit.prg
 acb6af8303196cb9ee1ce6e6708430eeae6146f4 2017091210:06:11-UTC ./util/createrepo.prg
 245590bf2b6c05af61b1ccabb5b61335f1bc4458 2017091210:06:05-UTC ./gitnav/viewcommit.prg
-abb1e4b22b1c215038fdd2e4313fb4d001333302 2017072420:03:51-UTC ./gitnav/fetchmenu.prg
-85bf9b6bfd3d293cbae8ad6696ac149114eeea19 2017070618:24:35-UTC ./gitnav/dogitview.prg
 bbea0ec21dafa9e75bafd82614de50b5afce0fc7 2017070618:24:31-UTC ./gitnav/dogitstat.prg
 d325495f07e46496d2030b056a5b9aae0d5037e5 2017070618:24:17-UTC ./gitnav/branchmenu.prg
 a6099b94cc0e7b5eacc74dbaa3ee1e8434c8e6df 2017060416:47:01-UTC ./gitnav/log-gitnav

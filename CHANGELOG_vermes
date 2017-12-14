@@ -1,3 +1,6 @@
+filetime-save es filetime-restore kimenete elkapva,
+hogy ne zavarjak ossze az ncurses-es megjelenitest;
+
 A comfirm repo atnevezve: origin remote-rol  comfirm remote-ra;
 
 A browse menu funkcioban a commit mindenhol megjelenitve;
