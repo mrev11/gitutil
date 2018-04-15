@@ -1,3 +1,7 @@
+gitnav: parancssori hibara kilep;
+gitview: defaultbol commit es commit^ kulonbgseget mutatja;
+gitfollow: uj program, csak a megadott filet erinto commitokat mutatja;
+
 filetime-save es filetime-restore kimenete elkapva,
 hogy ne zavarjak ossze az ncurses-es megjelenitest;
 

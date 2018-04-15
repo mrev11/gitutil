@@ -132,6 +132,10 @@ local err
         rl:=read_output_of(logcmd)
         while( (line:=rl:readline)!=NIL )
             line::=bin2str
+            if( at("fatal:",line)==1 )
+                ? line
+                quit
+            end
             line::=strtran(chr(10),"")
             pos:=at(" ",line)
             aadd(com,{"?",line[1..pos-1],line[pos+1..]})
