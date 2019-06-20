@@ -5,6 +5,8 @@
 *.exe
 objlin/
 objmng/
+objfre/
+objnet/
 ppo/
 error
 error--*

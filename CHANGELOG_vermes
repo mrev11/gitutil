@@ -1,3 +1,5 @@
+.gitignore-ba  objfre/ objnet/;
+
 gitnav: parancssori hibara kilep;
 gitview: defaultbol commit es commit^ kulonbgseget mutatja;
 gitfollow: uj program, csak a megadott filet erinto commitokat mutatja;
