@@ -34,9 +34,13 @@ local dep:=0
     ?
 
     run("git init")
-    memowrit("CHANGELOG_"+user,"initial import")    
+    if( !file("CHANGELOG_"+user) )
+        memowrit("CHANGELOG_"+user,"initial import")
+    end
     memowrit("commit-message","initial import")    
-    memowrit(".gitignore",gitignore())
+    if( !file(".gitignore") )
+        memowrit(".gitignore",gitignore())
+    end
     memowrit(".git/hooks/post-checkout",post_checkout())
 #ifndef _WINDOWS_
     chmod(".git/hooks/post-checkout",0b111101101)//755
@@ -76,7 +80,7 @@ local dep:=0
     run("filetime-save.exe")    
 
     //run("git add --all")
-    run("git add "+"CHANGELOG_"+user) //epp csak ne kegyenures
+    run("git add "+"CHANGELOG_"+user) //epp csak ne legyen ures
     run("git commit -F commit-message")
     //quit
 

@@ -42,8 +42,8 @@ local err
     //Nehany helyen hozza lett igazitva 2.10.0-hez.
     //Ami viszont elrontott korabban jol mukodo reszeket 2.7.4-en.
     //Tovabbi meglepetesek varhatok.
-    ?? "Git version",gitversion();?
-    ?? "Git user ",username();?
+    //?? "Git version",gitversion();?
+    //?? "Git user ",username();?
 
     change_to_gitdir()
     setup_checkout_hook()
