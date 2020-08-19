@@ -29,6 +29,7 @@ local branchmenu:={}
 local fetchmenu:={}
 local com:={{"","",""}},n
 local rl,line,pos
+local firstrun:=.t.
 local err
 
 
@@ -152,6 +153,12 @@ local err
         rearrange_col_width(brw)
 
         brwShow(brw)
+
+        if( firstrun .and. 1<len(branchmenu) )
+            alert(current_branch())
+        end
+        firstrun:=.f.
+
         begin
             brwLoop(brw)
         recover err <C>
