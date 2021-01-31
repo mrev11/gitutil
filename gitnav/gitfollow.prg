@@ -17,7 +17,7 @@ local follow
 
 local brw,com:={{"","",""}},n
 local rl,line,pos
-
+local curdir,gitdir
 
     //szóközök miatt a {} paraméterezés kell
     logcmd:={}
@@ -79,7 +79,6 @@ local rl,line,pos
 
     brwApplyKey(brw,{|b,k|appkey(b,k)})
 
-    brwMenuName(brw,"[follow: "+follow+"]")
 
     brw:colorspec:="w/n,n/w,,,,,,,,,,,w+/n,rg+/n"
     brw:getcolumn(1):colorblock:={|x|{14}}
@@ -109,7 +108,21 @@ local rl,line,pos
         quit
     end
 
+    //az atnevezeseket/mozgatasokat nem teljesen jol koveti
+    curdir:=curdir()
     change_to_gitdir()
+    gitdir:=curdir()
+    // follow: path/to/git/workdir/follow
+    // curdir: path/to/git/workdir
+    // gitdir: path/to/git
+    if( gitdir==curdir )
+        followed_file(follow)
+    else
+        follow:=curdir::substr(len(gitdir)+2)+dirsep()+follow
+        follow::=strtran("\","/") //Windows
+        followed_file(follow)
+    end
+    brwMenuName(brw,"["+followed_file()+"]")
     
     brwShow(brw)
     brwLoop(brw)

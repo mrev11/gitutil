@@ -123,6 +123,8 @@ local cr,cc,cursta
 
         if(prevpos!=NIL)
             brwArrayPos(brw,min(prevpos,len(brwArray(brw))))
+        elseif(followed_file()!=NIL)
+            namepos(brw,followed_file())
         end                                                           
 
         brwLoop(brw)
@@ -325,6 +327,28 @@ local fd:=fopen(".git/local/log-commit",FO_CREATE+FO_APPEND+FO_READWRITE)
         fwrite(fd,result)
         fclose(fd)
     end
+
+
+********************************************************************************************
+static function namepos(brw,name)
+local arr:=brwArray(brw)
+local pos:=ascan(arr,{|x|name==x[2]})
+    if( pos==0 )
+        name::=fnameext
+        pos:=ascan(arr,{|x|name==x[2]::fnameext})
+    end
+    pos::=max(1)
+    brwArrayPos(brw,pos)
+    brw:rowpos:=min(pos,int((brw:nbottom-brw:ntop)/2))
+
+
+********************************************************************************************
+function followed_file(file)
+static x:=NIL
+    if( file!=NIL )
+        x:=file
+    end
+    return x
 
 
 ********************************************************************************************
