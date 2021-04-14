@@ -1,5 +1,8 @@
+813117aea2b06aea4a510d3ec744848331cea321 2021041418:33:32-UTC ./CHANGELOG_vermes
+8edac1bbf9ef46f021329d1a54d693a6063dce1b 2021041418:29:31-UTC ./gitnav/browsecommit.prg
+6f4d2017fda2eb7a267c3c8c292a96e59f0a7840 2021041413:35:58-UTC ./util/inkeyname_ccc2.ch
+65e66ae6e5fff4a6e65402090774ba9b98a62063 2021041413:08:24-UTC ./util/inkeyname_ccc3.ch
 8070aad22fb747d2f940c880b0b6703fea662a83 2021013115:39:40-UTC ./gitnav/gitfollow.prg
-36f9569f820b39dc3c5f8bc42062924c66b61bf5 2021013115:19:59-UTC ./CHANGELOG_vermes
 3372c2e0d011f7dee2fda1c8842c92adfa29eabf 2021013115:16:22-UTC ./gitnav/dogitview.prg
 479513b2bdec9ebc67cb8943c8310925f8beb24e 2020081911:48:06-UTC ./gitnav/gitnav.prg
 642cd3ff58a9964ae7ff31cc02bd3267cdc35d03 2020022909:42:44-UTC ./util/createrepo.prg
@@ -8,7 +11,6 @@ f1c7759fcdd1096342f53943c4cd6e356b804088 2018040509:06:03-UTC ./gitnav/gitview.p
 ec92ef23ae594f5e604f5e239f33ed788102de0e 2017121410:50:28-UTC ./gitnav/fetchmenu.prg
 05c22bac0ddec425620e28220b5d0d6876954d8e 2017111209:11:18-UTC ./doc/git-remote-rename.txt
 b28ec508c5374ceefd2c150913f6c8c8b864b466 2017111209:04:32-UTC ./doc/git-remote-branch.txt
-e20e82a45d153fc2c4d3807fa19e338eb6f0d0eb 2017102308:11:02-UTC ./gitnav/browsecommit.prg
 245590bf2b6c05af61b1ccabb5b61335f1bc4458 2017091210:06:05-UTC ./gitnav/viewcommit.prg
 bbea0ec21dafa9e75bafd82614de50b5afce0fc7 2017070618:24:31-UTC ./gitnav/dogitstat.prg
 d325495f07e46496d2030b056a5b9aae0d5037e5 2017070618:24:17-UTC ./gitnav/branchmenu.prg
@@ -63,8 +65,6 @@ f8220df7e1b9bf4c8813fdaaef1b17e3595807a0 2016080707:39:11-UTC ./util/readlinedbg
 f14d7c35742ec4b74e3226d2830fb4af65fbb593 2016080707:36:53-UTC ./util/debug.prg
 f5e130fcb1bc33f229b493d81bfbc9607c0670fd 2016080614:50:15-UTC ./doc/git-diff.txt
 4bd9067d3bc09ba07a925950ad657bf4a35d312a 2016080613:35:46-UTC ./util/repoclean.prg
-da4cf74fd451cd797fa38c73e88d2f84117a68f9 2016080519:00:56-UTC ./util/inkeyname_ccc3.ch
-76c61b2a1fabf552c72a951ae93b7c0ee290e573 2016080519:00:36-UTC ./util/inkeyname_ccc2.ch
 c72082b5f7850374c26210f1a026ad004c6f8dbb 2016080516:22:40-UTC ./gitfind/OLVASS
 14af6cac796bb1f257297b46d00edbcb6f85fea4 2016080516:16:41-UTC ./gitfind/gitfind.prg
 23376814f6549c3eaf389713a429121ead968d0f 2016080511:00:40-UTC ./util/fnescape.prg

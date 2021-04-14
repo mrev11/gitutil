@@ -96,6 +96,8 @@ local zframe,zbrowse
     zbrowse:header2:=head[3]
     zbrowse:add_shortcut(K_F1,{|b|b:help},"Help")
     zbrowse:add_shortcut(K_ENTER,{|zb|view_item(zb,commit)},"View")
+    zbrowse:add_shortcut(K_CTRL_D,{|zb|diff_item(zb,commit)},"Diff")
+    zbrowse:add_shortcut(K_CTRL_O,{|zb|checkout_item(zb,commit)},"Checkout")
     zbrowse:colorblock:={|x|color(x)}
 
     zframe:=zframeNew()
@@ -116,6 +118,32 @@ static function color(x)
     end
     return "w/n"
 
+
+**************************************************************************************
+static function diff_item(zbrowse,commit)
+local line:=zbrowse:seltext::alltrim
+local fname
+    if( line==".." )
+    elseif( ISTREE(line) )
+    elseif( !empty(fname:=FNAME(line)) )
+        fname:=zbrowse:path+fname
+        view_diff({commit},{fname})
+    end
+
+**************************************************************************************
+static function checkout_item(zbrowse,commit)
+local line:=zbrowse:seltext::alltrim
+local fname,cmd,out
+    if( line==".." )
+    elseif( ISTREE(line) )
+    elseif( !empty(fname:=FNAME(line)) )
+        fname:=zbrowse:path+fname
+        cmd:="git checkout "+commit+" -- "+fn_escape(fname)
+        if( !file(fname) .or. 2==alert("Overwrite existing file?",{"Cancel","Overwrite"}) )
+            //alert(cmd)
+            out:=output_of(cmd)
+        end
+    end
 
 **************************************************************************************
 static function view_item(zbrowse,commit)

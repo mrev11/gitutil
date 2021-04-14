@@ -16,7 +16,7 @@ K_CTRL_I             9
 K_CTRL_J            10
 K_CTRL_K            11
 K_CTRL_L            12
-K_CTRL_M            13
+K_ENTER             13
 K_CTRL_N            14
 K_CTRL_O            15
 K_CTRL_P            16

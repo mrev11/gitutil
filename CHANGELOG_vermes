@@ -1,3 +1,8 @@
+2021-04-14 
+  a browse menuben K_CTRL_O-val egyenkent lehet checkoutolni regi fajlokat;
+  a regi commitbol eloszedett fajl felulirja a meglevo wt-beli peldanyt;
+  hogy ne vakon kelljen folulirni, K_CTRL_D-vel meg lehet nezni a diffjet;
+
 2021-01-31 gitfollow rapozicional a kovetett fajlra;
 
 2020-08-19 Indulaskor kiirja, melyik branchban van;
