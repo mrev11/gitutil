@@ -1,4 +1,4 @@
 #!/bin/bash
-set -x
+#set -x
 bapp_win_.msys2  -bccc"$CCCVER"_gitutil.lib
 

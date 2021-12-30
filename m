@@ -1,10 +1,10 @@
 #!/bin/bash
 
-pushd util        && m && popd
+( cd util        && m )
 
-pushd filetime    && m && popd
-pushd firstpar    && m && popd
-pushd gitdate     && m && popd
-pushd gitfind     && m && popd
-pushd gitnav      && m && popd
+( cd filetime    && m )
+( cd firstpar    && m )
+( cd gitdate     && m )
+( cd gitfind     && m )
+( cd gitnav      && m )
 

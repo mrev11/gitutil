@@ -1,10 +1,10 @@
 #!/bin/bash
 
-pushd util        && m.msys2 && popd
+( cd util        && m.msys2 )
 
-pushd filetime    && m.msys2 && popd
-pushd firstpar    && m.msys2 && popd
-pushd gitdate     && m.msys2 && popd
-pushd gitfind     && m.msys2 && popd
-pushd gitnav      && m.msys2 && popd
+( cd filetime    && m.msys2 )
+( cd firstpar    && m.msys2 )
+( cd gitdate     && m.msys2 )
+( cd gitfind     && m.msys2 )
+( cd gitnav      && m.msys2 )
 

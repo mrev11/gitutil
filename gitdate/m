@@ -1,4 +1,4 @@
 #!/bin/bash
-set -x
+#set -x
 bapp_unix_.b  -bccc"$CCCVER"_gitutil.lib
 
