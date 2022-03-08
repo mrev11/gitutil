@@ -114,9 +114,9 @@ static function appkey_diff(b,k,mode)
 
 ********************************************************************************************
 static function diffcolor(x)
-    if( "---"==x[1..3] )
+    if( "--- "==x[1..4] )
         return {15}
-    elseif( "+++"==x[1..3] )
+    elseif( "+++ "==x[1..4] )
         return {15}
     elseif( " "==x[1..1] )
         return {1}

@@ -1,3 +1,10 @@
+2022-03-08 diff-eknel szinezes javitva:  
+    "+++" helyett a "+++ " kezdetu soroknal valt feherre
+    "---" helyett a "--- " kezdetu soroknal valt feherre
+  A "--userid=..." sor modositasa utan a diff ezt mutatta:
+    ---userid=aaa  (piros helyett tevesen feher)
+    +--userid=bbb  (zold, ok)
+
 2021-12-29 m scriptek korszerusitve; 
 
 2021-08-26 m.msys2 scriptek; 
