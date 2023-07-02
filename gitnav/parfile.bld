@@ -3,7 +3,7 @@
 -b$(CCCDIR)/tools/$$(z)    
 
 BUILD_SHR=static
-BUILD_EXE=$(CCCDIR)/usr/bin/$(CCCUNAME) 
+#BUILD_EXE=$(CCCDIR)/usr/bin/$(CCCUNAME) 
 
 
 #Altalaban az kell, hogy statikusan legyen linkelve,

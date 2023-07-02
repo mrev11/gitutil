@@ -8,3 +8,5 @@
 ( cd gitfind     && m )
 ( cd gitnav      && m )
 
+install
+
