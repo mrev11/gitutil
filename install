@@ -1,8 +1,7 @@
 #!/bin/bash
 
-find . | while read FILE; do
+/bin/find . | while read FILE; do
     if [ "${FILE##*.}" == "exe" ]; then
-        echo $FILE  >>log
         cp -p $FILE ~/bin   
     fi
 done

@@ -1,10 +1,10 @@
-#-lgitnav
+-p../util/obj${CCCBIN}
+
 -bccc$(CCCVER)_gitutil
 -b$(CCCDIR)/tools/$$(z)    
 
-BUILD_SHR=static
-#BUILD_EXE=$(CCCDIR)/usr/bin/$(CCCUNAME) 
 
+BUILD_SHR=static
 
 #Altalaban az kell, hogy statikusan legyen linkelve,
 #hogy akkor is lehessen hasznalni, ha a CCC le van kopasztva.

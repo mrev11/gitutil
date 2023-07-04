@@ -1,4 +1,4 @@
 #!/bin/bash
-#set -x
-bapp_unix_.b  -bccc"$CCCVER"_gitutil.lib
+bapp_unix_.b  @parfile.bld
+
 

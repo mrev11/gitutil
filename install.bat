@@ -1,5 +1,8 @@
+@echo off
 
-set TARGET=%CCCDIR%\usr\bin\windows
+set TARGET=%USERPROFILE%\bin
+
+if not exist %TARGET% md %TARGET%
 
 copy   gitnav\gitref.exe                    %TARGET%
 copy   gitnav\gitview.exe                   %TARGET%
@@ -12,3 +15,4 @@ copy   firstpar\firstpar.exe                %TARGET%
 copy   filetime\filetime-save.exe           %TARGET%
 copy   filetime\filetime-restore.exe        %TARGET%
 copy   gitfind\gitfind.exe                  %TARGET%
+

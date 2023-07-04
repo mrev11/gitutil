@@ -1,8 +1,3 @@
 #!/bin/bash
 
 bapp_win_.msys2 -lccc"$CCCVER"_gitutil  @parfile.bld
-
-for lib in obj$CCCBIN/*.lib; do
-    cp -pf $lib $lib.new
-    mv $lib.new  $CCCDIR/usr/lib/$CCCBIN/`basename $lib`
-done

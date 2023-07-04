@@ -1,3 +1,5 @@
+-p../util/obj${CCCBIN}
+
 -bccc$(CCCVER)_gitutil.lib
 -bccc$(CCCVER)_crypto  
 -bcrypto
