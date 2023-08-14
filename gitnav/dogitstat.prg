@@ -48,6 +48,7 @@ local cr,cc,cursta
     brwMenu(brw,"AddAll","Stage all changes of all files/directories",{|b|addall(b,@reread)})
     brwMenu(brw,"ResetAll","Unstage all files/directories",{|b|resetall(b,@reread)})
     brwMenu(brw,"Checkout","Restore file in worktree from the last commit",{|b|checkout(b,@reread)})
+    brwMenu(brw,"Delete","Delete file from worktree",{|b|delete(b,@reread)})
 
     brw:colorspec:="w/n,n/w,,,,,,,,,,,r+/n,g+/n,w+/n,rg+/n,n/n"
     //              1   2             13   14   15   16    17
@@ -298,6 +299,50 @@ local result
     if( "error:"$result .or. "fatal:"$result )
         zbrowseNew(result,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop
     end
+
+    reread:=.t.  //uj brw array lesz
+    return .f.   //jelenlegi brwloop-bol ki
+
+
+********************************************************************************************
+static function delete(brw,reread)
+
+local arr:=brwArray(brw)
+local pos:=brwArrayPos(brw)
+local fspec:=arr[pos][2]::alltrim
+local status:=arr[pos][1]
+local result
+
+    if( status=="@@" )
+        //technikai sor
+        return .t.
+
+    elseif( right(fspec,1)==dirsep() )
+        //directory
+        return .t.
+
+    elseif( "D"$status )
+        //törölt fájl
+        return .t.
+
+    end
+    
+    if( "R"$status )
+        fspec::=replace_name
+        if( valtype(fspec)=="A" )
+            //mv src dst
+            fspec:=fspec[2]
+        else
+            return .t.
+        end
+    end
+
+    if( 2!=alert(fspec+";;Delete file from worktree?",{"Keep","Delete"}) )
+        return .t.
+    end
+
+    //alert(fspec)
+    ferase(fspec)
 
     reread:=.t.  //uj brw array lesz
     return .f.   //jelenlegi brwloop-bol ki
