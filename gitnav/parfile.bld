@@ -1,7 +1,7 @@
 -p../util/obj${CCCBIN}
 
 -bccc$(CCCVER)_gitutil
--b$(CCCDIR)/tools/$$(z)    
+-bccc$(CCCVER)_zedit    
 
 
 BUILD_SHR=static
