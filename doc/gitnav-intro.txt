@@ -1,0 +1,48 @@
+
+gitutil - git frontend
+
+A git frontendek általában a forrásfában navigálnak,
+és mutatják/megnyitják az egyes fájlokat. Nem túl hasznos 
+funkció, tekintve, hogy az egyszerű mc jobban tudja ugyanezt.
+
+A gitnav (a gitutil csomag egyik programja) a forrásfában való 
+navigálás helyett a kezdő képernyőn a commitokat mutatja. A fő 
+különbség tehát, hogy nem a forrásfából, hanem a commitokból 
+indulunk ki. A gitnav főbb funkciói:
+
+- Mindig látjuk, hogy a forrásfában mi változott az utolsó commithoz 
+  képest.
+
+- Bármelyik commitra mutatja, mi változott az előző commithoz képest.
+
+- Bármelyik commitra mutatja, hogy mi a különbség a HEAD-hez képest.
+
+- Összeállíthatjuk és végrehajthatjuk a következő commitot.
+
+- Bármelyik commit forrásfájában tud navigálni. Azaz nem csak az
+  aktuális forrásfában navigál (mint az egyszerű git frontendek),
+  hanem akármelyik commitnak megfelelő archív forrásfában is.
+
+- A 'Snapshot' funkcióval bármelyik commitnak megfelelő állapotot  
+  előveszi (időgép).
+  
+- A 'View fetch status do merge/rebase' funkcióban egy képernyőn
+  látjuk az összes local és remote branch-et. Látjuk, hogy melyik
+  hány committal van előrébb/hátrébb/elágazva az aktuális branch-hoz
+  képest. Ugyanezen a képernyőn bármelyik branch-ból tudunk fetch-elni. 
+  Látjuk, melyik branch-ba lehet pusholni, mit lehet merge-elni.
+  
+A gitfollow.exe-nek meg kell adni egy forrás fájl nevét. 
+A program képernyője hasonlít a gitnavéra. Ez is felhoz egy 
+CCC browse-t, ebben azonban csak azok a commitok vannak, amikben 
+változott a kérdéses fájl. Mutatja, hogy mi volt a változás.
+  
+
+Letölthető innen
+
+    git clone git://comfirm.hu/gitutil.git  
+
+vagy innen
+
+    git clone https://github.com/mrev11/gitutil.git
+    
