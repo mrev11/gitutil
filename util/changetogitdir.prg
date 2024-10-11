@@ -17,7 +17,7 @@ local curdir:=curdir()
             //hogy Linuxon a /-ben cd .. sikeresnek számít, 
             //holott nyilvánvalóan nem lehet feljebb menni
 
-            if( 2>alert("Not in a git working tree!",{"Quit","Create git repo"}))
+            if( 2>alert(curdir+";;Not in a git working tree!",{"Quit","Create git repo"}))
                 quit
             else
                 if( dirchange(curdir)==0 )
