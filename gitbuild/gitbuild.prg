@@ -13,7 +13,7 @@ local bnspec,text,offs,bnum
         bnum:=text::substr(offs+6)::val
         memowrit(bnspec,"function "+fname(bnspec)+"();return"+str(bnum+1))
         //run( "cat "+bnspec );?
-        ?? bnspec
+        ?? bnspec, bnum+1
     end
     
 

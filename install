@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/bin/find . | while read FILE; do
+find . | while read FILE; do
     if [ "${FILE##*.}" == "exe" ]; then
         cp -p $FILE ~/bin   
     fi
