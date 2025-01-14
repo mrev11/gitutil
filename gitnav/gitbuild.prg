@@ -4,7 +4,7 @@
 static basename:="buildnumber_*.prg"
 
 
-function main()
+function gitbuild()
 local bnspec,text,offs,bnum
     bnspec:=search(".")
     if( bnspec!=NIL )
@@ -12,12 +12,11 @@ local bnspec,text,offs,bnum
         offs:=at("return",text)
         bnum:=text::substr(offs+6)::val
         memowrit(bnspec,"function "+fname(bnspec)+"();return"+str(bnum+1))
-        //run( "cat "+bnspec );?
-        ?? bnspec, bnum+1
+        return bnspec
     end
     
 
-function search(dir)
+static function search(dir)
 local d,d1:={},f,n
 
     d:=directory( dir+dirsep()+fullmask(),"D" )

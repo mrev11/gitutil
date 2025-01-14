@@ -196,14 +196,11 @@ local fspec:=arr[pos][2]
 static function commit(brw,reread)
 local result
 local ftsave
-local gitbuild
+local bnspec
 
-    //jó volna ezeket betenni a pre-commit hook-ba
-    //de a hook nem tudja módosítani a commit tartalmát
-    
-    gitbuild:=output_of("gitbuild.exe")
-    if( file(gitbuild) )
-        rundbg("git add "+gitbuild)
+    bnspec:=gitbuild()
+    if( bnspec!=NIL .and. file(bnspec) )
+        rundbg("git add "+bnspec)
     end
 
     ftsave:=output_of("filetime-save.exe")

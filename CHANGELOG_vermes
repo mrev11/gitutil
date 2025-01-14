@@ -1,3 +1,5 @@
+2025-01-14 gitbuild.exe helyett function gitbuild();
+
 2024-12-31 install script a path-bol inditja find-et;
 
 2024-10-11 repo krealasra rakerdezeskor kiirja a directory nevet;
