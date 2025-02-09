@@ -1,3 +1,0 @@
-#!/bin/bash
-
-bapp_win_.msys2 -lccc"$CCCVER"_gitutil  @parfile.bld

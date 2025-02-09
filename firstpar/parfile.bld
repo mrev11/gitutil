@@ -1,2 +1,2 @@
--p../util/obj${CCCBIN}
--bccc$(CCCVER)_gitutil.lib
+-p../util/object
+-bgitutil.lib

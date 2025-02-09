@@ -1,6 +1,6 @@
--p../util/obj${CCCBIN}
+-p../util/object
 
--bccc$(CCCVER)_gitutil.lib
+-bgitutil.lib
 -bccc$(CCCVER)_crypto  
 -bcrypto
 

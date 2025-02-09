@@ -3,6 +3,7 @@
 *~
 
 *.exe
+object/
 objlin/
 objmng/
 objfre/

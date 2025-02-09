@@ -1,4 +1,4 @@
 #!/bin/bash
 
-bapp_unix_.b -lccc"$CCCVER"_gitutil  @parfile.bld
+cccapp.sh -lgitutil  @parfile.bld
 
