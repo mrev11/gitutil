@@ -197,6 +197,7 @@ static function commit(brw,reread)
 local result
 local ftsave
 local bnspec
+local cmd,msg
 
     bnspec:=gitbuild()
     if( bnspec!=NIL .and. file(bnspec) )
@@ -205,7 +206,9 @@ local bnspec
 
     ftsave:=output_of("filetime-save.exe")
     rundbg("git add .FILETIME_$USER"::strtran("$USER",username()))
-    run("firstpar.exe CHANGELOG_$USER >commit-message"::strtran("$USER",username()))
+    cmd:="firstpar.exe CHANGELOG_$USER"::strtran("$USER",username())
+    msg:=output_of(cmd)
+    memowrit("commit-message",msg)
     result:=output_of("git commit -F commit-message")
     commitlog(result)
     zbrowseNew(result+ftsave,brw:ntop,brw:nleft,brw:nbottom,brw:nright):loop

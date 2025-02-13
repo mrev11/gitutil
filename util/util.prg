@@ -1,39 +1,35 @@
 
 
 **************************************************************************************
-function output_of(cmd)
-
-local output
-local tmp:=tempfile(,"bak")
-local debug:=debug("goc")
-
-    run( cmd+" >"+tmp+" 2>&1") 
-    output:=memoread(tmp)
-    ferase(tmp)
-    
-    if( !empty(debug) .and. !"g"==debug )
-        ?? "--------------------------------------------------------"
-        if( "c"$debug )
-            callstack()
-        end
-        ?
+function runcmd(cmd,debug:="") // debug_default: no debug
+local rl:=read_output_of(cmd,debug)
+local line
+    while( (line:=rl:readline)!=NIL )
     end
-    if( "g"$debug )
-        ?? "GITCMD:",cmd;?
-    end
-    if( "o"$debug )
-        ?? output;?
-    end
+    rl:close
 
-    return output
+
+***************************************************************************************
+function rundbg(cmd)
+    runcmd(cmd,debug("goc"))
 
 
 **************************************************************************************
-function read_output_of(cmd)
+function output_of(cmd)
+local rl:=read_output_of(cmd)
+local output:=a"",line
+    while( (line:=rl:readline)!=NIL )
+        output+=line
+    end
+    rl:close
+    return  output::bin2str
+
+
+**************************************************************************************
+function read_output_of(cmd,debug:=debug("gc"))
 
 local pp:=child(cmd) //{r,w}
 local rl:=readlinedbgNew(pp[1])
-local debug:=debug("gc")
 
     fclose(pp[2])
 

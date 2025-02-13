@@ -33,7 +33,7 @@ local dep:=0
     ?
     ?
 
-    run("git init")
+    runcmd("git init")
     if( !file("CHANGELOG_"+user) )
         memowrit("CHANGELOG_"+user,"initial import")
     end
@@ -77,12 +77,10 @@ local dep:=0
     memowrit("ftr.bat",script_ftr_bat())
 #endif
 
-    run("filetime-save.exe")    
+    runcmd("filetime-save.exe")    
 
-    //run("git add --all")
-    run("git add "+"CHANGELOG_"+user) //epp csak ne legyen ures
-    run("git commit -F commit-message")
-    //quit
+    runcmd("git add "+"CHANGELOG_"+user) //epp csak ne legyen ures
+    runcmd("git commit -F commit-message")
 
 
 ***************************************************************************************

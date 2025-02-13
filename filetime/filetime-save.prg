@@ -74,7 +74,7 @@ local outarr:={},n
     set alternate to
     
     if( file(bakfile) )
-        run( "diff "+bakfile+" "+outfile )
+        runcmd( "diff "+bakfile+" "+outfile )
     end
     
 
