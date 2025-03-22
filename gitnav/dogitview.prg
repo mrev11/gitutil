@@ -83,9 +83,9 @@ local cr,cc,cursta
         brwMenu(brw,"Abort","Abort pending rebase",{||rebase_abort(brw,@reread)})
     end
 
-    //brwMenu(brw,"Sort","Sort file in status or name order",sort) //kell?
-    //aadd(sort,{"By name",{|b|sortbyname(b)}})
-    //aadd(sort,{"By status",{|b|sortbystatus(b)}})
+    brwMenu(brw,"Sort","Sort file in status or name order",sort) //kell?
+    aadd(sort,{"By name",{|b|sortbyname(b)}})
+    aadd(sort,{"By status",{|b|sortbystatus(b)}})
 
     brw:colorspec:="w/n,n/w,,,,,,,,,,,r+/n,g+/n,w+/n,rg+/n"
     //              1   2             13   14   15   16
@@ -144,6 +144,13 @@ local fspec,ftext
 
     if( k==K_ESC )
         return .f.
+
+    elseif( k==K_ALT_S )
+        sortbystatus(b)
+
+    elseif( k==K_ALT_N )
+        sortbyname(b)
+
     elseif( k==K_ALT_B )
         arr:=brwArray(b)
         pos:=brwArrayPos(b)

@@ -111,6 +111,13 @@ local fspec,ftext
 
     if( k==K_ESC )
         return .f.
+
+    elseif( k==K_ALT_S )
+        sortbystatus(b)
+
+    elseif( k==K_ALT_N )
+        sortbyname(b)
+
     elseif( k==K_ALT_B )
         arr:=brwArray(b)
         pos:=brwArrayPos(b)

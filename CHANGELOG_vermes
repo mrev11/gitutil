@@ -1,3 +1,6 @@
+2025-03-22
+  Status menuben ALT_S/ALT_N valtja a rendezettseget status/name szerint;
+
 2025-02-13 run (majdnem) mindenhol helyettesitve runcmd-vel;
 
 2025-02-09 object/ felveve .gitignore-ba;
