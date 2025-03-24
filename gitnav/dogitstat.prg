@@ -17,6 +17,7 @@ local gitcmd
 local reread,prevpos
 local blk1,blk2
 local menutitle
+local ord:="S"
 
 local screen
 local t,l,b,r
@@ -53,43 +54,50 @@ local cr,cc,cursta
     brw:colorspec:="w/n,n/w,,,,,,,,,,,r+/n,g+/n,w+/n,rg+/n,n/n"
     //              1   2             13   14   15   16    17
     brw:getcolumn(1):colorblock:={|x|statcolor(x)}
-    
-    brwApplyKey(brw,{|b,k|appkey_main(b,k)})
+
+    brwApplyKey(brw,{|b,k|appkey_main(b,k,@ord)})
 
     gitcmd:="git status --short"
 
-    brwShow(brw)                                       
+    brwShow(brw)
 
     reread:=.t.
     while(reread)
-        reread:=.f.                                           
-    
-        asize(changes,0)                                   
+        reread:=.f.
+
+        asize(changes,0)
         aadd(changes,{"@@",replicate("-",brw:getcolumn(2):width) })
 
-        rl:=read_output_of(gitcmd)                         
-        while( (line:=rl:readline)!=NIL )                  
-            line::=bin2str                                 
-            line::=strtran(chr(9),"")                    
-            line::=strtran(chr(10),"")                     
-            changes::aadd( {line[1..2],line[4..]::unquote}  )             
-        end                                                
-        rl:close                                           
+        rl:=read_output_of(gitcmd)
+        while( (line:=rl:readline)!=NIL )
+            line::=bin2str
+            line::=strtran(chr(9),"")
+            line::=strtran(chr(10),"")
+            changes::aadd( {line[1..2],line[4..]::unquote}  )
+        end
+        rl:close
         if( empty(changes) )
-            aadd(changes,{"",""})                               
-        end                                                
-        sortbystatus(brw)                                  
+            aadd(changes,{"",""})
+        end
+
+        if( ord=="S" )
+            sortbystatus(brw)
+        elseif( ord=="N" )
+            sortbyname(brw)
+        else
+            sortbystatus(brw)
+        end
 
         if(prevpos!=NIL)
             brwArrayPos(brw,min(prevpos,len(brwArray(brw))))
-        end                                                           
+        end
 
         brwMenuName(brw,branch_state_menuname(current))
-        brwShow(brw)                                       
+        brwShow(brw)
         brwLoop(brw)
-        
-        prevpos:=brwArrayPos(brw)                                       
-    end                                                  
+
+        prevpos:=brwArrayPos(brw)
+    end
 
     restscreen(t,l,b,r,screen)
     setpos(cr,cc) //nem szabad változnia!
@@ -105,7 +113,7 @@ local x:=eval(blk)
     return x
 
 ********************************************************************************************
-static function appkey_main(b,k)
+static function appkey_main(b,k,ord)
 local arr,pos
 local fspec,ftext
 
@@ -113,9 +121,11 @@ local fspec,ftext
         return .f.
 
     elseif( k==K_ALT_S )
+        ord:="S"
         sortbystatus(b)
 
     elseif( k==K_ALT_N )
+        ord:="N"
         sortbyname(b)
 
     elseif( k==K_ALT_B )
@@ -147,7 +157,7 @@ local fspec:=arr[pos][2]
             fspec:=fspec[1]
             view_diff({"HEAD"},{fspec})
         else
-            return .t. //??? 
+            return .t. //???
         end
 
     elseif( status=="??" )
@@ -192,7 +202,7 @@ local choice:=alert("reset",{"reread","esc"})
     elseif( choice==1 )
         reread:=.t.  //uj brw array lesz
         return .f.   //jelenlegi brwloop-bol ki
-    else 
+    else
         reread:=.f.
         return .f.   //brwloop-bol végleg ki
     end
@@ -218,7 +228,7 @@ local fspec:=arr[pos][2]
         //nincs értelme resetelni
         return .t. //marad a brwloop-ban
     end
-    
+
     if( status[1]=="R" )
         fspec::=replace_name
         if( valtype(fspec)=="A" )
@@ -273,7 +283,7 @@ local result
             return .t.
         end
     end
-    
+
     if( "R"$status )
         fspec::=replace_name
         if( valtype(fspec)=="A" )
@@ -283,15 +293,15 @@ local result
             //dst a wt-ben új, hacsak éppen nem felülírt valamit
             //mindkettőt lehet értelme checkoutolni
             //de valószínűbb, hogy az src kell
-            
+
             fspec:=fspec[1]
         else
-            return .t. //??? 
+            return .t. //???
         end
     end
 
     if( status=="AM" )
-        //új, indexelt, de indexelés után módosított fájl, 
+        //új, indexelt, de indexelés után módosított fájl,
         //nem a commitból, hanem az indexből checkoutoljuk,
         //azért itt nem kell resetelni
 
@@ -333,7 +343,7 @@ local result
         return .t.
 
     end
-    
+
     if( "R"$status )
         fspec::=replace_name
         if( valtype(fspec)=="A" )
@@ -356,12 +366,12 @@ local result
 
 
 ********************************************************************************************
-static function sortbyname(b)    
+static function sortbyname(b)
 local a:=brwArray(b)
     asort(a,,,{|x,y|x[2]<=y[2]})
     b:refreshall()
-    
-static function sortbystatus(b)    
+
+static function sortbystatus(b)
 local a:=brwArray(b)
     asort(a,,,{|x,y|if(x[1]==y[1],x[2]<=y[2],x[1]<=y[1])})
     b:refreshall()

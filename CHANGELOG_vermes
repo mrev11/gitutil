@@ -1,5 +1,11 @@
+2025-03-24
+  fspec.prg torolve, helyette filespec a ccc.lib-bol;
+  'objlin' helyett az 'object' directorykat keruli ki;
+  Megtartja az ALT_S/ALT_N rendezettseget AddOne stb. utan;
+
+
 2025-03-22
-  Status menuben ALT_S/ALT_N valtja a rendezettseget status/name szerint;
+ Status menuben ALT_S/ALT_N valtja a rendezettseget status/name szerint;
 
 2025-02-13 run (majdnem) mindenhol helyettesitve runcmd-vel;
 

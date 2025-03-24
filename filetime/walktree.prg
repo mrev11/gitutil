@@ -33,23 +33,9 @@ local x:=simplehashNew()
     x[".git"]:=.t.
     x["ppo"]:=.t.
 
-    x["objlin"]:=.t.
-    x["objlin_ui_"]:=.t.
-    x["objlin_uic"]:=.t.
-    x["objlin_uif"]:=.t.
-    x["objlin_uid"]:=.t.
-
-    x["objmng"]:=.t.
-    x["objmng_ui_"]:=.t.
-    x["objmng_uic"]:=.t.
-    x["objmng_uif"]:=.t.
-    x["objmng_uiw"]:=.t.
-
-    x["objmsc"]:=.t.
-    x["objmsc_ui_"]:=.t.
-    x["objmsc_uic"]:=.t.
-    x["objmsc_uif"]:=.t.
-    x["objmsc_uiw"]:=.t.
+    x["object"]:=.t.
+    x["object_ui_"]:=.t.
+    x["object_uic"]:=.t.
 
     return x
 
@@ -57,20 +43,20 @@ local x:=simplehashNew()
 static function  init_xext() // excluded file AND DIR extensions"
 local x:=simplehashNew()
 
-    x["exe"]:=.t.
-    x["obj"]:=.t.
-    x["o"]:=.t.
-    x["ppo"]:=.t.
-    x["lib"]:=.t.
-    x["so"]:=.t.
-    x["a"]:=.t.
-    x["bak"]:=.t.
-    x["tmp"]:=.t.
-    x["nopack"]:=.t.
-    x["zip"]:=.t.
-    x["bz2"]:=.t.
-    x["tar"]:=.t.
-    x["gz"]:=.t.
+    x[".exe"]:=.t.
+    x[".obj"]:=.t.
+    x[".o"]:=.t.
+    x[".ppo"]:=.t.
+    x[".lib"]:=.t.
+    x[".so"]:=.t.
+    x[".a"]:=.t.
+    x[".bak"]:=.t.
+    x[".tmp"]:=.t.
+    x[".nopack"]:=.t.
+    x[".zip"]:=.t.
+    x[".bz2"]:=.t.
+    x[".tar"]:=.t.
+    x[".gz"]:=.t.
 
     return x
 
@@ -89,7 +75,7 @@ local n,d,d1:={}
         size:=d[n][F_SIZE]
         attr:=d[n][F_ATTR]
         
-        ext:=fext0(name)
+        ext:=filespec.extension(name)
         if( xext[ext]!=NIL )
             loop //kihagy
         end

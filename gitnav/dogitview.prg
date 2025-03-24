@@ -83,9 +83,11 @@ local cr,cc,cursta
         brwMenu(brw,"Abort","Abort pending rebase",{||rebase_abort(brw,@reread)})
     end
 
-    brwMenu(brw,"Sort","Sort file in status or name order",sort) //kell?
-    aadd(sort,{"By name",{|b|sortbyname(b)}})
-    aadd(sort,{"By status",{|b|sortbystatus(b)}})
+    if( !rebasemenu .and. !commitmenu )
+        brwMenu(brw,"Sort","Sort file in status or name order",sort) //kell?
+        aadd(sort,{"By name",{|b|sortbyname(b)}})
+        aadd(sort,{"By status",{|b|sortbystatus(b)}})
+    end
 
     brw:colorspec:="w/n,n/w,,,,,,,,,,,r+/n,g+/n,w+/n,rg+/n"
     //              1   2             13   14   15   16
@@ -347,8 +349,8 @@ static function namepos(brw,name)
 local arr:=brwArray(brw)
 local pos:=ascan(arr,{|x|name==x[2]})
     if( pos==0 )
-        name::=fnameext
-        pos:=ascan(arr,{|x|name==x[2]::fnameext})
+        name::=filespec.nameext
+        pos:=ascan(arr,{|x|name==x[2]::filespec.nameext})
     end
     pos::=max(1)
     brwArrayPos(brw,pos)

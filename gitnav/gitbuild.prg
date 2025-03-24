@@ -11,7 +11,7 @@ local bnspec,text,offs,bnum
         text:=memoread(bnspec)
         offs:=at("return",text)
         bnum:=text::substr(offs+6)::val
-        memowrit(bnspec,"function "+fname(bnspec)+"();return"+str(bnum+1))
+        memowrit(bnspec,"function "+filespec.name(bnspec)+"();return"+str(bnum+1))
         return bnspec
     end
     

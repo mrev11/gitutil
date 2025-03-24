@@ -33,7 +33,7 @@ local da,ti,utcdati
     ftdir:=directory(".FILETIME_*")
 
     for n:=1 to len(ftdir)
-        if( fext0(ftdir[n][F_NAME])=="bak" )
+        if( filespec.extension(ftdir[n][F_NAME])==".bak" )
             loop
         end
     
