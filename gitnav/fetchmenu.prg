@@ -59,8 +59,8 @@ local head:=name_to_commitid("HEAD")
 local ms:=merge_status() //{{branch1,base1,tip1},{branch2,base2,tip2}, ... }
 local status:=chr(10)
 
-#define RM_F    op+=if("/"$ms[n][1],"[F]","[ ]")    // fetch if remote
-#define RM_P    op+=if("/"$ms[n][1],"[P]","[ ]")    // push if remote
+#define RM_F    op+=if("@"$ms[n][1],"[F]","[ ]")    // fetch if remote
+#define RM_P    op+=if("@"$ms[n][1],"[P]","[ ]")    // push if remote
 
 #define OP_D    op+="[D]"                           // diff
 #define OP_M    op+="[M]"                           // merge
@@ -73,7 +73,7 @@ local status:=chr(10)
 
     for n:=1 to len(ms)
         line:=" "
-        line+=ms[n][1]::padr(24)     //branch name
+        line+=ms[n][1]::padr(24)     //branchname
         line+=ms[n][2]::padr(10)+" " //merge-base
         line+=ms[n][3]::padr(10)+" " //tip
         
@@ -303,7 +303,7 @@ local rl:=read_output_of(cmd),line,n:=0
 
 ********************************************************************************************
 static function brname(zb)
-local line
+local line,name,commit
     line:=zb:seltext::alltrim
     while( "  "$line )
         line::=strtran("  "," ")
@@ -312,10 +312,20 @@ local line
     if( len(line)<3 )
         return NIL
     end
-    if( name_to_commitid(line[1]) != line[3]  )
+    
+    name:=line[1]
+    commit:=line[3]
+    
+    if( "@"$name )
+        //branch@remote -> remote/branch
+        name::=split("@")
+        name:=name[2]+"/"+name[1]
+    end 
+    
+    if( name_to_commitid(name) != commit )
         return NIL
     end
-    return line[1]  //ellenőrzött branch name
+    return name  //ellenőrzött branch name
 
 
 ********************************************************************************************

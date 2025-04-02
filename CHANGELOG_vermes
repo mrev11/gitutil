@@ -1,3 +1,6 @@
+2025-04-02
+  megjelenites valtozott: remote/branch  ->  branch@remote
+
 2025-03-24
   fspec.prg torolve, helyette filespec a ccc.lib-bol;
   'objlin' helyett az 'object' directorykat keruli ki;
