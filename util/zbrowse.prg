@@ -266,9 +266,9 @@ static home
     if( home==NIL )
 
         #ifdef _UNIX_
-        home:=getenv("HOME")+"/.z/"  
+            home:=getenv("HOME")+"/.z/"  
         #else
-        home:=fpath(exename()) 
+            home:=filespec.path(exename()) 
         #endif
     
         if( !empty(getenv("ZHOME")) )

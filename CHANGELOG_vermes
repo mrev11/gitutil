@@ -1,3 +1,6 @@
+2026-02-23
+  windowsos agban bennmaradt fpath() javitva filespec.path()-ra;
+
 2025-04-10
   kulon install helyett a build vegzi az installaciot;
 
